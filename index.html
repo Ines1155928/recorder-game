@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V4.8｜接收器唱名恆亮版</title>
+<title>直笛音高挑戰 V5.0｜曲目與指法隨機練習</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1145,6 +1145,239 @@ html.setup-mode body .setup-card{
   opacity:.72 !important;
 }
 
+
+/* ===== V5.0 曲目／指法隨機練習 ===== */
+.practice-mode-switch{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin:17px 0 18px;
+}
+.practice-mode-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  min-height:68px;
+  padding:11px 16px;
+  color:#365774;
+  background:linear-gradient(180deg,#edf3f6,#dfe9ee);
+  border:3px solid rgba(255,255,255,.92);
+  border-radius:22px;
+  box-shadow:0 6px 0 rgba(91,139,169,.12);
+  text-align:left;
+}
+.practice-mode-button .mode-icon{
+  font-size:30px;
+  line-height:1;
+}
+.practice-mode-button strong{
+  display:block;
+  font-size:18px;
+  color:#315572;
+}
+.practice-mode-button small{
+  display:block;
+  margin-top:3px;
+  color:#657f95;
+  font-size:12px;
+  font-weight:800;
+}
+.practice-mode-button.active{
+  color:#244c68;
+  background:linear-gradient(135deg,#d7eef5,#dce7f3 48%,#efd9e3);
+  border-color:#ffffff;
+  box-shadow:
+    0 0 0 3px rgba(91,180,221,.18),
+    0 7px 0 rgba(89,142,175,.12);
+}
+.practice-mode-button:focus-visible{
+  outline:4px solid rgba(75,166,210,.22);
+  outline-offset:2px;
+}
+
+.random-help{
+  padding:11px 13px;
+  border-radius:16px;
+  color:#526f88;
+  background:#e8f0f4;
+  border:2px solid rgba(255,255,255,.9);
+  font-size:13px;
+  font-weight:800;
+  line-height:1.55;
+}
+.random-quick-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:12px 0;
+}
+.random-small-button{
+  min-height:38px;
+  padding:7px 11px;
+  color:#294f6b;
+  background:linear-gradient(180deg,#eaf2f5,#dce9ee);
+  border:2px solid #95b4c3;
+  border-radius:13px;
+  font-size:12px;
+  font-weight:1000;
+  box-shadow:0 4px 0 rgba(74,118,145,.10);
+}
+.random-small-button.clear{
+  color:#744052;
+  background:linear-gradient(180deg,#f1e5e9,#e7d6dc);
+  border-color:#c4a0ad;
+}
+
+.random-note-group{
+  margin-top:13px;
+  padding:12px;
+  border-radius:18px;
+  background:rgba(244,248,250,.94);
+  border:2px solid rgba(138,180,204,.22);
+}
+.random-group-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:9px;
+  color:#365a76;
+}
+.random-group-title span{
+  color:#71889b;
+  font-size:12px;
+  font-weight:800;
+}
+.random-note-picker{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(82px,1fr));
+  gap:8px;
+}
+.random-note-button{
+  position:relative;
+  min-height:48px;
+  padding:8px 7px;
+  color:#36536d;
+  background:#edf2f5;
+  border:3px solid rgba(255,255,255,.92);
+  border-radius:15px;
+  box-shadow:0 4px 0 rgba(93,137,164,.09);
+  font-size:15px;
+  font-weight:1000;
+}
+.random-note-button::before{
+  content:"";
+  display:inline-block;
+  width:11px;
+  height:11px;
+  margin-right:6px;
+  border-radius:50%;
+  background:var(--note-color);
+  box-shadow:0 0 0 2px rgba(255,255,255,.9);
+  vertical-align:-1px;
+}
+.random-note-button.selected{
+  color:#243f57;
+  background:color-mix(in srgb,var(--note-color) 30%,#e9eff2);
+  border-color:color-mix(in srgb,var(--note-color) 58%,#ffffff);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb,var(--note-color) 20%,transparent),
+    0 5px 0 rgba(76,122,151,.10);
+}
+.random-note-button.selected::after{
+  content:"✓";
+  position:absolute;
+  right:7px;
+  top:5px;
+  color:#24465f;
+  font-size:13px;
+}
+.random-accidental-details{
+  margin-top:13px;
+  padding:10px 12px 12px;
+  border-radius:18px;
+  background:#eef3f5;
+  border:2px solid rgba(138,180,204,.22);
+}
+.random-accidental-details summary{
+  cursor:pointer;
+  color:#395d78;
+  font-weight:1000;
+}
+.accidental-picker{
+  margin-top:11px;
+}
+.random-setting-heading{
+  margin-top:18px !important;
+}
+.random-config-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.random-config-item{
+  display:grid;
+  gap:6px;
+  color:#466680;
+  font-size:13px;
+  font-weight:1000;
+}
+.random-check-row{
+  margin-top:11px;
+}
+.generate-random-button{
+  width:100%;
+  min-height:49px;
+  margin-top:14px;
+  color:#24445e;
+  background:linear-gradient(135deg,#b9dce8,#c6d4e9 50%,#e8c7d5);
+  border:3px solid #ffffff;
+  border-radius:17px;
+  font-size:16px;
+  font-weight:1000;
+  box-shadow:0 6px 0 rgba(80,129,157,.13);
+}
+.generate-random-button:disabled{
+  opacity:.58;
+}
+.random-status{
+  margin-top:11px;
+  padding:9px 11px;
+  color:#5d758b;
+  background:#e9eff2;
+  border:1px solid #b7cad4;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:900;
+  line-height:1.45;
+}
+.random-status.ready{
+  color:#244f3c;
+  background:#dbe9e1;
+  border-color:#a6c3b3;
+}
+.random-status.error{
+  color:#7a3041;
+  background:#ecd9df;
+  border-color:#cda2ad;
+}
+
+@media(max-width:760px){
+  .practice-mode-switch{
+    grid-template-columns:1fr;
+  }
+  .practice-mode-button{
+    justify-content:flex-start;
+  }
+  .random-config-grid{
+    grid-template-columns:1fr;
+  }
+  .random-note-picker{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+
 </style>
 </head>
 <body class="setup-mode">
@@ -1156,51 +1389,141 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V4.8</h1>
-        <div class="subtitle">學生直接從雲端曲目庫選歌；老師仍可自行匯入 MusicXML 測試新樂譜。</div>
+        <h1>🎵 直笛音高挑戰 V5.0</h1>
+        <div class="subtitle">可從雲端曲目庫選歌，也能自由選音，由系統產生指法隨機題目。</div>
       </div>
-      <div class="badge">✨ 接收器唱名恆亮版</div>
+      <div class="badge">🎲 指法隨機練習</div>
+    </div>
+
+    <div class="practice-mode-switch" role="tablist" aria-label="練習模式">
+      <button id="libraryModeBtn" class="practice-mode-button active" type="button" role="tab" aria-selected="true">
+        <span class="mode-icon">🎼</span>
+        <span><strong>曲目練習</strong><small>從雲端曲目庫選歌</small></span>
+      </button>
+      <button id="randomModeBtn" class="practice-mode-button" type="button" role="tab" aria-selected="false">
+        <span class="mode-icon">🎲</span>
+        <span><strong>指法隨機練習</strong><small>自由選音，系統隨機出題</small></span>
+      </button>
     </div>
 
     <div class="setup-grid">
       <div class="panel">
-        <h2>① 選擇練習歌曲</h2>
+        <div id="libraryModePanel">
+          <h2>① 選擇練習歌曲</h2>
 
-        <div class="library-toolbar">
-          <input id="songSearch" class="library-control" type="search" placeholder="搜尋曲名或標籤">
-          <select id="gradeFilter" class="library-control">
-            <option value="">全部年級</option>
-          </select>
-          <select id="semesterFilter" class="library-control">
-            <option value="">全部學期</option>
-          </select>
-          <select id="categoryFilter" class="library-control">
-            <option value="">全部類型</option>
-          </select>
-        </div>
-
-        <div class="library-status-row">
-          <div id="libraryStatus" class="library-status">正在讀取雲端曲目庫……</div>
-          <button id="refreshLibraryBtn" class="icon-button" type="button">重新整理</button>
-        </div>
-
-        <div id="songLibrary" class="song-library">
-          <div class="library-empty">正在載入歌曲……</div>
-        </div>
-
-        <details class="teacher-details">
-          <summary>老師測試模式：自行上傳 MusicXML</summary>
-          <div id="fileDrop" class="file-drop">
-            <input id="musicXmlInput" type="file" accept=".musicxml,.xml,application/xml,text/xml">
-            <div class="file-icon">📄</div>
-            <strong>點這裡選擇 .musicxml</strong>
-            <div id="fileName" class="file-name">尚未自行匯入曲目</div>
+          <div class="library-toolbar">
+            <input id="songSearch" class="library-control" type="search" placeholder="搜尋曲名或標籤">
+            <select id="gradeFilter" class="library-control">
+              <option value="">全部年級</option>
+            </select>
+            <select id="semesterFilter" class="library-control">
+              <option value="">全部學期</option>
+            </select>
+            <select id="categoryFilter" class="library-control">
+              <option value="">全部類型</option>
+            </select>
           </div>
-        </details>
+
+          <div class="library-status-row">
+            <div id="libraryStatus" class="library-status">正在讀取雲端曲目庫……</div>
+            <button id="refreshLibraryBtn" class="icon-button" type="button">重新整理</button>
+          </div>
+
+          <div id="songLibrary" class="song-library">
+            <div class="library-empty">正在載入歌曲……</div>
+          </div>
+
+          <details class="teacher-details">
+            <summary>老師測試模式：自行上傳 MusicXML</summary>
+            <div id="fileDrop" class="file-drop">
+              <input id="musicXmlInput" type="file" accept=".musicxml,.xml,application/xml,text/xml">
+              <div class="file-icon">📄</div>
+              <strong>點這裡選擇 .musicxml</strong>
+              <div id="fileName" class="file-name">尚未自行匯入曲目</div>
+            </div>
+          </details>
+        </div>
+
+        <div id="randomModePanel" hidden>
+          <h2>① 選擇想練習的音</h2>
+
+          <div class="random-help">
+            勾選學生已經學過的音，系統會平均混合並隨機排列，避免只反覆出現少數音。
+          </div>
+
+          <div class="random-quick-actions">
+            <button id="selectBeginnerNotesBtn" class="random-small-button" type="button">勾選 sol、la、si</button>
+            <button id="selectNaturalNotesBtn" class="random-small-button" type="button">勾選全部自然音</button>
+            <button id="clearRandomNotesBtn" class="random-small-button clear" type="button">全部清除</button>
+          </div>
+
+          <section class="random-note-group">
+            <div class="random-group-title">
+              <strong>基礎音域</strong>
+              <span>C5～B5</span>
+            </div>
+            <div id="lowNaturalPicker" class="random-note-picker"></div>
+          </section>
+
+          <section class="random-note-group">
+            <div class="random-group-title">
+              <strong>高音域</strong>
+              <span>C6～G6</span>
+            </div>
+            <div id="highNaturalPicker" class="random-note-picker"></div>
+          </section>
+
+          <details class="random-accidental-details">
+            <summary>加入升降音</summary>
+            <div id="accidentalPicker" class="random-note-picker accidental-picker"></div>
+          </details>
+
+          <h2 class="random-setting-heading">② 隨機出題設定</h2>
+
+          <div class="random-config-grid">
+            <label class="random-config-item">
+              <span>題目數量</span>
+              <select id="randomQuestionCount" class="library-control">
+                <option value="8">8 題</option>
+                <option value="12">12 題</option>
+                <option value="20" selected>20 題</option>
+                <option value="30">30 題</option>
+                <option value="40">40 題</option>
+              </select>
+            </label>
+
+            <label class="random-config-item">
+              <span>每題音值</span>
+              <select id="randomNoteBeats" class="library-control">
+                <option value="1">1 拍</option>
+                <option value="2" selected>2 拍</option>
+                <option value="4">4 拍</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="check-row random-check-row">
+            <input id="avoidImmediateRepeat" type="checkbox" checked>
+            儘量避免連續出現相同音
+          </label>
+
+          <label class="check-row random-check-row">
+            <input id="shuffleEachStart" type="checkbox" checked>
+            每次按開始時重新排列題目
+          </label>
+
+          <button id="generateRandomBtn" class="generate-random-button" type="button">
+            🎲 產生／重新排列題目
+          </button>
+
+          <div id="randomStatus" class="random-status">
+            尚未選擇練習音。
+          </div>
+        </div>
       </div>
 
       <div class="panel">
-        <h2>② 已選曲目與練習設定</h2>
+        <h2 id="selectionHeading">② 已選曲目與練習設定</h2>
 
         <div id="selectedPlaceholder" class="selected-placeholder">
           請先從左側曲目庫選擇一首歌曲。
@@ -1210,7 +1533,7 @@ html.setup-mode body .setup-card{
           <div id="songInfo" class="song-info" style="display:none">
             <div class="info-item"><div class="info-label">曲名</div><div id="songTitle" class="info-value">—</div></div>
             <div class="info-item"><div class="info-label">拍號</div><div id="songTime" class="info-value">—</div></div>
-            <div class="info-item"><div class="info-label">原譜 BPM</div><div id="songOriginalBpm" class="info-value">—</div></div>
+            <div class="info-item"><div id="songBpmLabel" class="info-label">原譜 BPM</div><div id="songOriginalBpm" class="info-value">—</div></div>
             <div class="info-item"><div class="info-label">小節 / 音符</div><div id="songStats" class="info-value">—</div></div>
           </div>
 
@@ -1237,7 +1560,7 @@ html.setup-mode body .setup-card{
             <label class="check-row"><input id="metronomeToggle" type="checkbox" checked> 開啟節拍器提示音</label>
           </div>
 
-          <h2 style="margin-top:20px">③ 本曲軌道預覽</h2>
+          <h2 id="previewHeading" style="margin-top:20px">③ 本曲軌道預覽</h2>
           <div id="preview" class="preview">
             <div class="preview-empty">選擇曲目後，這裡會顯示使用到的音高軌道。</div>
           </div>
@@ -1368,7 +1691,15 @@ const state = {
   micNoiseFloor:0.0015,
   micGate:0.003,
   micIsIPad:false,
-  micSettings:null
+  micSettings:null,
+  practiceMode:"library",
+  librarySong:null,
+  randomSong:null,
+  randomSelected:new Set(),
+  randomQuestionCount:20,
+  randomNoteBeats:2,
+  avoidImmediateRepeat:true,
+  shuffleEachStart:true
 };
 
 const $ = id => document.getElementById(id);
@@ -1379,8 +1710,17 @@ const songSearch=$("songSearch"), gradeFilter=$("gradeFilter"), semesterFilter=$
 const songLibrary=$("songLibrary"), libraryStatus=$("libraryStatus"), refreshLibraryBtn=$("refreshLibraryBtn");
 const selectedPlaceholder=$("selectedPlaceholder"), selectedContent=$("selectedContent"), selectedMeta=$("selectedMeta");
 
+const libraryModeBtn=$("libraryModeBtn"), randomModeBtn=$("randomModeBtn");
+const libraryModePanel=$("libraryModePanel"), randomModePanel=$("randomModePanel");
+const lowNaturalPicker=$("lowNaturalPicker"), highNaturalPicker=$("highNaturalPicker"), accidentalPicker=$("accidentalPicker");
+const selectBeginnerNotesBtn=$("selectBeginnerNotesBtn"), selectNaturalNotesBtn=$("selectNaturalNotesBtn"), clearRandomNotesBtn=$("clearRandomNotesBtn");
+const randomQuestionCount=$("randomQuestionCount"), randomNoteBeats=$("randomNoteBeats");
+const avoidImmediateRepeat=$("avoidImmediateRepeat"), shuffleEachStart=$("shuffleEachStart");
+const generateRandomBtn=$("generateRandomBtn"), randomStatus=$("randomStatus");
+const selectionHeading=$("selectionHeading"), previewHeading=$("previewHeading");
+
 const songInfo=$("songInfo"), songTitle=$("songTitle"), songTime=$("songTime");
-const songOriginalBpm=$("songOriginalBpm"), songStats=$("songStats");
+const songBpmLabel=$("songBpmLabel"), songOriginalBpm=$("songOriginalBpm"), songStats=$("songStats");
 const noteTags=$("noteTags"), parseWarning=$("parseWarning"), preview=$("preview");
 
 const bpmRange=$("bpmRange"), bpmInput=$("bpmInput"), previewRange=$("previewRange"), previewValue=$("previewValue");
@@ -1389,6 +1729,281 @@ const startBtn=$("startBtn"), demoBtn=$("demoBtn"), pauseBtn=$("pauseBtn"), back
 const hudTitle=$("hudTitle"), hudSub=$("hudSub"), hudBpm=$("hudBpm"), progressText=$("progressText"), scoreText=$("scoreText");
 const meterFill=$("meterFill"), detectedNote=$("detectedNote"), statusText=$("statusText");
 const messageCard=$("messageCard"), messageMain=$("messageMain"), messageSub=$("messageSub");
+
+
+function setRandomStatus(text,type=""){
+  randomStatus.textContent=text;
+  randomStatus.className="random-status"+(type?` ${type}`:"");
+}
+
+function setSelectedPanelEmpty(message){
+  state.song=null;
+  state.selected=new Set();
+  selectedPlaceholder.textContent=message;
+  selectedPlaceholder.style.display="grid";
+  selectedContent.style.display="none";
+  startBtn.disabled=true;
+  demoBtn.disabled=true;
+}
+
+function displayLoadedSong(song,preferredBpm=null){
+  state.song=song;
+  state.selected=new Set(song.usedNotes);
+
+  const bpm=Number(preferredBpm)||song.originalBpm||80;
+  syncBpm(bpm);
+
+  selectedPlaceholder.style.display="none";
+  selectedContent.style.display="block";
+
+  renderSongInfo();
+  renderPreview();
+
+  startBtn.disabled=false;
+  demoBtn.disabled=false;
+}
+
+function setPracticeMode(mode){
+  state.practiceMode=mode==="random"?"random":"library";
+  const random=state.practiceMode==="random";
+
+  libraryModeBtn.classList.toggle("active",!random);
+  randomModeBtn.classList.toggle("active",random);
+  libraryModeBtn.setAttribute("aria-selected",String(!random));
+  randomModeBtn.setAttribute("aria-selected",String(random));
+
+  libraryModePanel.hidden=random;
+  randomModePanel.hidden=!random;
+
+  selectionHeading.textContent=random
+    ? "③ 已選音與練習設定"
+    : "② 已選曲目與練習設定";
+
+  previewHeading.textContent=random
+    ? "④ 指法練習軌道預覽"
+    : "③ 本曲軌道預覽";
+
+  if(random){
+    if(state.randomSong){
+      displayLoadedSong(state.randomSong,state.practiceBpm);
+    }else if(state.randomSelected.size){
+      generateRandomPractice(false);
+    }else{
+      setSelectedPanelEmpty("請先從左側勾選想練習的音。");
+    }
+  }else{
+    if(state.librarySong){
+      displayLoadedSong(state.librarySong,state.librarySong.originalBpm);
+    }else{
+      setSelectedPanelEmpty("請先從左側曲目庫選擇一首歌曲。");
+    }
+  }
+
+  requestAnimationFrame(()=>window.scrollTo({top:0,behavior:"smooth"}));
+}
+
+function createRandomNoteButton(note,container){
+  const button=document.createElement("button");
+  button.type="button";
+  button.className="random-note-button";
+  button.dataset.noteId=note.id;
+  button.textContent=note.label;
+  button.style.setProperty("--note-color",note.color);
+  button.setAttribute("aria-pressed","false");
+
+  button.addEventListener("click",()=>{
+    if(state.randomSelected.has(note.id)){
+      state.randomSelected.delete(note.id);
+    }else{
+      // 同音異名（例如升fa／降sol）使用相同頻率。
+      // 為避免麥克風只能判成其中一種唱名，選擇新拼法時自動取消同音的另一拼法。
+      NOTES
+        .filter(other=>other.midi===note.midi && other.id!==note.id)
+        .forEach(other=>state.randomSelected.delete(other.id));
+
+      state.randomSelected.add(note.id);
+    }
+    updateRandomNotePicker();
+    generateRandomPractice(false);
+  });
+
+  container.appendChild(button);
+}
+
+function buildRandomNotePicker(){
+  lowNaturalPicker.innerHTML="";
+  highNaturalPicker.innerHTML="";
+  accidentalPicker.innerHTML="";
+
+  NOTES.forEach(note=>{
+    if(note.alter===0 && note.octave===5){
+      createRandomNoteButton(note,lowNaturalPicker);
+    }else if(note.alter===0 && note.octave===6){
+      createRandomNoteButton(note,highNaturalPicker);
+    }else{
+      createRandomNoteButton(note,accidentalPicker);
+    }
+  });
+
+  updateRandomNotePicker();
+}
+
+function updateRandomNotePicker(){
+  document.querySelectorAll(".random-note-button").forEach(button=>{
+    const selected=state.randomSelected.has(button.dataset.noteId);
+    button.classList.toggle("selected",selected);
+    button.setAttribute("aria-pressed",String(selected));
+  });
+
+  generateRandomBtn.disabled=state.randomSelected.size===0;
+}
+
+function setRandomSelection(ids){
+  state.randomSelected=new Set(ids.filter(id=>NOTE_BY_ID[id]));
+  updateRandomNotePicker();
+  generateRandomPractice(false);
+}
+
+function shuffleArray(values){
+  const array=[...values];
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  }
+  return array;
+}
+
+function makeBalancedRandomSequence(ids,count,avoidRepeat=true){
+  if(!ids.length) return [];
+  if(ids.length===1) return Array(count).fill(ids[0]);
+
+  const result=[];
+  let last=null;
+
+  while(result.length<count){
+    let bag=shuffleArray(ids);
+
+    if(avoidRepeat && last && bag[0]===last){
+      const swapIndex=bag.findIndex(id=>id!==last);
+      if(swapIndex>0){
+        [bag[0],bag[swapIndex]]=[bag[swapIndex],bag[0]];
+      }
+    }
+
+    for(const id of bag){
+      if(result.length>=count) break;
+
+      if(avoidRepeat && id===last){
+        const alternative=bag.find(candidate=>candidate!==last && !result.includes(candidate));
+        if(alternative){
+          result.push(alternative);
+          last=alternative;
+          continue;
+        }
+      }
+
+      result.push(id);
+      last=id;
+    }
+  }
+
+  return result.slice(0,count);
+}
+
+function generateRandomPractice(showConfirmation=true){
+  const ids=NOTES
+    .filter(note=>state.randomSelected.has(note.id))
+    .sort((a,b)=>a.midi-b.midi || a.label.localeCompare(b.label,"zh-Hant"))
+    .map(note=>note.id);
+
+  if(!ids.length){
+    state.randomSong=null;
+    if(state.practiceMode==="random"){
+      setSelectedPanelEmpty("請先從左側勾選想練習的音。");
+    }
+    setRandomStatus("至少選擇一個音，才能產生題目。","error");
+    return null;
+  }
+
+  const count=Math.max(1,Number(randomQuestionCount.value)||20);
+  const noteBeats=Math.max(1,Number(randomNoteBeats.value)||2);
+  const avoid=avoidImmediateRepeat.checked;
+
+  state.randomQuestionCount=count;
+  state.randomNoteBeats=noteBeats;
+  state.avoidImmediateRepeat=avoid;
+  state.shuffleEachStart=shuffleEachStart.checked;
+
+  const sequence=makeBalancedRandomSequence(ids,count,avoid);
+  const durationTick=noteBeats*TPQN;
+  const events=sequence.map((noteId,index)=>({
+    id:`random-${Date.now()}-${index}`,
+    noteId,
+    startTick:index*durationTick,
+    durationTick
+  }));
+
+  const totalTicks=count*durationTick;
+  const measureTicks=4*TPQN;
+  const song={
+    title:"指法隨機練習",
+    timeSignature:"4/4",
+    originalBpm:state.practiceBpm||80,
+    beats:4,
+    beatType:4,
+    measureCount:Math.ceil(totalTicks/measureTicks),
+    events,
+    usedNotes:[...ids],
+    totalTicks,
+    warnings:[],
+    libraryMeta:{
+      category:"指法隨機練習",
+      source:"系統隨機出題",
+      randomPractice:true,
+      description:`選擇 ${ids.length} 個音｜${count} 題｜每題 ${noteBeats} 拍`
+    }
+  };
+
+  state.randomSong=song;
+
+  if(state.practiceMode==="random"){
+    displayLoadedSong(song,state.practiceBpm);
+  }
+
+  setRandomStatus(
+    `已產生 ${count} 題，使用 ${ids.length} 個音，每題 ${noteBeats} 拍。`,
+    "ready"
+  );
+
+  if(showConfirmation && state.practiceMode==="random"){
+    selectedMeta.textContent=`系統已重新排列｜${ids.length} 個音｜${count} 題｜每題 ${noteBeats} 拍`;
+  }
+
+  return song;
+}
+
+libraryModeBtn.addEventListener("click",()=>setPracticeMode("library"));
+randomModeBtn.addEventListener("click",()=>setPracticeMode("random"));
+
+selectBeginnerNotesBtn.addEventListener("click",()=>{
+  setRandomSelection(["sol","la","si"]);
+});
+
+selectNaturalNotesBtn.addEventListener("click",()=>{
+  setRandomSelection(NOTES.filter(note=>note.alter===0).map(note=>note.id));
+});
+
+clearRandomNotesBtn.addEventListener("click",()=>{
+  setRandomSelection([]);
+});
+
+randomQuestionCount.addEventListener("change",()=>generateRandomPractice(false));
+randomNoteBeats.addEventListener("change",()=>generateRandomPractice(false));
+avoidImmediateRepeat.addEventListener("change",()=>generateRandomPractice(false));
+shuffleEachStart.addEventListener("change",()=>{
+  state.shuffleEachStart=shuffleEachStart.checked;
+});
+generateRandomBtn.addEventListener("click",()=>generateRandomPractice(true));
 
 musicXmlInput.addEventListener("change", e => {
   const file=e.target.files?.[0];
@@ -1563,21 +2178,16 @@ async function loadSongLibrary(force=false){
   }
 }
 
-function applyLoadedSong(song,sourceLabel,preferredBpm=null){
-  state.song=song;
-  state.selected=new Set(song.usedNotes);
+function applyLoadedSong(song,sourceLabel,preferredBpm=null,mode="library"){
+  if(mode==="random"){
+    state.randomSong=song;
+  }else{
+    state.librarySong=song;
+  }
 
-  const bpm=Number(preferredBpm)||song.originalBpm||80;
-  syncBpm(bpm);
-
-  selectedPlaceholder.style.display="none";
-  selectedContent.style.display="block";
-
-  renderSongInfo();
-  renderPreview();
-
-  startBtn.disabled=false;
-  demoBtn.disabled=false;
+  if(state.practiceMode===mode){
+    displayLoadedSong(song,preferredBpm);
+  }
 
   if(sourceLabel) fileName.textContent=sourceLabel;
 }
@@ -1601,7 +2211,7 @@ async function selectLibrarySong(entry,card){
     song.libraryMeta=entry;
 
     state.selectedLibraryId=entry.id;
-    applyLoadedSong(song,entry.file,entry.defaultBpm);
+    applyLoadedSong(song,entry.file,entry.defaultBpm,"library");
 
     renderSongLibrary();
     setLibraryStatus(`已選擇〈${song.title}〉`,"success");
@@ -1626,7 +2236,7 @@ async function loadMusicXmlFile(file){
     };
 
     state.selectedLibraryId=null;
-    applyLoadedSong(song,file.name,song.originalBpm);
+    applyLoadedSong(song,file.name,song.originalBpm,"library");
     renderSongLibrary();
 
     fileName.textContent=file.name;
@@ -1798,8 +2408,11 @@ function renderSongInfo(){
   songInfo.style.display="grid";
   songTitle.textContent=s.title;
   songTime.textContent=s.timeSignature;
-  songOriginalBpm.textContent=Math.round(s.originalBpm);
-  songStats.textContent=`${s.measureCount} 小節 / ${s.events.length} 音`;
+  songBpmLabel.textContent=meta.randomPractice?"練習 BPM":"原譜 BPM";
+  songOriginalBpm.textContent=Math.round(meta.randomPractice?state.practiceBpm:s.originalBpm);
+  songStats.textContent=meta.randomPractice
+    ? `${s.events.length} 題 / ${s.usedNotes.length} 個音`
+    : `${s.measureCount} 小節 / ${s.events.length} 音`;
 
   const metaParts=[
     meta.grade,
@@ -1848,6 +2461,7 @@ function trackYFor(noteId){
 function renderPreview(){
   preview.innerHTML="";
   const selected=getSelectedNotes();
+  preview.style.height=`${Math.max(330,selected.length*54+70)}px`;
   if(!selected.length){
     preview.innerHTML='<div class="preview-empty">尚未有可顯示的音高軌道。</div>'; return;
   }
@@ -1943,6 +2557,10 @@ async function initMic(){
 }
 
 async function startGame(useMic){
+  if(state.practiceMode==="random" && shuffleEachStart.checked){
+    generateRandomPractice(false);
+  }
+
   if(!state.song) return;
   state.demoMode=!useMic;
   if(useMic){
@@ -2043,7 +2661,14 @@ function stopAndReturn(){
   meterFill.style.width="0%"; detectedNote.textContent="—";
   setTimeout(renderPreview,0);
   if(state.song){
-    setLibraryStatus(`目前選擇：〈${state.song.title}〉`,"success");
+    if(state.practiceMode==="random"){
+      setRandomStatus(
+        `目前題目：${state.song.events.length} 題，使用 ${state.song.usedNotes.length} 個音。`,
+        "ready"
+      );
+    }else{
+      setLibraryStatus(`目前選擇：〈${state.song.title}〉`,"success");
+    }
   }
 }
 
@@ -2775,6 +3400,8 @@ addEventListener("keyup",e=>{
 });
 
 resizeCanvas();
+buildRandomNotePicker();
+setPracticeMode("library");
 loadSongLibrary();
 })();
 </script>
