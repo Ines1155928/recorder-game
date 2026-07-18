@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" class="setup-mode">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V4.4｜iPad 操作與清晰度修正版</title>
+<title>直笛音高挑戰 V4.5｜iPad 捲動與按鈕對比修正版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -997,6 +997,112 @@ body.setup-mode .setup-card{
   }
 }
 
+
+/* ===== V4.5 iPad 真正整頁捲動修正 ===== */
+
+/* 前版只解除 body，html 仍是 overflow:hidden；本版兩者一起解除。 */
+html.setup-mode,
+body.setup-mode{
+  width:100%;
+  height:auto !important;
+  min-height:100% !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:auto;
+}
+
+html.setup-mode body{
+  position:static !important;
+  touch-action:pan-y;
+}
+
+html.setup-mode body .app{
+  position:relative;
+  width:100%;
+  height:auto !important;
+  min-height:100vh;
+  min-height:100dvh;
+  overflow:visible !important;
+}
+
+html.setup-mode body #setupScreen.active{
+  position:relative !important;
+  inset:auto !important;
+  width:100%;
+  height:auto !important;
+  min-height:100vh;
+  min-height:100dvh;
+  overflow:visible !important;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+html.setup-mode body .setup-card{
+  height:auto !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+
+/* iPad / 觸控裝置只保留「整個頁面」一個捲動區，避免歌曲清單搶走手勢。 */
+@media (pointer:coarse), (max-width:1180px){
+  html.setup-mode body .song-library{
+    max-height:none !important;
+    overflow:visible !important;
+    -webkit-overflow-scrolling:auto;
+  }
+
+  html.setup-mode body .setup-actions{
+    position:static !important;
+    bottom:auto !important;
+    margin-top:20px !important;
+    padding:12px 0 max(18px,env(safe-area-inset-bottom)) !important;
+    background:transparent !important;
+    border-radius:0 !important;
+  }
+}
+
+/* 重新整理按鈕改為深色文字與清楚邊框。 */
+#refreshLibraryBtn{
+  color:#183d59 !important;
+  background:linear-gradient(180deg,#e8f1f5,#d8e7ee) !important;
+  border:2px solid #7fa8bd !important;
+  font-weight:1000 !important;
+  text-shadow:none !important;
+  box-shadow:0 5px 0 rgba(72,118,148,.16),0 9px 16px rgba(73,118,147,.12) !important;
+}
+
+#refreshLibraryBtn:hover,
+#refreshLibraryBtn:focus{
+  color:#102f47 !important;
+  background:linear-gradient(180deg,#edf5f8,#cfe2eb) !important;
+  border-color:#5f91aa !important;
+}
+
+#refreshLibraryBtn:active{
+  transform:translateY(2px);
+  box-shadow:0 2px 0 rgba(72,118,148,.16) !important;
+}
+
+/* 再提高曲目庫狀態文字的對比。 */
+.library-status{
+  color:#435f77 !important;
+  font-weight:850;
+}
+
+.library-status.success{
+  color:#174f38 !important;
+  background:#d4e8dc !important;
+  border-color:#8fbea3 !important;
+}
+
+.library-status.error{
+  color:#7a293a !important;
+  background:#efd5dc !important;
+  border-color:#cf95a4 !important;
+}
+
 </style>
 </head>
 <body class="setup-mode">
@@ -1008,10 +1114,10 @@ body.setup-mode .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V4.4</h1>
+        <h1>🎵 直笛音高挑戰 V4.5</h1>
         <div class="subtitle">學生直接從雲端曲目庫選歌；老師仍可自行匯入 MusicXML 測試新樂譜。</div>
       </div>
-      <div class="badge">🌈 iPad 清晰操作版</div>
+      <div class="badge">🌈 iPad 捲動修正版</div>
     </div>
 
     <div class="setup-grid">
@@ -1776,6 +1882,7 @@ async function startGame(useMic){
   hudTitle.textContent=state.song.title; hudSub.textContent=`${state.song.timeSignature}｜${state.song.events.length} 個音符`;
   statusText.textContent=state.demoMode?demoHelpText():"麥克風已啟用，請依拍點吹奏";
   pauseBtn.textContent="⏸";
+  document.documentElement.classList.remove("setup-mode");
   document.body.classList.remove("setup-mode");
   window.scrollTo(0,0);
   setupScreen.classList.remove("active");
@@ -1830,6 +1937,7 @@ function stopAndReturn(){
   state.running=false; state.paused=false; state.finished=false;
   gameScreen.classList.remove("active");
   setupScreen.classList.add("active");
+  document.documentElement.classList.add("setup-mode");
   document.body.classList.add("setup-mode");
   requestAnimationFrame(()=>window.scrollTo(0,0));
   if(state.mediaStream){state.mediaStream.getTracks().forEach(t=>t.stop());state.mediaStream=null}
