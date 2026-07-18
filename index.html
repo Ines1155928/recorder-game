@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V4｜雲端曲目庫</title>
+<title>直笛音高挑戰 V4.2｜童趣可愛版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -13,8 +13,9 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--text);background:
-radial-gradient(circle at 20% 20%,rgba(47,123,255,.2),transparent 32%),
-radial-gradient(circle at 80% 30%,rgba(147,55,255,.15),transparent 30%),
+radial-gradient(circle at 12% 16%,rgba(255,193,220,.55),transparent 24%),
+radial-gradient(circle at 82% 18%,rgba(139,221,255,.5),transparent 26%),
+radial-gradient(circle at 75% 75%,rgba(255,232,160,.42),transparent 24%),
 linear-gradient(180deg,var(--bg2),var(--bg1))}
 button,input{font:inherit}
 button{border:0;border-radius:14px;padding:11px 16px;cursor:pointer;font-weight:800;color:#06101f;background:#fff}
@@ -218,6 +219,12 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 .meter-fill{height:100%;width:0;background:linear-gradient(90deg,#56d9ff,#7cff9b,#ffe76d);transition:width .05s linear}
 .tip-box{display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:13px}
 .orientation-warning{display:none;position:fixed;inset:0;z-index:9999;place-items:center;text-align:center;padding:28px;background:#071226}
+
+.note-tag{padding:7px 11px;border-radius:999px;font-weight:900;border:1px solid var(--c);color:#fff;background:var(--c);box-shadow:0 6px 12px rgba(140,193,230,.18)}
+.preview-track{position:absolute;left:110px;right:18px;height:4px;transform:translateY(-50%);background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 55%,transparent),transparent)}
+.preview-label{position:absolute;left:12px;transform:translateY(-50%);min-width:84px;text-align:center;padding:8px 10px;border-radius:999px;background:#ffffff;border:2px solid var(--c);color:#335d83;font-size:21px;font-weight:1000;box-shadow:0 6px 14px rgba(147,201,232,.18)}
+.preview-receiver{position:absolute;left:92px;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;border:3px solid rgba(255,255,255,.96);background:radial-gradient(circle at 35% 30%,#fff 0 7%,var(--c) 10% 62%,#d9f2ff 70%);box-shadow:0 0 16px var(--c)}
+
 @media (orientation:portrait) and (max-width:900px){.orientation-warning{display:grid}}
 @media(max-width:900px){
   #setupScreen{padding:10px}.setup-card{padding:16px}.setup-grid{grid-template-columns:1fr}.preview{height:250px}
@@ -225,18 +232,396 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
   .stat{min-width:70px;padding:5px 7px}.stat-value{font-size:16px}.bottom-bar{min-height:64px;padding:6px 8px;gap:7px}
   .meter-box,.detected-box,.tip-box{min-height:46px;padding:6px 8px}.detected-note{font-size:22px}
 }
+
+/* ===== V4.2 童趣可愛版視覺覆寫 ===== */
+:root{
+  --cute-pink:#ffb8d2;
+  --cute-blue:#94ddff;
+  --cute-yellow:#ffe48b;
+  --cute-green:#9ee6bd;
+  --cute-purple:#c9b5ff;
+  --cute-ink:#31557a;
+}
+
+html,body{
+  font-family:"Arial Rounded MT Bold","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  background:
+    radial-gradient(circle at 8% 13%,rgba(255,190,216,.75),transparent 17%),
+    radial-gradient(circle at 91% 12%,rgba(149,225,255,.72),transparent 18%),
+    radial-gradient(circle at 82% 86%,rgba(255,228,139,.62),transparent 18%),
+    radial-gradient(circle at 17% 82%,rgba(165,232,194,.55),transparent 18%),
+    linear-gradient(180deg,#fffafe 0%,#eefaff 52%,#fffdf2 100%);
+}
+
+#setupScreen{
+  position:relative;
+}
+#setupScreen::before,
+#setupScreen::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:0;
+  border-radius:999px;
+  filter:drop-shadow(0 8px 14px rgba(112,172,217,.13));
+}
+#setupScreen::before{
+  width:210px;
+  height:72px;
+  left:2.5vw;
+  top:5vh;
+  background:
+    radial-gradient(circle at 28% 62%,#fff 0 36%,transparent 37%),
+    radial-gradient(circle at 50% 40%,#fff 0 44%,transparent 45%),
+    radial-gradient(circle at 73% 62%,#fff 0 34%,transparent 35%);
+  opacity:.92;
+}
+#setupScreen::after{
+  width:175px;
+  height:62px;
+  right:3vw;
+  bottom:5vh;
+  background:
+    radial-gradient(circle at 27% 62%,#fff 0 34%,transparent 35%),
+    radial-gradient(circle at 51% 39%,#fff 0 45%,transparent 46%),
+    radial-gradient(circle at 75% 63%,#fff 0 33%,transparent 34%);
+  opacity:.82;
+}
+
+.setup-card{
+  position:relative;
+  z-index:1;
+  border-radius:34px;
+  border:4px solid rgba(255,255,255,.95);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.95),rgba(250,253,255,.91));
+  box-shadow:
+    0 20px 0 rgba(171,220,248,.18),
+    0 30px 55px rgba(107,164,206,.2);
+  overflow:visible;
+}
+
+.cute-stickers{
+  position:absolute;
+  inset:-23px 34px auto 34px;
+  display:flex;
+  justify-content:space-between;
+  pointer-events:none;
+  z-index:5;
+}
+.cute-stickers span{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  font-size:23px;
+  font-weight:1000;
+  color:#fff;
+  border:4px solid #fff;
+  box-shadow:0 8px 14px rgba(109,165,205,.17);
+  transform:rotate(-7deg);
+}
+.cute-stickers span:nth-child(1){background:var(--cute-pink)}
+.cute-stickers span:nth-child(2){background:var(--cute-yellow);transform:rotate(8deg)}
+.cute-stickers span:nth-child(3){background:var(--cute-blue)}
+.cute-stickers span:nth-child(4){background:var(--cute-green);transform:rotate(8deg)}
+.cute-stickers span:nth-child(5){background:var(--cute-purple)}
+
+h1{
+  font-weight:1000;
+  letter-spacing:.02em;
+  color:#315e89;
+  text-shadow:0 3px 0 #fff,0 7px 14px rgba(103,164,211,.16);
+}
+.subtitle{
+  color:#6285a4;
+  font-weight:800;
+}
+.badge{
+  border-radius:999px;
+  background:linear-gradient(135deg,#fff1a9,#ffd5e6 48%,#c9efff);
+  color:#395f82;
+  border:3px solid #fff;
+  box-shadow:0 8px 0 rgba(153,205,236,.17);
+  transform:rotate(1deg);
+}
+
+.panel{
+  position:relative;
+  border-radius:28px;
+  border:3px solid #fff;
+  box-shadow:0 12px 0 rgba(154,206,235,.12),0 18px 30px rgba(143,193,226,.12);
+  overflow:hidden;
+}
+.panel:first-child{
+  background:linear-gradient(180deg,#fff9fc,#fff);
+}
+.panel:nth-child(2){
+  background:linear-gradient(180deg,#f5fcff,#fffef8);
+}
+.panel h2{
+  color:#315e89;
+  font-size:21px;
+  font-weight:1000;
+}
+.panel h2::before{
+  content:"✨";
+  margin-right:7px;
+}
+
+.library-toolbar{
+  gap:11px;
+}
+.library-control{
+  border-radius:17px;
+  border:3px solid #fff;
+  background:#fff;
+  color:#31557a;
+  font-weight:800;
+  box-shadow:0 7px 0 rgba(150,207,239,.12),0 10px 20px rgba(146,194,226,.1);
+}
+.library-control:focus{
+  border-color:var(--cute-blue);
+  box-shadow:0 0 0 4px rgba(148,221,255,.22);
+}
+
+.icon-button,
+.secondary,
+.primary,
+.song-select-button{
+  border:3px solid #fff;
+  border-radius:18px;
+  font-weight:1000;
+  box-shadow:0 7px 0 rgba(116,177,219,.17),0 12px 22px rgba(119,174,213,.12);
+  transition:transform .16s ease,box-shadow .16s ease;
+}
+.icon-button:hover,
+.secondary:hover,
+.primary:hover,
+.song-select-button:hover{
+  transform:translateY(-2px) rotate(-.4deg);
+  box-shadow:0 10px 0 rgba(116,177,219,.15),0 16px 26px rgba(119,174,213,.15);
+}
+.primary{
+  background:linear-gradient(135deg,#8fe8ff,#a7c8ff 48%,#ffc3dc);
+}
+.secondary{
+  background:linear-gradient(180deg,#fff,#f1faff);
+}
+.icon-button{
+  background:linear-gradient(180deg,#fff,#eef9ff);
+}
+.song-select-button{
+  background:linear-gradient(135deg,#8be9ff,#b7d1ff 48%,#ffc6df);
+}
+
+.song-library{
+  gap:14px;
+  padding:5px 7px 9px 4px;
+}
+.song-card{
+  position:relative;
+  border-radius:25px;
+  border:4px solid #fff;
+  min-height:158px;
+  overflow:hidden;
+  box-shadow:0 10px 0 rgba(164,210,238,.14),0 16px 28px rgba(137,188,222,.12);
+}
+.song-card:nth-child(4n+1){
+  background:linear-gradient(145deg,#fff7fb,#ffeaf3);
+}
+.song-card:nth-child(4n+2){
+  background:linear-gradient(145deg,#f4fcff,#e3f6ff);
+}
+.song-card:nth-child(4n+3){
+  background:linear-gradient(145deg,#fffdf1,#fff4bd);
+}
+.song-card:nth-child(4n+4){
+  background:linear-gradient(145deg,#f5fff8,#dcf7e7);
+}
+.song-card::before{
+  content:"♪";
+  position:absolute;
+  right:12px;
+  top:5px;
+  font-size:46px;
+  font-weight:1000;
+  color:rgba(73,133,180,.10);
+  transform:rotate(12deg);
+}
+.song-card:hover{
+  transform:translateY(-4px) rotate(-.3deg);
+  border-color:#fff;
+}
+.song-card.selected{
+  box-shadow:
+    0 0 0 5px rgba(92,203,255,.24),
+    0 12px 0 rgba(115,199,238,.15),
+    0 20px 32px rgba(128,187,224,.17);
+}
+.song-card-title{
+  color:#31577c;
+  font-size:21px;
+  font-weight:1000;
+}
+.song-card-meta{
+  color:#6d88a0;
+  font-weight:800;
+}
+.song-mini-tag{
+  background:#fff;
+  color:#486b8b;
+  border:2px solid rgba(255,255,255,.94);
+  box-shadow:0 4px 0 rgba(120,186,225,.10);
+}
+.song-mini-tag:nth-child(3n+1){background:#fff4b9}
+.song-mini-tag:nth-child(3n+2){background:#ffe3ef}
+.song-mini-tag:nth-child(3n+3){background:#dff6ff}
+
+.selected-placeholder,
+.library-empty{
+  border:3px dashed rgba(125,196,236,.34);
+  border-radius:23px;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,222,235,.55),transparent 22%),
+    radial-gradient(circle at 80% 26%,rgba(191,236,255,.55),transparent 24%),
+    linear-gradient(180deg,#fff,#f9fdff);
+  font-weight:900;
+}
+.selected-meta{
+  border-radius:18px;
+  border:3px solid #fff;
+  background:linear-gradient(135deg,#fff9c9,#ffe5f0 52%,#e1f7ff);
+  color:#456b8b;
+  font-weight:900;
+  box-shadow:0 6px 0 rgba(143,200,233,.11);
+}
+.info-item{
+  border-radius:18px;
+  border:3px solid #fff;
+  background:#fff;
+  box-shadow:0 6px 0 rgba(145,200,232,.1);
+}
+.info-label{
+  color:#7a96ad;
+  font-weight:800;
+}
+.info-value{
+  color:#31577c;
+}
+
+.note-tag{
+  border:3px solid #fff;
+  border-radius:999px;
+  box-shadow:0 5px 0 rgba(103,167,210,.13);
+}
+
+.option-row label,
+.check-row{
+  color:#496c8d;
+  font-weight:900;
+}
+.number-input{
+  border-radius:14px;
+  border:3px solid #fff;
+  background:#fff;
+  color:#31577c;
+  box-shadow:0 5px 0 rgba(136,194,230,.1);
+}
+
+.preview{
+  border-radius:26px;
+  border:4px solid #fff;
+  background:
+    radial-gradient(circle at 13% 17%,rgba(255,215,231,.7),transparent 20%),
+    radial-gradient(circle at 82% 16%,rgba(175,232,255,.7),transparent 22%),
+    radial-gradient(circle at 70% 85%,rgba(255,235,153,.48),transparent 20%),
+    linear-gradient(180deg,#ffffff,#f3fbff);
+  box-shadow:inset 0 0 0 2px rgba(135,198,235,.08),0 10px 0 rgba(151,205,235,.11);
+}
+.preview-label{
+  border:3px solid #fff;
+  box-shadow:0 6px 0 rgba(105,170,212,.14);
+}
+.preview-receiver{
+  border:4px solid #fff;
+}
+
+/* 遊戲畫面也改成童趣教學遊戲風格 */
+.hud{
+  background:linear-gradient(180deg,#fff,#f0faff);
+  border-bottom:4px solid #fff;
+  box-shadow:0 8px 0 rgba(147,204,236,.12);
+}
+.hud-title{
+  color:#31577c;
+}
+.stat{
+  border:3px solid #fff;
+  border-radius:18px;
+  box-shadow:0 5px 0 rgba(145,201,233,.11);
+}
+.stat:nth-of-type(1){background:#fff6bd}
+.stat:nth-of-type(2){background:#e7f7ff}
+.stat:nth-of-type(3){background:#ffe6f1}
+.hud button{
+  border:3px solid #fff;
+  border-radius:16px;
+  box-shadow:0 5px 0 rgba(144,199,231,.13);
+}
+
+.game-area{
+  background:
+    radial-gradient(circle at 13% 12%,rgba(255,219,234,.55),transparent 19%),
+    radial-gradient(circle at 87% 16%,rgba(172,230,255,.6),transparent 21%),
+    radial-gradient(circle at 82% 88%,rgba(255,233,157,.5),transparent 20%),
+    linear-gradient(180deg,#fdfdff,#edf9ff);
+}
+.message-card{
+  border:4px solid #fff;
+  border-radius:25px;
+  background:linear-gradient(145deg,#fff,#f5fbff);
+  box-shadow:0 10px 0 rgba(141,200,234,.13),0 18px 30px rgba(121,180,218,.14);
+}
+.message-main{
+  color:#31577c;
+}
+.bottom-bar{
+  border-top:4px solid #fff;
+  background:linear-gradient(180deg,#fff,#f1faff);
+  box-shadow:0 -7px 0 rgba(145,202,234,.11);
+}
+.meter-box,.detected-box,.tip-box{
+  border:3px solid #fff;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 5px 0 rgba(144,199,231,.1);
+}
+.detected-box{background:#fff2f8}
+.meter-box{background:#f1fbff}
+.tip-box{background:#fffbea}
+
+@media(max-width:900px){
+  .cute-stickers{inset:-18px 20px auto 20px}
+  .cute-stickers span{width:34px;height:34px;font-size:18px;border-width:3px}
+}
+
 </style>
 </head>
 <body>
 <div class="app">
 <section id="setupScreen" class="screen active">
   <div class="setup-card">
+      <div class="cute-stickers" aria-hidden="true">
+        <span>♪</span><span>★</span><span>♫</span><span>☁</span><span>♬</span>
+      </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V4</h1>
+        <h1>🎵 直笛音高挑戰 V4.2</h1>
         <div class="subtitle">學生直接從雲端曲目庫選歌；老師仍可自行匯入 MusicXML 測試新樂譜。</div>
       </div>
-      <div class="badge">雲端曲目庫</div>
+      <div class="badge">🌈 童趣可愛版</div>
     </div>
 
     <div class="setup-grid">
