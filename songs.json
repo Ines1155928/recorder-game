@@ -1,0 +1,19 @@
+[
+  {
+    "id": "hot-bread",
+    "title": "熱麵包",
+    "file": "songs/hot-bread.musicxml",
+    "grade": "三年級",
+    "semester": "上學期",
+    "category": "課本歌曲",
+    "difficulty": 1,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "sol-la-si",
+      "基礎節奏"
+    ],
+    "description": "適合練習 sol、la、si 與四分、八分音符。",
+    "enabled": true
+  }
+]
