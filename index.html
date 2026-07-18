@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V4.6｜iPad 麥克風靈敏度修正版</title>
+<title>直笛音高挑戰 V4.7｜按鈕對比與圓形洞口修正版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1116,6 +1116,35 @@ html.setup-mode body .setup-card{
   min-width:2px;
 }
 
+
+/* ===== V4.7 按鈕對比與洞口視覺修正 ===== */
+
+/* 初始頁「不開麥克風試玩」按鈕提高對比，就算尚未選歌為 disabled 也能看清楚。 */
+#demoBtn{
+  color:#173a56 !important;
+  background:linear-gradient(180deg,#ecf2f6,#dce8ee) !important;
+  border:2px solid #8aa9ba !important;
+  text-shadow:none !important;
+  font-weight:1000 !important;
+}
+#demoBtn:disabled{
+  opacity:.72 !important;
+  color:#294c67 !important;
+  background:linear-gradient(180deg,#eef3f6,#dfe9ee) !important;
+  border-color:#9ab2c0 !important;
+}
+#demoBtn:not(:disabled):hover,
+#demoBtn:not(:disabled):focus{
+  color:#102f47 !important;
+  background:linear-gradient(180deg,#f1f6f9,#d3e2ea) !important;
+  border-color:#6d95aa !important;
+}
+
+/* 開始按鈕 disabled 狀態也略提高可讀性 */
+#startBtn:disabled{
+  opacity:.72 !important;
+}
+
 </style>
 </head>
 <body class="setup-mode">
@@ -1127,10 +1156,10 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V4.6</h1>
+        <h1>🎵 直笛音高挑戰 V4.7</h1>
         <div class="subtitle">學生直接從雲端曲目庫選歌；老師仍可自行匯入 MusicXML 測試新樂譜。</div>
       </div>
-      <div class="badge">🎤 iPad 麥克風修正版</div>
+      <div class="badge">🎤 V4.7 修正版</div>
     </div>
 
     <div class="setup-grid">
@@ -2506,9 +2535,18 @@ function drawGame(currentTick){
 
     ctx.save();
 
-    // 只保留洞口右側的音符畫面；進入洞口後逐步被吃掉
+    // 只保留接收器洞口外側的音符畫面。
+    // 使用接收器「右半圓」當裁切邊界，讓音符消失時能貼合圓形洞口，
+    // 不再是平平的一刀切。
+    const holeR = 21;
     ctx.beginPath();
-    ctx.rect(rx-8,0,w-(rx-8),h);
+    ctx.moveTo(w+120, -120);
+    ctx.lineTo(w+120, h+120);
+    ctx.lineTo(rx + holeR, h+120);
+    ctx.lineTo(rx + holeR, y + holeR);
+    ctx.arc(rx, y, holeR, Math.PI/2, -Math.PI/2, true);
+    ctx.lineTo(rx + holeR, -120);
+    ctx.closePath();
     ctx.clip();
 
     if(st?.judged) ctx.globalAlpha=st.hit?.28:.16;
