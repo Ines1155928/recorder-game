@@ -15,5 +15,35 @@
     ],
     "description": "適合練習 sol、la、si 與四分、八分音符。",
     "enabled": true
+  },
+  {
+    "id": "when we play togerther",
+    "title": "當我們同在一起",
+    "file": "songs/when we play togerther.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "補充歌曲",
+    "difficulty": 3,
+    "defaultBpm": 80,
+    "tags": [
+      "3/4",
+    ],
+    "description": "適合練習附點四分音符、高音mi。",
+    "enabled": true
+  },
+  {
+    "id": "donadona",
+    "title": "多娜多娜",
+    "file": "songs/donadona.musicxml",
+    "grade": "四年級",
+    "semester": "上學期",
+    "category": "補充歌曲",
+    "difficulty": 2,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+    ],
+    "description": "練習升fa。",
+    "enabled": true
   }
 ]
