@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V4.5｜iPad 捲動與按鈕對比修正版</title>
+<title>直笛音高挑戰 V4.6｜iPad 麥克風靈敏度修正版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1103,6 +1103,19 @@ html.setup-mode body .setup-card{
   border-color:#cf95a4 !important;
 }
 
+
+/* ===== V4.6 iPad 麥克風顯示修正 ===== */
+.detected-note{
+  color:#2d5271;
+  text-shadow:none;
+}
+.meter-track{
+  background:#cbdce5;
+}
+.meter-fill{
+  min-width:2px;
+}
+
 </style>
 </head>
 <body class="setup-mode">
@@ -1114,10 +1127,10 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V4.5</h1>
+        <h1>🎵 直笛音高挑戰 V4.6</h1>
         <div class="subtitle">學生直接從雲端曲目庫選歌；老師仍可自行匯入 MusicXML 測試新樂譜。</div>
       </div>
-      <div class="badge">🌈 iPad 捲動修正版</div>
+      <div class="badge">🎤 iPad 麥克風修正版</div>
     </div>
 
     <div class="setup-grid">
@@ -1321,7 +1334,12 @@ const state = {
   finished:false,
   library:[],
   libraryLoaded:false,
-  selectedLibraryId:null
+  selectedLibraryId:null,
+  micGainNode:null,
+  micNoiseFloor:0.0015,
+  micGate:0.003,
+  micIsIPad:false,
+  micSettings:null
 };
 
 const $ = id => document.getElementById(id);
@@ -1843,14 +1861,56 @@ function resizeCanvas(){
 }
 addEventListener("resize",resizeCanvas);
 
+function isAppleTablet(){
+  return /iPad|iPhone|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+}
+
 async function initMic(){
   if(!navigator.mediaDevices?.getUserMedia) throw new Error("此瀏覽器不支援麥克風存取");
-  state.mediaStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
-  state.audioContext=new (AudioContext||webkitAudioContext)();
+
+  state.micIsIPad=isAppleTablet();
+  const supported=navigator.mediaDevices.getSupportedConstraints?.()||{};
+  const audio={};
+
+  // 使用 ideal，避免某些 Safari 因不支援特定限制而直接拒絕麥克風。
+  if(supported.echoCancellation) audio.echoCancellation={ideal:false};
+  if(supported.noiseSuppression) audio.noiseSuppression={ideal:false};
+
+  // iPad 麥克風輸入通常較小，保留自動增益可提高穩定度。
+  if(supported.autoGainControl) audio.autoGainControl={ideal:state.micIsIPad};
+
+  try{
+    state.mediaStream=await navigator.mediaDevices.getUserMedia({audio});
+  }catch(firstError){
+    console.warn("自訂音訊條件失敗，改用瀏覽器預設麥克風設定",firstError);
+    state.mediaStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  }
+
+  const track=state.mediaStream.getAudioTracks()[0];
+  state.micSettings=track?.getSettings?.()||null;
+
+  state.audioContext=new (window.AudioContext||window.webkitAudioContext)({
+    latencyHint:"interactive"
+  });
   await state.audioContext.resume();
+
   const source=state.audioContext.createMediaStreamSource(state.mediaStream);
-  state.analyser=state.audioContext.createAnalyser(); state.analyser.fftSize=4096; state.analyser.smoothingTimeConstant=.12;
-  source.connect(state.analyser); state.audioBuffer=new Float32Array(state.analyser.fftSize);
+  state.micGainNode=state.audioContext.createGain();
+
+  // iPad 先以數位方式放大，再交給音高辨識；電腦只做輕微補償。
+  state.micGainNode.gain.value=state.micIsIPad?2.8:1.25;
+
+  state.analyser=state.audioContext.createAnalyser();
+  state.analyser.fftSize=4096;
+  state.analyser.smoothingTimeConstant=.08;
+
+  source.connect(state.micGainNode);
+  state.micGainNode.connect(state.analyser);
+
+  state.audioBuffer=new Float32Array(state.analyser.fftSize);
+  state.micNoiseFloor=state.micIsIPad?0.0012:0.0018;
+  state.micGate=state.micIsIPad?0.0024:0.0045;
 }
 
 async function startGame(useMic){
@@ -1880,7 +1940,11 @@ async function startGame(useMic){
 
   scoreText.textContent="0"; progressText.textContent="0%"; hudBpm.textContent=Math.round(state.practiceBpm);
   hudTitle.textContent=state.song.title; hudSub.textContent=`${state.song.timeSignature}｜${state.song.events.length} 個音符`;
-  statusText.textContent=state.demoMode?demoHelpText():"麥克風已啟用，請依拍點吹奏";
+  statusText.textContent=state.demoMode
+    ? demoHelpText()
+    : state.micIsIPad
+      ? "iPad 麥克風靈敏模式已啟用，請依拍點吹奏"
+      : "麥克風已啟用，請依拍點吹奏";
   pauseBtn.textContent="⏸";
   document.documentElement.classList.remove("setup-mode");
   document.body.classList.remove("setup-mode");
@@ -1942,7 +2006,11 @@ function stopAndReturn(){
   requestAnimationFrame(()=>window.scrollTo(0,0));
   if(state.mediaStream){state.mediaStream.getTracks().forEach(t=>t.stop());state.mediaStream=null}
   if(state.audioContext){state.audioContext.close().catch(()=>{});state.audioContext=null}
-  state.analyser=null; state.audioBuffer=null; state.detected=null;
+  state.analyser=null;
+  state.micGainNode=null;
+  state.audioBuffer=null;
+  state.detected=null;
+  state.micSettings=null;
   meterFill.style.width="0%"; detectedNote.textContent="—";
   setTimeout(renderPreview,0);
   if(state.song){
@@ -1967,26 +2035,88 @@ function closestSelectedNote(freq){
 }
 
 function autoCorrelate(buffer,sampleRate){
-  let mean=0; for(const v of buffer) mean+=v; mean/=buffer.length;
-  let rms=0; for(const v0 of buffer){const v=v0-mean;rms+=v*v} rms=Math.sqrt(rms/buffer.length); state.detectedVolume=rms;
-  if(rms<.012) return -1;
-  const minFreq=480,maxFreq=1750,minLag=Math.floor(sampleRate/maxFreq),maxLag=Math.min(Math.floor(sampleRate/minFreq),buffer.length-1);
-  let bestLag=-1,bestCorr=0;
+  let mean=0;
+  for(const v of buffer) mean+=v;
+  mean/=buffer.length;
+
+  let rms=0;
+  for(const v0 of buffer){
+    const v=v0-mean;
+    rms+=v*v;
+  }
+  rms=Math.sqrt(rms/buffer.length);
+  state.detectedVolume=rms;
+
+  // 在安靜片段緩慢學習環境底噪，不用固定的桌機門檻。
+  const quietCeiling=state.micIsIPad?0.010:0.014;
+  if(rms<quietCeiling && rms<state.micNoiseFloor*2.2){
+    state.micNoiseFloor=state.micNoiseFloor*.96+rms*.04;
+  }
+
+  const baseGate=state.micIsIPad?0.0022:0.0042;
+  state.micGate=Math.max(baseGate,state.micNoiseFloor*(state.micIsIPad?2.0:2.4));
+  if(rms<state.micGate) return -1;
+
+  const minFreq=480;
+  const maxFreq=1750;
+  const minLag=Math.floor(sampleRate/maxFreq);
+  const maxLag=Math.min(Math.floor(sampleRate/minFreq),buffer.length-1);
+
+  let bestLag=-1;
+  let bestCorr=0;
+
   for(let lag=minLag;lag<=maxLag;lag++){
     let corr=0,n1=0,n2=0;
-    for(let i=0;i<buffer.length-lag;i++){const a=buffer[i]-mean,b=buffer[i+lag]-mean;corr+=a*b;n1+=a*a;n2+=b*b}
+    for(let i=0;i<buffer.length-lag;i++){
+      const a=buffer[i]-mean;
+      const b=buffer[i+lag]-mean;
+      corr+=a*b;
+      n1+=a*a;
+      n2+=b*b;
+    }
     corr/=Math.sqrt(n1*n2)||1;
-    if(corr>bestCorr){bestCorr=corr;bestLag=lag}
+    if(corr>bestCorr){
+      bestCorr=corr;
+      bestLag=lag;
+    }
   }
-  if(bestCorr<.68||bestLag<=0) return -1;
-  return sampleRate/bestLag;
+
+  // iPad 經過硬體與 Safari 音訊處理後，波形規律度通常低於桌機。
+  const correlationGate=state.micIsIPad?0.50:0.60;
+  if(bestCorr<correlationGate||bestLag<=0) return -1;
+
+  // 使用鄰近相關值做小幅插值，減少音高跳動。
+  const correlationAt=lag=>{
+    if(lag<minLag||lag>maxLag) return bestCorr;
+    let corr=0,n1=0,n2=0;
+    for(let i=0;i<buffer.length-lag;i++){
+      const a=buffer[i]-mean;
+      const b=buffer[i+lag]-mean;
+      corr+=a*b;
+      n1+=a*a;
+      n2+=b*b;
+    }
+    return corr/(Math.sqrt(n1*n2)||1);
+  };
+
+  const left=correlationAt(bestLag-1);
+  const center=bestCorr;
+  const right=correlationAt(bestLag+1);
+  const denominator=left-2*center+right;
+  const shift=Math.abs(denominator)>1e-6
+    ? .5*(left-right)/denominator
+    : 0;
+  const refinedLag=bestLag+Math.max(-.5,Math.min(.5,shift));
+
+  return sampleRate/refinedLag;
 }
 
 function updatePitch(){
   if(state.demoMode||!state.analyser||!state.audioBuffer) return;
   state.analyser.getFloatTimeDomainData(state.audioBuffer);
   const freq=autoCorrelate(state.audioBuffer,state.audioContext.sampleRate);
-  meterFill.style.width=`${Math.max(0,Math.min(100,state.detectedVolume*900))}%`;
+  const meterScale=state.micIsIPad?4200:1800;
+  meterFill.style.width=`${Math.max(0,Math.min(100,state.detectedVolume*meterScale))}%`;
   if(freq>0){
     const nearest=closestSelectedNote(freq); state.detected=nearest;
     detectedNote.textContent=nearest?nearest.note.label:"—";
@@ -1997,7 +2127,9 @@ function updatePitch(){
     }
   }else{
     state.detected=null; detectedNote.textContent="—"; detectedNote.style.color="white";
-    statusText.textContent="等待清楚、穩定的直笛聲";
+    statusText.textContent=state.micIsIPad
+      ? "等待直笛聲；請讓 iPad 麥克風朝向直笛，距離約 20～40 公分"
+      : "等待清楚、穩定的直笛聲";
   }
 }
 
