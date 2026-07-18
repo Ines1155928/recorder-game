@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V4.2｜童趣可愛版</title>
+<title>直笛音高挑戰 V4.3｜童趣柔和投影版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -607,6 +607,231 @@ h1{
   .cute-stickers span{width:34px;height:34px;font-size:18px;border-width:3px}
 }
 
+
+/* ===== V4.3 童趣柔和投影版 =====
+   目標：保留童趣風格，但降低過曝感，增加投影可讀性
+*/
+:root{
+  --text:#2f4c6a;
+  --muted:#627d97;
+  --panel:rgba(248,251,253,.92);
+  --panel2:rgba(244,248,251,.88);
+  --accent:#61b9e7;
+}
+
+html,body{
+  background:
+    radial-gradient(circle at 8% 13%,rgba(247,186,209,.34),transparent 17%),
+    radial-gradient(circle at 91% 12%,rgba(150,213,237,.34),transparent 18%),
+    radial-gradient(circle at 82% 86%,rgba(241,216,128,.24),transparent 18%),
+    radial-gradient(circle at 17% 82%,rgba(157,214,184,.22),transparent 18%),
+    linear-gradient(180deg,#f3f6f8 0%,#eaf2f6 52%,#f6f5ef 100%);
+}
+
+#setupScreen::before,
+#setupScreen::after{
+  opacity:.48;
+  filter:drop-shadow(0 6px 10px rgba(112,172,217,.08));
+}
+
+.setup-card{
+  background:linear-gradient(180deg,rgba(247,250,252,.96),rgba(242,247,250,.94));
+  border-color:rgba(255,255,255,.85);
+  box-shadow:
+    0 18px 0 rgba(171,220,248,.10),
+    0 28px 48px rgba(107,164,206,.12);
+}
+
+.cute-stickers span{
+  box-shadow:0 6px 12px rgba(109,165,205,.12);
+  filter:saturate(.92) brightness(.96);
+}
+
+h1{
+  color:#365979;
+  text-shadow:0 2px 0 rgba(255,255,255,.8),0 5px 10px rgba(103,164,211,.10);
+}
+.subtitle{
+  color:#67819a;
+}
+.badge{
+  background:linear-gradient(135deg,#efdf93,#f3c9da 48%,#bfe2ef);
+  color:#3c607e;
+  box-shadow:0 6px 0 rgba(153,205,236,.10);
+}
+
+.panel{
+  border-color:rgba(255,255,255,.86);
+  box-shadow:0 8px 0 rgba(154,206,235,.08),0 14px 24px rgba(143,193,226,.09);
+}
+.panel:first-child{
+  background:linear-gradient(180deg,#f9f4f6,#f6f8fa);
+}
+.panel:nth-child(2){
+  background:linear-gradient(180deg,#f2f8fb,#f6f5ef);
+}
+.panel h2,
+.song-card-title,
+.info-value,
+.message-main,
+.hud-title{
+  color:#355776;
+}
+
+.library-control,
+.number-input{
+  background:#f9fbfc;
+  color:#365a79;
+  box-shadow:0 4px 0 rgba(150,207,239,.08),0 8px 14px rgba(146,194,226,.06);
+}
+.library-control:focus{
+  box-shadow:0 0 0 3px rgba(97,185,231,.16);
+}
+
+.icon-button,
+.secondary,
+.primary,
+.song-select-button,
+.hud button{
+  box-shadow:0 5px 0 rgba(116,177,219,.10),0 10px 18px rgba(119,174,213,.08);
+}
+.primary{
+  background:linear-gradient(135deg,#78d5eb,#94b7e7 48%,#efb1cc);
+  color:#284866;
+}
+.secondary{
+  background:linear-gradient(180deg,#f7f9fb,#edf4f7);
+}
+.icon-button{
+  background:linear-gradient(180deg,#f7f9fb,#edf4f7);
+}
+.song-select-button{
+  background:linear-gradient(135deg,#79d6ea,#9fbae8 48%,#efb7ce);
+  color:#2e4d6b;
+}
+
+.song-card{
+  border-color:rgba(255,255,255,.88);
+  box-shadow:0 8px 0 rgba(164,210,238,.09),0 12px 22px rgba(137,188,222,.09);
+}
+.song-card:nth-child(4n+1){
+  background:linear-gradient(145deg,#f7edf1,#f3e5ea);
+}
+.song-card:nth-child(4n+2){
+  background:linear-gradient(145deg,#eff7fa,#e4eef4);
+}
+.song-card:nth-child(4n+3){
+  background:linear-gradient(145deg,#f5f1dd,#efe9c9);
+}
+.song-card:nth-child(4n+4){
+  background:linear-gradient(145deg,#edf5ef,#e1ece4);
+}
+.song-card:hover{
+  box-shadow:0 10px 0 rgba(164,210,238,.09),0 16px 24px rgba(137,188,222,.11);
+}
+.song-card.selected{
+  box-shadow:
+    0 0 0 4px rgba(92,203,255,.16),
+    0 10px 0 rgba(115,199,238,.09),
+    0 18px 28px rgba(128,187,224,.11);
+}
+.song-card-meta,
+.info-label,
+.tip-box,
+.library-status,
+.selected-meta{
+  color:#607c95;
+}
+.song-mini-tag{
+  color:#4f6f8c;
+  box-shadow:0 3px 0 rgba(120,186,225,.06);
+}
+.song-mini-tag:nth-child(3n+1){background:#efe4a6}
+.song-mini-tag:nth-child(3n+2){background:#efd3df}
+.song-mini-tag:nth-child(3n+3){background:#d5ebf2}
+
+.selected-placeholder,
+.library-empty{
+  background:
+    radial-gradient(circle at 20% 20%,rgba(243,210,223,.34),transparent 22%),
+    radial-gradient(circle at 80% 26%,rgba(189,223,236,.32),transparent 24%),
+    linear-gradient(180deg,#f8fafb,#f1f5f7);
+  color:#667f97;
+}
+.selected-meta{
+  background:linear-gradient(135deg,#efe5ad,#efd8e3 52%,#d8ecf3);
+  box-shadow:0 4px 0 rgba(143,200,233,.07);
+}
+.info-item{
+  background:#f9fbfc;
+  box-shadow:0 4px 0 rgba(145,200,232,.06);
+}
+
+.note-tag{
+  box-shadow:0 3px 0 rgba(103,167,210,.08);
+  filter:saturate(.9) brightness(.92);
+}
+
+.preview{
+  background:
+    radial-gradient(circle at 13% 17%,rgba(243,210,223,.34),transparent 20%),
+    radial-gradient(circle at 82% 16%,rgba(183,223,236,.34),transparent 22%),
+    radial-gradient(circle at 70% 85%,rgba(230,214,144,.22),transparent 20%),
+    linear-gradient(180deg,#f7fafb,#edf3f6);
+  box-shadow:inset 0 0 0 2px rgba(135,198,235,.05),0 8px 0 rgba(151,205,235,.07);
+}
+.preview-label{
+  background:#f7fafb;
+  color:#456781;
+  box-shadow:0 4px 0 rgba(105,170,212,.09);
+}
+.preview-receiver{
+  box-shadow:0 0 10px color-mix(in srgb,var(--c) 60%, transparent);
+  filter:saturate(.85) brightness(.93);
+}
+.preview-track{
+  opacity:.84;
+}
+
+.hud{
+  background:linear-gradient(180deg,#f6f9fb,#ecf3f6);
+  box-shadow:0 6px 0 rgba(147,204,236,.08);
+}
+.stat{
+  box-shadow:0 3px 0 rgba(145,201,233,.06);
+}
+.stat:nth-of-type(1){background:#efe3a4}
+.stat:nth-of-type(2){background:#dcecf2}
+.stat:nth-of-type(3){background:#edd0dc}
+
+.game-area{
+  background:
+    radial-gradient(circle at 13% 12%,rgba(243,210,223,.28),transparent 19%),
+    radial-gradient(circle at 87% 16%,rgba(184,223,236,.30),transparent 21%),
+    radial-gradient(circle at 82% 88%,rgba(229,214,143,.22),transparent 20%),
+    linear-gradient(180deg,#f4f7f9,#e9f0f4);
+}
+.message-card{
+  background:linear-gradient(145deg,#f9fbfc,#eff4f7);
+  box-shadow:0 8px 0 rgba(141,200,234,.08),0 15px 24px rgba(121,180,218,.09);
+}
+.bottom-bar{
+  background:linear-gradient(180deg,#f6f9fb,#ecf3f6);
+  box-shadow:0 -5px 0 rgba(145,202,234,.07);
+}
+.meter-box,.detected-box,.tip-box{
+  background:#f8fbfc;
+  box-shadow:0 3px 0 rgba(144,199,231,.06);
+}
+.detected-box{background:#f3e5eb}
+.meter-box{background:#edf5f8}
+.tip-box{background:#f1eddb;color:#5d7891}
+
+/* 降低遊戲中的過亮發光效果，投影更清楚 */
+#gameCanvas{
+  filter:saturate(.88) brightness(.94) contrast(.98);
+}
+
 </style>
 </head>
 <body>
@@ -618,10 +843,10 @@ h1{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V4.2</h1>
+        <h1>🎵 直笛音高挑戰 V4.3</h1>
         <div class="subtitle">學生直接從雲端曲目庫選歌；老師仍可自行匯入 MusicXML 測試新樂譜。</div>
       </div>
-      <div class="badge">🌈 童趣可愛版</div>
+      <div class="badge">🌈 童趣柔和投影版</div>
     </div>
 
     <div class="setup-grid">
