@@ -17,16 +17,16 @@
     "enabled": true
   },
   {
-    "id": "when we play togerther",
+    "id": "when-we-play-together",
     "title": "當我們同在一起",
-    "file": "songs/when we play togerther.musicxml",
+    "file": "songs/when-we-play-together.musicxml",
     "grade": "四年級",
     "semester": "下學期",
     "category": "補充歌曲",
     "difficulty": 3,
     "defaultBpm": 80,
     "tags": [
-      "3/4",
+      "3/4"
     ],
     "description": "適合練習附點四分音符、高音mi。",
     "enabled": true
@@ -41,7 +41,7 @@
     "difficulty": 2,
     "defaultBpm": 80,
     "tags": [
-      "4/4",
+      "4/4"
     ],
     "description": "練習升fa。",
     "enabled": true
