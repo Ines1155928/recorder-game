@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V4.7｜按鈕對比與圓形洞口修正版</title>
+<title>直笛音高挑戰 V4.8｜接收器唱名恆亮版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1156,10 +1156,10 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V4.7</h1>
+        <h1>🎵 直笛音高挑戰 V4.8</h1>
         <div class="subtitle">學生直接從雲端曲目庫選歌；老師仍可自行匯入 MusicXML 測試新樂譜。</div>
       </div>
-      <div class="badge">🎤 V4.7 修正版</div>
+      <div class="badge">✨ 接收器唱名恆亮版</div>
     </div>
 
     <div class="setup-grid">
@@ -2287,20 +2287,21 @@ function getReceiverFeedback(noteId,currentTick,now){
     state.detected.note.id === noteId &&
     Math.abs(state.detected.cents) <= state.toleranceCents;
 
+  let activeEvent = null;
   let hold = false;
 
-  // 長音只有在「音符正在持續」且「真的收到正確聲音」時才持續發亮。
-  if(correctSound){
-    for(const ev of state.song.events){
-      if(ev.noteId !== noteId) continue;
+  // 音符頭到達接收器後，從起音到音值結束都視為「正在接收」。
+  // 這個狀態不依賴學生是否吹對，因此唱名會完整跟隨樂譜音值恆亮。
+  for(const ev of state.song.events){
+    if(ev.noteId !== noteId) continue;
 
-      const endTick = ev.startTick + ev.durationTick;
+    const endTick = ev.startTick + ev.durationTick;
+    if(currentTick >= ev.startTick && currentTick <= endTick){
+      activeEvent = ev;
+
       const isLong = ev.durationTick >= TPQN * 1.5;
-
-      if(isLong && currentTick >= ev.startTick && currentTick <= endTick){
-        hold = true;
-        break;
-      }
+      hold = Boolean(isLong && correctSound);
+      break;
     }
   }
 
@@ -2308,7 +2309,10 @@ function getReceiverFeedback(noteId,currentTick,now){
     flash,
     flashProgress,
     hold,
-    active: flash || hold
+    noteActive:Boolean(activeEvent),
+    activeEvent,
+    correctSound,
+    active:flash || hold
   };
 }
 
@@ -2394,16 +2398,37 @@ function drawGame(currentTick){
     ctx.lineWidth=3;
     ctx.stroke();
 
-    // 黑色洞口
-    const hole = ctx.createRadialGradient(0,0,2,0,0,22);
-    hole.addColorStop(0,"rgba(0,0,0,1)");
-    hole.addColorStop(.7,"rgba(2,7,18,.98)");
-    hole.addColorStop(1,"rgba(7,18,38,.85)");
+    // 無音符時保留深色洞口；音符到達後改成音符色實心核心，
+    // 避免音值持續期間變成黑色或白色空洞。
     ctx.shadowBlur=0;
-    ctx.fillStyle=hole;
-    ctx.beginPath();
-    ctx.arc(0,0,21,0,Math.PI*2);
-    ctx.fill();
+    if(feedback.noteActive){
+      const activeCore = ctx.createRadialGradient(-6,-7,2,0,0,23);
+      activeCore.addColorStop(0,"rgba(255,255,255,.78)");
+      activeCore.addColorStop(.14,note.color);
+      activeCore.addColorStop(.72,note.color);
+      activeCore.addColorStop(1,"rgba(36,58,82,.94)");
+
+      ctx.fillStyle=activeCore;
+      ctx.shadowColor=note.color;
+      ctx.shadowBlur=18;
+      ctx.beginPath();
+      ctx.arc(0,0,22,0,Math.PI*2);
+      ctx.fill();
+
+      ctx.shadowBlur=0;
+      ctx.strokeStyle="rgba(255,255,255,.88)";
+      ctx.lineWidth=2.5;
+      ctx.stroke();
+    }else{
+      const hole = ctx.createRadialGradient(0,0,2,0,0,22);
+      hole.addColorStop(0,"rgba(0,0,0,1)");
+      hole.addColorStop(.7,"rgba(2,7,18,.98)");
+      hole.addColorStop(1,"rgba(7,18,38,.85)");
+      ctx.fillStyle=hole;
+      ctx.beginPath();
+      ctx.arc(0,0,21,0,Math.PI*2);
+      ctx.fill();
+    }
 
     // 一拍或短音：只有成功收到正確起音後才閃一次
     if(feedback.flash){
@@ -2457,17 +2482,7 @@ function drawGame(currentTick){
       ctx.stroke();
       ctx.restore();
 
-      // 長音中央亮芯固定恆亮。
-      ctx.save();
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "#ffffff";
-      ctx.shadowColor = note.color;
-      ctx.shadowBlur = 48;
-      ctx.beginPath();
-      ctx.arc(0,0,13,0,Math.PI*2);
-      ctx.fill();
-      ctx.restore();
-
+      // 中央不再覆蓋白色亮芯；唱名色芯會持續保留。
       // 長音回饋光帶保持固定亮度，只在收到正確聲音時出現。
       const beamLen=175;
       const beamHeight=30;
@@ -2496,6 +2511,52 @@ function drawGame(currentTick){
       ctx.beginPath();
       ctx.arc(0,0,34,0,Math.PI*2);
       ctx.stroke();
+      ctx.restore();
+    }
+
+    // 音符到達接收器後，唱名依該音符的實際長度恆亮。
+    // 此層最後繪製，確保不會被黑洞、白色亮芯或回饋光效蓋掉。
+    if(feedback.noteActive){
+      ctx.save();
+
+      const labelCore = ctx.createRadialGradient(-6,-7,2,0,0,23);
+      labelCore.addColorStop(0,"rgba(255,255,255,.68)");
+      labelCore.addColorStop(.13,note.color);
+      labelCore.addColorStop(.75,note.color);
+      labelCore.addColorStop(1,"rgba(34,57,81,.96)");
+
+      ctx.fillStyle=labelCore;
+      ctx.shadowColor=note.color;
+      ctx.shadowBlur=feedback.correctSound?25:14;
+      ctx.beginPath();
+      ctx.arc(0,0,22,0,Math.PI*2);
+      ctx.fill();
+
+      ctx.shadowBlur=0;
+      ctx.strokeStyle="rgba(255,255,255,.92)";
+      ctx.lineWidth=2.5;
+      ctx.stroke();
+
+      const labelLength=[...note.label].length;
+      const receiverFontSize =
+        labelLength<=2 ? 17 :
+        labelLength<=4 ? 14 :
+        labelLength<=5 ? 12 : 10.5;
+
+      ctx.font=`1000 ${receiverFontSize}px "Arial Rounded MT Bold","PingFang TC","Noto Sans TC",sans-serif`;
+      ctx.textAlign="center";
+      ctx.textBaseline="middle";
+      ctx.lineJoin="round";
+
+      // 深色細描邊提升黃色、綠色音符上的文字可讀性，
+      // 但核心本身仍維持音符色，不會變成黑色或白色洞口。
+      ctx.strokeStyle="rgba(24,45,66,.88)";
+      ctx.lineWidth=3;
+      ctx.strokeText(note.label,0,1);
+
+      ctx.fillStyle="#ffffff";
+      ctx.fillText(note.label,0,1);
+
       ctx.restore();
     }
 
