@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V4.3｜童趣柔和投影版</title>
+<title>直笛音高挑戰 V4.4｜iPad 操作與清晰度修正版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -832,9 +832,174 @@ h1{
   filter:saturate(.88) brightness(.94) contrast(.98);
 }
 
+
+/* ===== V4.4 iPad 操作與清晰度修正 ===== */
+
+/* 設定頁改用整頁捲動，避免 iPad Safari 的雙層 overflow 容器卡住。 */
+body.setup-mode{
+  height:auto !important;
+  min-height:100%;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  -webkit-overflow-scrolling:touch;
+}
+
+body.setup-mode .app{
+  height:auto;
+  min-height:100vh;
+  min-height:100dvh;
+}
+
+body.setup-mode #setupScreen.active{
+  position:relative;
+  inset:auto;
+  width:100%;
+  min-height:100vh;
+  min-height:100dvh;
+  overflow:visible;
+  align-items:flex-start;
+  justify-content:center;
+  padding-top:max(22px,env(safe-area-inset-top));
+  padding-right:max(14px,env(safe-area-inset-right));
+  padding-bottom:max(38px,env(safe-area-inset-bottom));
+  padding-left:max(14px,env(safe-area-inset-left));
+}
+
+body.setup-mode .setup-card{
+  max-height:none !important;
+  overflow:visible !important;
+  margin:0 auto;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+/* 在 iPad 與較矮的橫向畫面中，開始按鈕列維持可見。 */
+@media (max-width:1180px), (max-height:820px){
+  body.setup-mode .setup-actions{
+    position:sticky;
+    bottom:0;
+    z-index:30;
+    margin:18px -8px -8px;
+    padding:12px 8px max(12px,env(safe-area-inset-bottom));
+    background:linear-gradient(
+      180deg,
+      rgba(242,247,250,0),
+      rgba(242,247,250,.94) 24%,
+      rgba(242,247,250,.99)
+    );
+    border-radius:0 0 24px 24px;
+  }
+}
+
+/* 「已選擇」狀態改成較深的綠色，避免投影或 iPad 上看不清楚。 */
+.library-status.success{
+  display:inline-flex;
+  align-items:center;
+  min-height:32px;
+  padding:6px 11px;
+  color:#1f6648 !important;
+  background:#dceee5;
+  border:1px solid #a9cfba;
+  border-radius:11px;
+  font-weight:900;
+  line-height:1.35;
+}
+
+.library-status.error{
+  display:inline-flex;
+  align-items:center;
+  min-height:32px;
+  padding:6px 11px;
+  color:#8a3545 !important;
+  background:#f4dfe4;
+  border:1px solid #ddb2bd;
+  border-radius:11px;
+  font-weight:900;
+}
+
+.song-card.selected .song-select-button{
+  color:#244f68;
+  background:linear-gradient(135deg,#b7dde8,#c4d8ec 52%,#e8c6d5);
+}
+
+/* 移除 Safari 容易讓文字霧化的祖先濾鏡與半透明效果。 */
+.preview,
+.preview *{
+  -webkit-font-smoothing:auto;
+  text-rendering:optimizeLegibility;
+}
+
+.preview{
+  transform:none !important;
+  filter:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+/* 軌道預覽唱名：使用實色、高對比、整數定位，不再以 Y 軸 transform 排版。 */
+.preview-label{
+  transform:none !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:44px;
+  min-width:88px;
+  padding:0 11px;
+  background:#f7fafc !important;
+  color:#294d6a !important;
+  border:3px solid var(--c) !important;
+  border-radius:999px;
+  font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+  font-size:22px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:0;
+  text-shadow:none !important;
+  box-shadow:0 3px 0 rgba(66,111,145,.12) !important;
+  filter:none !important;
+  opacity:1 !important;
+}
+
+.preview-receiver{
+  transform:translateX(-50%) !important;
+  filter:none !important;
+  opacity:1 !important;
+}
+
+.preview-track{
+  transform:none !important;
+  height:4px;
+  opacity:1 !important;
+  filter:none !important;
+}
+
+/* 小尺寸 iPad 仍保留足夠大的觸控區。 */
+@media (max-width:900px){
+  body.setup-mode #setupScreen.active{
+    padding-top:max(14px,env(safe-area-inset-top));
+    padding-bottom:max(30px,env(safe-area-inset-bottom));
+  }
+
+  body.setup-mode .setup-card{
+    width:min(100%,760px);
+    padding:16px;
+    border-radius:24px;
+  }
+
+  .setup-actions button{
+    min-height:50px;
+    flex:1 1 220px;
+  }
+
+  .preview-label{
+    font-size:21px;
+    height:42px;
+  }
+}
+
 </style>
 </head>
-<body>
+<body class="setup-mode">
 <div class="app">
 <section id="setupScreen" class="screen active">
   <div class="setup-card">
@@ -843,10 +1008,10 @@ h1{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V4.3</h1>
+        <h1>🎵 直笛音高挑戰 V4.4</h1>
         <div class="subtitle">學生直接從雲端曲目庫選歌；老師仍可自行匯入 MusicXML 測試新樂譜。</div>
       </div>
-      <div class="badge">🌈 童趣柔和投影版</div>
+      <div class="badge">🌈 iPad 清晰操作版</div>
     </div>
 
     <div class="setup-grid">
@@ -1534,10 +1699,24 @@ function renderPreview(){
     preview.innerHTML='<div class="preview-empty">尚未有可顯示的音高軌道。</div>'; return;
   }
   selected.forEach((note,index)=>{
-    const y=getTrackY(index,selected.length,preview.clientHeight||330);
-    const line=document.createElement("div"); line.className="preview-track"; line.style.top=`${y}px`; line.style.setProperty("--c",note.color);
-    const label=document.createElement("div"); label.className="preview-label"; label.textContent=note.label; label.style.top=`${y}px`; label.style.setProperty("--c",note.color);
-    const rec=document.createElement("div"); rec.className="preview-receiver"; rec.style.top=`${y}px`; rec.style.setProperty("--c",note.color);
+    const y=Math.round(getTrackY(index,selected.length,preview.clientHeight||330));
+
+    const line=document.createElement("div");
+    line.className="preview-track";
+    line.style.top=`${y-2}px`;
+    line.style.setProperty("--c",note.color);
+
+    const label=document.createElement("div");
+    label.className="preview-label";
+    label.textContent=note.label;
+    label.style.top=`${y-22}px`;
+    label.style.setProperty("--c",note.color);
+
+    const rec=document.createElement("div");
+    rec.className="preview-receiver";
+    rec.style.top=`${y-21}px`;
+    rec.style.setProperty("--c",note.color);
+
     preview.append(line,label,rec);
   });
 }
@@ -1597,7 +1776,10 @@ async function startGame(useMic){
   hudTitle.textContent=state.song.title; hudSub.textContent=`${state.song.timeSignature}｜${state.song.events.length} 個音符`;
   statusText.textContent=state.demoMode?demoHelpText():"麥克風已啟用，請依拍點吹奏";
   pauseBtn.textContent="⏸";
-  setupScreen.classList.remove("active"); gameScreen.classList.add("active");
+  document.body.classList.remove("setup-mode");
+  window.scrollTo(0,0);
+  setupScreen.classList.remove("active");
+  gameScreen.classList.add("active");
 
   requestAnimationFrame(()=>{
     resizeCanvas();
@@ -1646,7 +1828,10 @@ backBtn.addEventListener("click",stopAndReturn);
 
 function stopAndReturn(){
   state.running=false; state.paused=false; state.finished=false;
-  gameScreen.classList.remove("active"); setupScreen.classList.add("active");
+  gameScreen.classList.remove("active");
+  setupScreen.classList.add("active");
+  document.body.classList.add("setup-mode");
+  requestAnimationFrame(()=>window.scrollTo(0,0));
   if(state.mediaStream){state.mediaStream.getTracks().forEach(t=>t.stop());state.mediaStream=null}
   if(state.audioContext){state.audioContext.close().catch(()=>{});state.audioContext=null}
   state.analyser=null; state.audioBuffer=null; state.detected=null;
