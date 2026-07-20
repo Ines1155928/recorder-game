@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V5.1｜Google 試算表曲目庫</title>
+<title>直笛音高挑戰 V5.2｜寬鬆判定版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1392,6 +1392,20 @@ html.setup-mode body .setup-card{
   line-height:1.45;
 }
 
+
+/* ===== V5.2 寬鬆判定提示 ===== */
+.judgement-hint{
+  margin-top:9px;
+  padding:8px 10px;
+  color:#506d84;
+  background:#e4edf1;
+  border:1px solid #b7cbd5;
+  border-radius:11px;
+  font-size:12px;
+  font-weight:850;
+  line-height:1.45;
+}
+
 </style>
 </head>
 <body class="setup-mode">
@@ -1403,10 +1417,10 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V5.1</h1>
+        <h1>🎵 直笛音高挑戰 V5.2</h1>
         <div class="subtitle">曲目由 Google 試算表與 Drive 管理，也能自由選音進行指法隨機練習。</div>
       </div>
-      <div class="badge">☁️ Google 曲目庫</div>
+      <div class="badge">🎵 寬鬆判定版</div>
     </div>
 
     <div class="practice-mode-switch" role="tablist" aria-label="練習模式">
@@ -1571,11 +1585,14 @@ html.setup-mode body .setup-card{
               <span id="previewValue">4 拍</span>
             </div>
             <div class="option-row">
-              <label for="toleranceRange">音準寬容度</label>
-              <input id="toleranceRange" type="range" min="25" max="90" step="5" value="55">
-              <span id="toleranceValue">±55¢</span>
+              <label for="toleranceRange">音準寬容度（預設寬鬆）</label>
+              <input id="toleranceRange" type="range" min="25" max="90" step="5" value="70">
+              <span id="toleranceValue">±70¢</span>
             </div>
             <label class="check-row"><input id="metronomeToggle" type="checkbox" checked> 開啟節拍器提示音</label>
+            <div class="judgement-hint">
+              目前使用寬鬆判定：起音可稍微提早或延後，麥克風短暫漏訊也不會立刻判錯。
+            </div>
           </div>
 
           <h2 id="previewHeading" style="margin-top:20px">③ 本曲軌道預覽</h2>
@@ -1686,7 +1703,7 @@ const state = {
   song:null,
   practiceBpm:80,
   previewBeats:4,
-  toleranceCents:55,
+  toleranceCents:70,
   selected:new Set(),
   running:false,
   paused:false,
@@ -2953,28 +2970,60 @@ function getCurrentTick(now){
 }
 
 function judgeSong(dt,currentTick){
-  const attackWindow=TPQN*.32; // 約 ±0.32 拍
-  const releaseGrace=TPQN*.18;
+  // V5.2 寬鬆判定：
+  // 1. 起音允許稍微提早或延後。
+  // 2. 麥克風短暫漏訊時保留 180ms 緩衝。
+  // 3. 一般音只需約 25% 的音值被穩定偵測。
+  // 4. 即使沒有抓到起音，只要大部分音值正確，也可補救判定。
+  const attackEarly=TPQN*.45;  // 最多提早約 0.45 拍
+  const attackLate=TPQN*.70;   // 最多延後約 0.70 拍
+  const releaseGrace=TPQN*.35;
+  const dropoutGraceMs=180;
+  const now=performance.now();
+
   for(const ev of state.song.events){
     const st=state.eventStates.get(ev.id);
     if(st.judged) continue;
-    const endTick=ev.startTick+ev.durationTick;
-    const correct=state.detected && state.detected.note.id===ev.noteId && Math.abs(state.detected.cents)<=state.toleranceCents;
 
-    if(Math.abs(currentTick-ev.startTick)<=attackWindow && correct && !st.attackHit){
-      st.attackHit=true; flashReceiver(ev.noteId); burst(receiverX(),trackYFor(ev.noteId),NOTE_BY_ID[ev.noteId].color);
+    const endTick=ev.startTick+ev.durationTick;
+    const detectedCorrect=Boolean(
+      state.detected &&
+      state.detected.note.id===ev.noteId &&
+      Math.abs(state.detected.cents)<=state.toleranceCents
+    );
+
+    if(detectedCorrect){
+      st.lastCorrectAt=now;
+    }
+
+    const correct=detectedCorrect || Boolean(
+      st.lastCorrectAt &&
+      now-st.lastCorrectAt<=dropoutGraceMs
+    );
+
+    const insideAttackWindow=
+      currentTick>=ev.startTick-attackEarly &&
+      currentTick<=ev.startTick+attackLate;
+
+    if(insideAttackWindow && correct && !st.attackHit){
+      st.attackHit=true;
+      flashReceiver(ev.noteId);
+      burst(
+        receiverX(),
+        trackYFor(ev.noteId),
+        NOTE_BY_ID[ev.noteId].color
+      );
     }
 
     if(currentTick>=ev.startTick && currentTick<=endTick && correct){
-      st.correctTime += dt;
+      st.correctTime+=dt;
 
-      const isLong = ev.durationTick >= TPQN * 1.5;
+      const isLong=ev.durationTick>=TPQN*1.5;
       if(isLong){
-        st.holdParticleTimer = (st.holdParticleTimer || 0) + dt;
+        st.holdParticleTimer=(st.holdParticleTimer||0)+dt;
 
-        // 約每 0.045 秒產生一批粒子，吹奏不中斷就會持續。
-        while(st.holdParticleTimer >= 0.045){
-          st.holdParticleTimer -= 0.045;
+        while(st.holdParticleTimer>=0.045){
+          st.holdParticleTimer-=0.045;
           emitHoldParticles(
             receiverX(),
             trackYFor(ev.noteId),
@@ -2983,19 +3032,33 @@ function judgeSong(dt,currentTick){
         }
       }
     }else{
-      // 停止、吹錯音或音準偏差時，粒子立即停止累積。
-      st.holdParticleTimer = 0;
+      st.holdParticleTimer=0;
     }
 
     if(currentTick>endTick+releaseGrace){
-      st.judged=true; state.judgedCount++;
-      const durationSec=(ev.durationTick/TPQN)*(60/state.practiceBpm);
-      const ratio=durationSec>0?st.correctTime/durationSec:0;
-      const required=ev.durationTick<=TPQN*.5 ? .18 : .45;
-      st.hit=st.attackHit && ratio>=required;
+      st.judged=true;
+      state.judgedCount++;
+
+      const durationSec=
+        (ev.durationTick/TPQN)*(60/state.practiceBpm);
+      const ratio=
+        durationSec>0 ? st.correctTime/durationSec : 0;
+
+      // 短音約需 10%，一般音約需 25%。
+      const required=
+        ev.durationTick<=TPQN*.5 ? .10 : .25;
+
+      // 若整段有至少 55% 都正確，即使起音瞬間未被收音，也判定通過。
+      const sustainedRescue=ratio>=.55;
+
+      st.hit=(st.attackHit||sustainedRescue) && ratio>=required;
+
       if(st.hit){
-        state.score+=Math.round(100*Math.max(1,ev.durationTick/TPQN));
+        state.score+=Math.round(
+          100*Math.max(1,ev.durationTick/TPQN)
+        );
       }
+
       scoreText.textContent=String(state.score);
     }
   }
