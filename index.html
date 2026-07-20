@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V5.0｜曲目與指法隨機練習</title>
+<title>直笛音高挑戰 V5.1｜Google 試算表曲目庫</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1378,6 +1378,20 @@ html.setup-mode body .setup-card{
   }
 }
 
+
+/* ===== V5.1 Google 試算表曲目庫 ===== */
+.google-library-hint{
+  margin:10px 0 12px;
+  padding:9px 11px;
+  color:#4b687f;
+  background:#e7eef2;
+  border:1px solid #b9cad3;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:850;
+  line-height:1.45;
+}
+
 </style>
 </head>
 <body class="setup-mode">
@@ -1389,16 +1403,16 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V5.0</h1>
-        <div class="subtitle">可從雲端曲目庫選歌，也能自由選音，由系統產生指法隨機題目。</div>
+        <h1>🎵 直笛音高挑戰 V5.1</h1>
+        <div class="subtitle">曲目由 Google 試算表與 Drive 管理，也能自由選音進行指法隨機練習。</div>
       </div>
-      <div class="badge">🎲 指法隨機練習</div>
+      <div class="badge">☁️ Google 曲目庫</div>
     </div>
 
     <div class="practice-mode-switch" role="tablist" aria-label="練習模式">
       <button id="libraryModeBtn" class="practice-mode-button active" type="button" role="tab" aria-selected="true">
         <span class="mode-icon">🎼</span>
-        <span><strong>曲目練習</strong><small>從雲端曲目庫選歌</small></span>
+        <span><strong>曲目練習</strong><small>從 Google 試算表曲目庫選歌</small></span>
       </button>
       <button id="randomModeBtn" class="practice-mode-button" type="button" role="tab" aria-selected="false">
         <span class="mode-icon">🎲</span>
@@ -1410,6 +1424,10 @@ html.setup-mode body .setup-card{
       <div class="panel">
         <div id="libraryModePanel">
           <h2>① 選擇練習歌曲</h2>
+
+          <div class="google-library-hint">
+            新增或修改歌曲時，只需更新 Google Drive 與試算表；學生重新整理網頁即可取得最新曲目。
+          </div>
 
           <div class="library-toolbar">
             <input id="songSearch" class="library-control" type="search" placeholder="搜尋曲名或標籤">
@@ -1425,7 +1443,7 @@ html.setup-mode body .setup-card{
           </div>
 
           <div class="library-status-row">
-            <div id="libraryStatus" class="library-status">正在讀取雲端曲目庫……</div>
+            <div id="libraryStatus" class="library-status">正在讀取 Google 試算表曲目庫……</div>
             <button id="refreshLibraryBtn" class="icon-button" type="button">重新整理</button>
           </div>
 
@@ -1612,6 +1630,13 @@ html.setup-mode body .setup-card{
 <script>
 (() => {
 "use strict";
+
+// Google Apps Script 曲目資料庫
+const SONG_API_URL = "https://script.google.com/macros/s/AKfycbx4ipFEClj0V2Fdq7AMtdulZfR9e49RgPQVV_A46_bTxzf4O04MR6Xq64fD6PODB_u28A/exec";
+
+// 保留 GitHub songs.json 作為備援。
+// Google 試算表或 Apps Script 暫時無法連線時，仍可載入原本的本地曲目庫。
+const USE_LOCAL_LIBRARY_FALLBACK = true;
 
 const TPQN = 480;
 const midiToFreq = midi => 440 * Math.pow(2, (midi - 69) / 12);
@@ -2147,34 +2172,151 @@ function renderSongLibrary(){
   });
 }
 
+
+function loadJsonp(url,timeoutMs=20000){
+  return new Promise((resolve,reject)=>{
+    const callbackName=`__recorderSongApi_${Date.now()}_${Math.floor(Math.random()*1000000)}`;
+    const script=document.createElement("script");
+    let finished=false;
+
+    const cleanup=()=>{
+      if(finished) return;
+      finished=true;
+      clearTimeout(timer);
+      script.remove();
+      try{ delete window[callbackName]; }
+      catch(_){ window[callbackName]=undefined; }
+    };
+
+    const timer=setTimeout(()=>{
+      cleanup();
+      reject(new Error("Google 曲目資料庫連線逾時"));
+    },timeoutMs);
+
+    window[callbackName]=data=>{
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror=()=>{
+      cleanup();
+      reject(new Error("無法連線到 Google 曲目資料庫"));
+    };
+
+    const separator=url.includes("?")?"&":"?";
+    script.src=`${url}${separator}prefix=${encodeURIComponent(callbackName)}&_=${Date.now()}`;
+    script.async=true;
+    document.head.appendChild(script);
+  });
+}
+
+function normalizeApiSongList(result){
+  const list=Array.isArray(result)
+    ? result
+    : Array.isArray(result?.songs)
+      ? result.songs
+      : [];
+
+  if(result && result.ok===false){
+    throw new Error(result.error||"Google 曲目資料庫回傳錯誤");
+  }
+
+  return list
+    .filter(song=>song && song.enabled!==false && song.id)
+    .map(song=>({
+      id:String(song.id),
+      title:String(song.title||song.id),
+      grade:String(song.grade||""),
+      semester:String(song.semester||""),
+      category:String(song.category||""),
+      difficulty:Number(song.difficulty)||1,
+      defaultBpm:Number(song.defaultBpm ?? song.default_bpm)||80,
+      tags:Array.isArray(song.tags)
+        ? song.tags
+        : String(song.tags||"")
+            .split(/[,，]/)
+            .map(tag=>tag.trim())
+            .filter(Boolean),
+      description:String(song.description||""),
+      source:"Google 試算表"
+    }));
+}
+
+function normalizeApiSongPayload(result,entry){
+  if(result && result.ok===false){
+    throw new Error(result.error||"樂譜資料讀取失敗");
+  }
+
+  const payload=result?.song||result||{};
+  const xml=payload.xml||payload.musicxml||payload.content;
+
+  if(typeof xml!=="string" || !xml.trim()){
+    throw new Error("Apps Script 沒有回傳 MusicXML 內容");
+  }
+
+  return {
+    xml,
+    title:String(payload.title||entry.title||entry.id),
+    defaultBpm:Number(payload.defaultBpm ?? payload.default_bpm ?? entry.defaultBpm)||80
+  };
+}
+
+async function loadLocalSongLibrary(){
+  const response=await fetch(`songs.json?v=${Date.now()}`,{cache:"no-store"});
+  if(!response.ok) throw new Error(`備援 songs.json 讀取失敗（HTTP ${response.status}）`);
+
+  const data=await response.json();
+  if(!Array.isArray(data)) throw new Error("備援 songs.json 必須是歌曲陣列");
+
+  return data
+    .filter(song=>song && song.enabled!==false && song.id && song.file)
+    .map(song=>({...song,source:"GitHub 備援曲目庫"}));
+}
+
 async function loadSongLibrary(force=false){
-  setLibraryStatus("正在讀取雲端曲目庫……");
+  setLibraryStatus("正在讀取 Google 試算表曲目庫……");
   songLibrary.innerHTML='<div class="library-empty">正在載入歌曲……</div>';
 
   try{
-    if(location.protocol==="file:"){
-      throw new Error("雲端曲目庫需透過 GitHub Pages 或網頁伺服器開啟；直接雙擊 HTML 時請改用下方老師上傳模式。");
-    }
-
-    const url=force ? `songs.json?v=${Date.now()}` : "songs.json";
-    const response=await fetch(url,{cache:"no-store"});
-    if(!response.ok) throw new Error(`songs.json 讀取失敗（HTTP ${response.status}）`);
-
-    const data=await response.json();
-    if(!Array.isArray(data)) throw new Error("songs.json 必須是歌曲陣列");
-
-    state.library=data.filter(song=>song && song.enabled!==false && song.id && song.file);
+    const result=await loadJsonp(`${SONG_API_URL}?action=list${force?`&refresh=${Date.now()}`:""}`);
+    state.library=normalizeApiSongList(result);
     state.libraryLoaded=true;
 
     buildLibraryFilters();
     renderSongLibrary();
-    setLibraryStatus(`已載入 ${state.library.length} 首歌曲`,"success");
-  }catch(err){
-    console.error(err);
-    state.library=[];
-    state.libraryLoaded=false;
-    renderSongLibrary();
-    setLibraryStatus(err.message,"error");
+    setLibraryStatus(`已從 Google 試算表載入 ${state.library.length} 首歌曲`,"success");
+  }catch(apiError){
+    console.error("Google 曲目庫載入失敗",apiError);
+
+    if(!USE_LOCAL_LIBRARY_FALLBACK){
+      state.library=[];
+      state.libraryLoaded=false;
+      renderSongLibrary();
+      setLibraryStatus(apiError.message,"error");
+      return;
+    }
+
+    try{
+      setLibraryStatus("Google 曲目庫暫時無法連線，正在改用 GitHub 備援曲目庫……");
+      state.library=await loadLocalSongLibrary();
+      state.libraryLoaded=true;
+
+      buildLibraryFilters();
+      renderSongLibrary();
+      setLibraryStatus(
+        `Google 曲目庫無法連線，目前使用 GitHub 備援曲目庫（${state.library.length} 首）`,
+        "error"
+      );
+    }catch(localError){
+      console.error("GitHub 備援曲目庫載入失敗",localError);
+      state.library=[];
+      state.libraryLoaded=false;
+      renderSongLibrary();
+      setLibraryStatus(
+        `曲目庫讀取失敗：${apiError.message}；${localError.message}`,
+        "error"
+      );
+    }
   }
 }
 
@@ -2193,25 +2335,42 @@ function applyLoadedSong(song,sourceLabel,preferredBpm=null,mode="library"){
 }
 
 async function selectLibrarySong(entry,card){
-  if(!entry?.file) return;
+  if(!entry?.id) return;
 
   [...songLibrary.querySelectorAll(".song-card")].forEach(el=>el.classList.remove("loading"));
   card?.classList.add("loading");
   setLibraryStatus(`正在載入〈${entry.title}〉……`);
 
   try{
-    const response=await fetch(entry.file,{cache:"no-store"});
-    if(!response.ok) throw new Error(`樂譜讀取失敗（HTTP ${response.status}）`);
+    let xmlText="";
+    let loadedTitle=entry.title;
+    let loadedBpm=entry.defaultBpm||80;
+    let sourceLabel="Google 試算表／Drive";
 
-    const text=await response.text();
-    const fallbackName=entry.title || entry.file.split("/").pop();
-    const song=parseMusicXML(text,fallbackName);
+    if(entry.file && entry.source==="GitHub 備援曲目庫"){
+      const response=await fetch(entry.file,{cache:"no-store"});
+      if(!response.ok) throw new Error(`備援樂譜讀取失敗（HTTP ${response.status}）`);
+      xmlText=await response.text();
+      sourceLabel=entry.file;
+    }else{
+      const result=await loadJsonp(
+        `${SONG_API_URL}?action=song&id=${encodeURIComponent(entry.id)}`
+      );
+      const payload=normalizeApiSongPayload(result,entry);
+      xmlText=payload.xml;
+      loadedTitle=payload.title;
+      loadedBpm=payload.defaultBpm;
+    }
 
-    song.title=entry.title || song.title;
-    song.libraryMeta=entry;
+    const song=parseMusicXML(xmlText,loadedTitle);
+    song.title=loadedTitle||song.title;
+    song.libraryMeta={
+      ...entry,
+      source:entry.source||"Google 試算表／Drive"
+    };
 
     state.selectedLibraryId=entry.id;
-    applyLoadedSong(song,entry.file,entry.defaultBpm,"library");
+    applyLoadedSong(song,sourceLabel,loadedBpm,"library");
 
     renderSongLibrary();
     setLibraryStatus(`已選擇〈${song.title}〉`,"success");
