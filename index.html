@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V5.2｜寬鬆判定版</title>
+<title>直笛音高挑戰 V5.3｜長音比例計分版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1393,7 +1393,7 @@ html.setup-mode body .setup-card{
 }
 
 
-/* ===== V5.2 寬鬆判定提示 ===== */
+/* ===== V5.3 寬鬆判定與長音比例計分提示 ===== */
 .judgement-hint{
   margin-top:9px;
   padding:8px 10px;
@@ -1417,10 +1417,10 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V5.2</h1>
+        <h1>🎵 直笛音高挑戰 V5.3</h1>
         <div class="subtitle">曲目由 Google 試算表與 Drive 管理，也能自由選音進行指法隨機練習。</div>
       </div>
-      <div class="badge">🎵 寬鬆判定版</div>
+      <div class="badge">🎶 長音比例計分</div>
     </div>
 
     <div class="practice-mode-switch" role="tablist" aria-label="練習模式">
@@ -1591,7 +1591,7 @@ html.setup-mode body .setup-card{
             </div>
             <label class="check-row"><input id="metronomeToggle" type="checkbox" checked> 開啟節拍器提示音</label>
             <div class="judgement-hint">
-              目前使用寬鬆判定：起音可稍微提早或延後，麥克風短暫漏訊也不會立刻判錯。
+              目前使用寬鬆判定；長音可提早半拍換氣仍得滿分，再提早停止則依實際維持時間扣分。
             </div>
           </div>
 
@@ -2970,13 +2970,13 @@ function getCurrentTick(now){
 }
 
 function judgeSong(dt,currentTick){
-  // V5.2 寬鬆判定：
+  // V5.3 寬鬆判定＋長音比例計分：
   // 1. 起音允許稍微提早或延後。
-  // 2. 麥克風短暫漏訊時保留 180ms 緩衝。
-  // 3. 一般音只需約 25% 的音值被穩定偵測。
-  // 4. 即使沒有抓到起音，只要大部分音值正確，也可補救判定。
-  const attackEarly=TPQN*.45;  // 最多提早約 0.45 拍
-  const attackLate=TPQN*.70;   // 最多延後約 0.70 拍
+  // 2. 麥克風短暫漏訊保留 180ms 緩衝。
+  // 3. 長音可以少吹最後半拍作為換氣，仍視為完整維持。
+  // 4. 若比半拍更早停止，依實際吹奏比例給部分分數。
+  const attackEarly=TPQN*.45;
+  const attackLate=TPQN*.70;
   const releaseGrace=TPQN*.35;
   const dropoutGraceMs=180;
   const now=performance.now();
@@ -3039,26 +3039,59 @@ function judgeSong(dt,currentTick){
       st.judged=true;
       state.judgedCount++;
 
-      const durationSec=
-        (ev.durationTick/TPQN)*(60/state.practiceBpm);
-      const ratio=
+      const beats=ev.durationTick/TPQN;
+      const secondsPerBeat=60/state.practiceBpm;
+      const durationSec=beats*secondsPerBeat;
+      const rawRatio=
         durationSec>0 ? st.correctTime/durationSec : 0;
+      const maxPoints=Math.round(100*Math.max(1,beats));
+      const isLong=beats>=1.5;
 
-      // 短音約需 10%，一般音約需 25%。
-      const required=
-        ev.durationTick<=TPQN*.5 ? .10 : .25;
+      let earnedPoints=0;
 
-      // 若整段有至少 55% 都正確，即使起音瞬間未被收音，也判定通過。
-      const sustainedRescue=ratio>=.55;
-
-      st.hit=(st.attackHit||sustainedRescue) && ratio>=required;
-
-      if(st.hit){
-        state.score+=Math.round(
-          100*Math.max(1,ev.durationTick/TPQN)
+      if(isLong){
+        // 最後半拍可作為換氣，不扣分。
+        const breathingGraceSec=.5*secondsPerBeat;
+        const fullHoldTargetSec=Math.max(
+          durationSec-breathingGraceSec,
+          durationSec*.5
         );
+
+        const holdRatio=Math.max(
+          0,
+          Math.min(1,st.correctTime/fullHoldTargetSec)
+        );
+
+        // 起音占30%，長音維持占70%。
+        // 若起音瞬間漏抓，但後段吹得很完整，仍保留部分起音分。
+        const sustainedRescue=rawRatio>=.55;
+        const attackScore=st.attackHit ? .30 : sustainedRescue ? .15 : 0;
+        const holdScore=.70*holdRatio;
+        const totalRatio=Math.max(
+          0,
+          Math.min(1,attackScore+holdScore)
+        );
+
+        earnedPoints=Math.round(maxPoints*totalRatio);
+
+        // 正確率採較寬鬆門檻；分數仍會反映長音是否吹足。
+        st.hit=totalRatio>=.55;
+        st.holdRatio=holdRatio;
+      }else{
+        const required=
+          ev.durationTick<=TPQN*.5 ? .10 : .25;
+        const sustainedRescue=rawRatio>=.55;
+
+        st.hit=
+          (st.attackHit||sustainedRescue) &&
+          rawRatio>=required;
+
+        earnedPoints=st.hit ? maxPoints : 0;
+        st.holdRatio=Math.max(0,Math.min(1,rawRatio));
       }
 
+      st.earnedPoints=earnedPoints;
+      state.score+=earnedPoints;
       scoreText.textContent=String(state.score);
     }
   }
@@ -3110,12 +3143,35 @@ function updateGame(dt,now){
 }
 
 function finishSong(){
-  state.finished=true; state.running=false;
-  const hit=[...state.eventStates.values()].filter(s=>s.hit).length;
+  state.finished=true;
+  state.running=false;
+
+  const hit=[...state.eventStates.values()]
+    .filter(s=>s.hit).length;
   const total=state.song.events.length;
-  const accuracy=total?Math.round(hit/total*100):0;
-  showMessage("完成！",`正確 ${hit}/${total}｜${accuracy}%｜${state.score} 分`,999999);
-  statusText.textContent="曲目完成，按 ⚙ 回設定可調整 BPM 再練習";
+  const accuracy=total
+    ? Math.round(hit/total*100)
+    : 0;
+
+  const maxScore=state.song.events.reduce(
+    (sum,ev)=>sum+Math.round(
+      100*Math.max(1,ev.durationTick/TPQN)
+    ),
+    0
+  );
+
+  const scoreRate=maxScore
+    ? Math.round(state.score/maxScore*100)
+    : 0;
+
+  showMessage(
+    "完成！",
+    `正確 ${hit}/${total}｜正確率 ${accuracy}%｜分數 ${state.score}/${maxScore}（${scoreRate}%）`,
+    999999
+  );
+
+  statusText.textContent=
+    "長音最後半拍可換氣；更早停止會依維持時間扣分。按 ⚙ 可回設定再練習";
 }
 
 function drawRoundedRect(x,y,w,h,r){
