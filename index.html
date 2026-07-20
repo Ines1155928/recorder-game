@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V5.3｜長音比例計分版</title>
+<title>直笛音高挑戰 V5.4｜分級成績報告版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1406,6 +1406,311 @@ html.setup-mode body .setup-card{
   line-height:1.45;
 }
 
+
+/* ===== V5.4 分級成績報告 ===== */
+.result-overlay{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:grid;
+  place-items:center;
+  padding:
+    max(18px,env(safe-area-inset-top))
+    max(14px,env(safe-area-inset-right))
+    max(18px,env(safe-area-inset-bottom))
+    max(14px,env(safe-area-inset-left));
+  background:rgba(36,60,80,.54);
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.result-overlay[hidden]{
+  display:none !important;
+}
+.result-report{
+  width:min(900px,96vw);
+  max-height:min(90vh,820px);
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:24px;
+  color:#304f6b;
+  background:
+    radial-gradient(circle at 10% 5%,rgba(240,210,222,.36),transparent 23%),
+    radial-gradient(circle at 90% 7%,rgba(181,222,237,.36),transparent 24%),
+    linear-gradient(180deg,#f5f8fa,#eaf1f4);
+  border:4px solid rgba(255,255,255,.94);
+  border-radius:30px;
+  box-shadow:0 24px 55px rgba(22,55,77,.28);
+}
+.result-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+.result-eyebrow{
+  color:#6e879b;
+  font-size:13px;
+  font-weight:1000;
+  letter-spacing:.08em;
+}
+.result-header h2{
+  margin:3px 0 2px;
+  color:#2f5474;
+  font-size:32px;
+  line-height:1.15;
+}
+.result-song-name{
+  color:#5d7890;
+  font-size:16px;
+  font-weight:900;
+}
+.result-close-button{
+  flex:0 0 auto;
+  width:44px;
+  height:44px;
+  padding:0;
+  color:#3b5d76;
+  background:#e2ebef;
+  border:2px solid #9eb7c4;
+  border-radius:50%;
+  font-size:28px;
+  line-height:1;
+  box-shadow:0 5px 0 rgba(73,116,143,.12);
+}
+.result-score-summary{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  align-items:center;
+  gap:18px;
+  margin-top:18px;
+  padding:16px 18px;
+  background:linear-gradient(135deg,#e8f1f4,#e9e4ee);
+  border:3px solid #fff;
+  border-radius:23px;
+  box-shadow:0 7px 0 rgba(91,139,167,.09);
+}
+.result-main-score{
+  width:112px;
+  height:112px;
+  display:grid;
+  place-items:center;
+  align-content:center;
+  border-radius:50%;
+  color:#294e6a;
+  background:linear-gradient(145deg,#c8e3ec,#d5dcec 52%,#e8cbd8);
+  border:5px solid #fff;
+  box-shadow:0 8px 0 rgba(79,128,158,.11);
+}
+.result-main-score span{
+  font-size:34px;
+  font-weight:1000;
+  line-height:1;
+}
+.result-main-score small{
+  margin-top:6px;
+  color:#55728a;
+  font-size:12px;
+  font-weight:1000;
+}
+.result-summary-text{
+  display:grid;
+  gap:6px;
+}
+.result-summary-text strong{
+  color:#315674;
+  font-size:24px;
+}
+.result-summary-text span{
+  color:#647f95;
+  font-size:16px;
+  font-weight:900;
+}
+
+.result-grade-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-top:15px;
+}
+.result-grade-card{
+  min-height:112px;
+  display:grid;
+  align-content:center;
+  gap:4px;
+  padding:13px 10px;
+  text-align:center;
+  border:3px solid #fff;
+  border-radius:20px;
+  box-shadow:0 6px 0 rgba(78,126,155,.08);
+}
+.result-grade-card.perfect{background:#d9eee5}
+.result-grade-card.good{background:#dceaf2}
+.result-grade-card.ok{background:#eee8cc}
+.result-grade-card.miss{background:#eed8df}
+.result-grade-name{
+  color:#355772;
+  font-size:17px;
+  font-weight:1000;
+}
+.result-grade-percent{
+  color:#294c67;
+  font-size:28px;
+  font-weight:1000;
+  line-height:1;
+}
+.result-grade-count{
+  color:#647e93;
+  font-size:12px;
+  font-weight:900;
+}
+
+.result-section{
+  margin-top:20px;
+}
+.result-section-title{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.result-section-title h3{
+  margin:0;
+  color:#315674;
+  font-size:21px;
+}
+.result-section-title span{
+  color:#71889b;
+  font-size:12px;
+  font-weight:850;
+  text-align:right;
+}
+.result-note-list{
+  display:grid;
+  gap:8px;
+}
+.result-note-row{
+  display:grid;
+  grid-template-columns:minmax(92px,130px) 86px 1fr;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  background:#f2f6f8;
+  border:2px solid #fff;
+  border-radius:16px;
+  box-shadow:0 4px 0 rgba(86,133,161,.06);
+}
+.result-note-name{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#315572;
+  font-size:16px;
+  font-weight:1000;
+}
+.result-note-dot{
+  width:14px;
+  height:14px;
+  flex:0 0 14px;
+  border-radius:50%;
+  background:var(--note-color);
+  box-shadow:0 0 0 3px #fff;
+}
+.result-note-rate{
+  color:#456781;
+  font-size:15px;
+  font-weight:1000;
+}
+.result-note-counts{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+}
+.result-mini-grade{
+  padding:4px 7px;
+  border-radius:999px;
+  color:#405f77;
+  font-size:11px;
+  font-weight:1000;
+}
+.result-mini-grade.perfect{background:#d3e9df}
+.result-mini-grade.good{background:#d5e5ed}
+.result-mini-grade.ok{background:#e9e2c3}
+.result-mini-grade.miss{background:#ead1d9}
+
+.result-advice{
+  margin-top:15px;
+  padding:12px 14px;
+  color:#3d6079;
+  background:linear-gradient(135deg,#e8e5cf,#e3edf1);
+  border:2px solid #fff;
+  border-radius:17px;
+  font-size:14px;
+  font-weight:900;
+  line-height:1.55;
+}
+.result-actions{
+  display:flex;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:17px;
+}
+.result-back-button,
+.result-stay-button{
+  min-height:46px;
+  padding:10px 18px;
+  border:3px solid #fff;
+  border-radius:16px;
+  font-weight:1000;
+  box-shadow:0 5px 0 rgba(74,117,144,.11);
+}
+.result-back-button{
+  color:#294d68;
+  background:linear-gradient(135deg,#bcdce6,#c6d4e5 52%,#e5c8d4);
+}
+.result-stay-button{
+  color:#405f76;
+  background:#e2eaee;
+}
+
+@media(max-width:700px){
+  .result-report{
+    width:100%;
+    padding:17px;
+    border-radius:24px;
+  }
+  .result-header h2{font-size:27px}
+  .result-score-summary{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+  .result-main-score{
+    margin:auto;
+    width:98px;
+    height:98px;
+  }
+  .result-grade-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .result-note-row{
+    grid-template-columns:1fr auto;
+  }
+  .result-note-counts{
+    grid-column:1/-1;
+  }
+  .result-section-title{
+    display:block;
+  }
+  .result-section-title span{
+    display:block;
+    margin-top:3px;
+    text-align:left;
+  }
+}
+
 </style>
 </head>
 <body class="setup-mode">
@@ -1417,10 +1722,10 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V5.3</h1>
+        <h1>🎵 直笛音高挑戰 V5.4</h1>
         <div class="subtitle">曲目由 Google 試算表與 Drive 管理，也能自由選音進行指法隨機練習。</div>
       </div>
-      <div class="badge">🎶 長音比例計分</div>
+      <div class="badge">🏅 分級成績報告</div>
     </div>
 
     <div class="practice-mode-switch" role="tablist" aria-label="練習模式">
@@ -1640,6 +1945,47 @@ html.setup-mode body .setup-card{
 </section>
 </div>
 
+<div id="resultOverlay" class="result-overlay" hidden>
+  <section class="result-report" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+    <div class="result-header">
+      <div>
+        <div class="result-eyebrow">本次練習完成</div>
+        <h2 id="resultTitle">成績報告</h2>
+        <div id="resultSongName" class="result-song-name">—</div>
+      </div>
+      <button id="resultCloseBtn" class="result-close-button" type="button" aria-label="關閉成績">×</button>
+    </div>
+
+    <div class="result-score-summary">
+      <div class="result-main-score">
+        <span id="resultScoreRate">0%</span>
+        <small>得分率</small>
+      </div>
+      <div class="result-summary-text">
+        <strong id="resultScoreText">0 / 0 分</strong>
+        <span id="resultAccuracyText">正確 0 / 0</span>
+      </div>
+    </div>
+
+    <div id="resultGradeGrid" class="result-grade-grid"></div>
+
+    <section class="result-section">
+      <div class="result-section-title">
+        <h3>各音表現</h3>
+        <span>看看哪些音已經熟練、哪些音需要再加強</span>
+      </div>
+      <div id="resultNoteList" class="result-note-list"></div>
+    </section>
+
+    <div id="resultAdvice" class="result-advice"></div>
+
+    <div class="result-actions">
+      <button id="resultBackBtn" class="result-back-button" type="button">回到設定頁</button>
+      <button id="resultStayBtn" class="result-stay-button" type="button">留在完成畫面</button>
+    </div>
+  </section>
+</div>
+
 <div class="orientation-warning">
   <div><div style="font-size:54px">↻</div><h2>請將裝置轉為橫向</h2><p>橫向畫面才能清楚顯示多條音高軌道。</p></div>
 </div>
@@ -1771,6 +2117,13 @@ const startBtn=$("startBtn"), demoBtn=$("demoBtn"), pauseBtn=$("pauseBtn"), back
 const hudTitle=$("hudTitle"), hudSub=$("hudSub"), hudBpm=$("hudBpm"), progressText=$("progressText"), scoreText=$("scoreText");
 const meterFill=$("meterFill"), detectedNote=$("detectedNote"), statusText=$("statusText");
 const messageCard=$("messageCard"), messageMain=$("messageMain"), messageSub=$("messageSub");
+
+const resultOverlay=$("resultOverlay"), resultCloseBtn=$("resultCloseBtn");
+const resultBackBtn=$("resultBackBtn"), resultStayBtn=$("resultStayBtn");
+const resultSongName=$("resultSongName"), resultScoreRate=$("resultScoreRate");
+const resultScoreText=$("resultScoreText"), resultAccuracyText=$("resultAccuracyText");
+const resultGradeGrid=$("resultGradeGrid"), resultNoteList=$("resultNoteList");
+const resultAdvice=$("resultAdvice");
 
 
 function setRandomStatus(text,type=""){
@@ -2748,6 +3101,8 @@ async function startGame(useMic){
     startBtn.disabled=false; startBtn.textContent="啟用麥克風並開始";
   }
 
+  resultOverlay.hidden=true;
+  messageCard.classList.remove("show");
   state.score=0; state.judgedCount=0; state.eventStates=new Map(); state.particles=[]; state.receiverFlashes={};
   state.running=true; state.paused=false; state.finished=false; state.pausedDuration=0; state.pauseStarted=0;
   state.nextMetronomeBeat=0;
@@ -2757,7 +3112,12 @@ async function startGame(useMic){
       correctTime:0,
       judged:false,
       hit:false,
-      holdParticleTimer:0
+      holdParticleTimer:0,
+      earnedPoints:0,
+      maxPoints:0,
+      scoreRatio:0,
+      qualityRatio:0,
+      resultGrade:"miss"
     });
   }
 
@@ -2820,7 +3180,27 @@ pauseBtn.addEventListener("click",()=>{
 });
 backBtn.addEventListener("click",stopAndReturn);
 
+resultCloseBtn.addEventListener("click",()=>{
+  resultOverlay.hidden=true;
+});
+
+resultStayBtn.addEventListener("click",()=>{
+  resultOverlay.hidden=true;
+});
+
+resultBackBtn.addEventListener("click",()=>{
+  resultOverlay.hidden=true;
+  stopAndReturn();
+});
+
+resultOverlay.addEventListener("click",event=>{
+  if(event.target===resultOverlay){
+    resultOverlay.hidden=true;
+  }
+});
+
 function stopAndReturn(){
+  resultOverlay.hidden=true;
   state.running=false; state.paused=false; state.finished=false;
   gameScreen.classList.remove("active");
   setupScreen.classList.add("active");
@@ -2969,6 +3349,23 @@ function getCurrentTick(now){
   return quarterNotes*TPQN;
 }
 
+
+function performanceGrade(ratio){
+  if(ratio>=.90) return "perfect";
+  if(ratio>=.75) return "good";
+  if(ratio>=.55) return "ok";
+  return "miss";
+}
+
+function gradeDisplayName(grade){
+  return {
+    perfect:"Perfect",
+    good:"Good",
+    ok:"OK",
+    miss:"Miss"
+  }[grade]||"Miss";
+}
+
 function judgeSong(dt,currentTick){
   // V5.3 寬鬆判定＋長音比例計分：
   // 1. 起音允許稍微提早或延後。
@@ -3074,6 +3471,9 @@ function judgeSong(dt,currentTick){
 
         earnedPoints=Math.round(maxPoints*totalRatio);
 
+        // 長音直接以起音＋維持比例作為表現分級。
+        st.qualityRatio=totalRatio;
+
         // 正確率採較寬鬆門檻；分數仍會反映長音是否吹足。
         st.hit=totalRatio>=.55;
         st.holdRatio=holdRatio;
@@ -3088,9 +3488,26 @@ function judgeSong(dt,currentTick){
 
         earnedPoints=st.hit ? maxPoints : 0;
         st.holdRatio=Math.max(0,Math.min(1,rawRatio));
+
+        // 短音總分維持通過／不通過，但成績分級會再細分吹奏品質。
+        if(!st.hit){
+          st.qualityRatio=0;
+        }else if(ev.durationTick<=TPQN*.5){
+          st.qualityRatio=st.attackHit ? .95 : .62;
+        }else if(st.attackHit && rawRatio>=.65){
+          st.qualityRatio=.95;
+        }else if(st.attackHit && rawRatio>=.40){
+          st.qualityRatio=.82;
+        }else{
+          st.qualityRatio=.64;
+        }
       }
 
       st.earnedPoints=earnedPoints;
+      st.maxPoints=maxPoints;
+      st.scoreRatio=maxPoints>0 ? earnedPoints/maxPoints : 0;
+      st.resultGrade=performanceGrade(st.qualityRatio);
+      st.rawRatio=rawRatio;
       state.score+=earnedPoints;
       scoreText.textContent=String(state.score);
     }
@@ -3142,13 +3559,40 @@ function updateGame(dt,now){
   return currentTick;
 }
 
-function finishSong(){
-  state.finished=true;
-  state.running=false;
+function buildResultReport(){
+  const grades=["perfect","good","ok","miss"];
+  const gradeCounts={
+    perfect:0,
+    good:0,
+    ok:0,
+    miss:0
+  };
 
-  const hit=[...state.eventStates.values()]
-    .filter(s=>s.hit).length;
+  const noteMap=new Map();
+
+  state.song.events.forEach(ev=>{
+    const st=state.eventStates.get(ev.id);
+    const grade=st?.resultGrade||"miss";
+    gradeCounts[grade]=(gradeCounts[grade]||0)+1;
+
+    if(!noteMap.has(ev.noteId)){
+      noteMap.set(ev.noteId,{
+        noteId:ev.noteId,
+        total:0,
+        perfect:0,
+        good:0,
+        ok:0,
+        miss:0
+      });
+    }
+
+    const row=noteMap.get(ev.noteId);
+    row.total++;
+    row[grade]++;
+  });
+
   const total=state.song.events.length;
+  const hit=total-gradeCounts.miss;
   const accuracy=total
     ? Math.round(hit/total*100)
     : 0;
@@ -3164,14 +3608,146 @@ function finishSong(){
     ? Math.round(state.score/maxScore*100)
     : 0;
 
-  showMessage(
-    "完成！",
-    `正確 ${hit}/${total}｜正確率 ${accuracy}%｜分數 ${state.score}/${maxScore}（${scoreRate}%）`,
-    999999
-  );
+  return {
+    grades,
+    gradeCounts,
+    noteRows:[...noteMap.values()].sort((a,b)=>{
+      const noteA=NOTE_BY_ID[a.noteId];
+      const noteB=NOTE_BY_ID[b.noteId];
+      return (noteA?.midi||0)-(noteB?.midi||0);
+    }),
+    total,
+    hit,
+    accuracy,
+    maxScore,
+    scoreRate
+  };
+}
+
+function renderResultReport(report){
+  resultSongName.textContent=state.song.title;
+  resultScoreRate.textContent=`${report.scoreRate}%`;
+  resultScoreText.textContent=`${state.score} / ${report.maxScore} 分`;
+  resultAccuracyText.textContent=`正確 ${report.hit} / ${report.total}｜正確率 ${report.accuracy}%`;
+
+  resultGradeGrid.innerHTML="";
+  report.grades.forEach(grade=>{
+    const count=report.gradeCounts[grade]||0;
+    const percent=report.total
+      ? Math.round(count/report.total*100)
+      : 0;
+
+    const card=document.createElement("div");
+    card.className=`result-grade-card ${grade}`;
+
+    const name=document.createElement("div");
+    name.className="result-grade-name";
+    name.textContent=gradeDisplayName(grade);
+
+    const value=document.createElement("div");
+    value.className="result-grade-percent";
+    value.textContent=`${percent}%`;
+
+    const countText=document.createElement("div");
+    countText.className="result-grade-count";
+    countText.textContent=`${count} / ${report.total} 個音`;
+
+    card.append(name,value,countText);
+    resultGradeGrid.appendChild(card);
+  });
+
+  resultNoteList.innerHTML="";
+  report.noteRows.forEach(row=>{
+    const note=NOTE_BY_ID[row.noteId];
+    const passed=row.total-row.miss;
+    const passRate=row.total
+      ? Math.round(passed/row.total*100)
+      : 0;
+
+    const item=document.createElement("div");
+    item.className="result-note-row";
+
+    const name=document.createElement("div");
+    name.className="result-note-name";
+    name.style.setProperty("--note-color",note?.color||"#7fa8bd");
+
+    const dot=document.createElement("span");
+    dot.className="result-note-dot";
+    dot.style.setProperty("--note-color",note?.color||"#7fa8bd");
+
+    const label=document.createElement("span");
+    label.textContent=note?.label||row.noteId;
+    name.append(dot,label);
+
+    const rate=document.createElement("div");
+    rate.className="result-note-rate";
+    rate.textContent=`${passRate}%`;
+
+    const counts=document.createElement("div");
+    counts.className="result-note-counts";
+
+    ["perfect","good","ok","miss"].forEach(grade=>{
+      const chip=document.createElement("span");
+      chip.className=`result-mini-grade ${grade}`;
+      chip.textContent=`${gradeDisplayName(grade)} ${row[grade]}`;
+      counts.appendChild(chip);
+    });
+
+    item.append(name,rate,counts);
+    resultNoteList.appendChild(item);
+  });
+
+  const weakNotes=report.noteRows
+    .map(row=>{
+      const note=NOTE_BY_ID[row.noteId];
+      const needPractice=row.ok+row.miss;
+      const weakRate=row.total
+        ? needPractice/row.total
+        : 0;
+
+      return {
+        label:note?.label||row.noteId,
+        weakRate,
+        miss:row.miss,
+        ok:row.ok,
+        total:row.total
+      };
+    })
+    .filter(item=>item.miss>0 || item.weakRate>=.34)
+    .sort((a,b)=>b.weakRate-a.weakRate || b.miss-a.miss)
+    .slice(0,3);
+
+  if(!weakNotes.length){
+    resultAdvice.textContent=
+      "表現很穩定！這次沒有特別需要加強的音，可以提高BPM或增加練習音域。";
+  }else{
+    const labels=weakNotes.map(item=>{
+      const detail=[];
+      if(item.miss) detail.push(`Miss ${item.miss}`);
+      if(item.ok) detail.push(`OK ${item.ok}`);
+      return `${item.label}（${detail.join("、")}）`;
+    });
+
+    resultAdvice.textContent=
+      `建議優先加強：${labels.join("、")}。可以到「指法隨機練習」只勾選這些音再練習。`;
+  }
+}
+
+function showResultReport(){
+  const report=buildResultReport();
+  renderResultReport(report);
+  messageCard.classList.remove("show");
+  resultOverlay.hidden=false;
+}
+
+function finishSong(){
+  state.finished=true;
+  state.running=false;
+
+  showResultReport();
 
   statusText.textContent=
-    "長音最後半拍可換氣；更早停止會依維持時間扣分。按 ⚙ 可回設定再練習";
+    "完成！成績報告會列出 Perfect、Good、OK、Miss，以及各音的表現。";
 }
 
 function drawRoundedRect(x,y,w,h,r){
