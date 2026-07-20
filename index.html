@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V5.5｜即時分級回饋版</title>
+<title>直笛音高挑戰 V5.6｜HUD即時回饋版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1707,55 +1707,130 @@ html.setup-mode body .setup-card{
 }
 
 
-/* ===== V5.5 遊戲進行中的即時分級回饋 ===== */
-.message-card.judgement-feedback{
-  min-width:250px;
-  border-width:4px;
-  transform:scale(1);
-  box-shadow:
-    0 9px 0 rgba(47,81,105,.12),
-    0 18px 30px rgba(41,75,99,.18);
-}
-.message-card.judgement-feedback #messageMain{
-  font-size:34px;
-  font-weight:1000;
-  letter-spacing:.02em;
-  text-shadow:none;
-}
-.message-card.judgement-feedback #messageSub{
-  margin-top:5px;
-  color:#405f76;
-  font-size:15px;
-  font-weight:1000;
-}
-.message-card.grade-perfect{
-  background:linear-gradient(145deg,#dcefe6,#cfe6dc);
-  border-color:#ffffff;
-}
-.message-card.grade-perfect #messageMain{color:#236347}
-.message-card.grade-good{
-  background:linear-gradient(145deg,#dcebf2,#ccdfE9);
-  border-color:#ffffff;
-}
-.message-card.grade-good #messageMain{color:#285f7d}
-.message-card.grade-ok{
-  background:linear-gradient(145deg,#efe9cf,#e6ddb8);
-  border-color:#ffffff;
-}
-.message-card.grade-ok #messageMain{color:#765f22}
-.message-card.grade-miss{
-  background:linear-gradient(145deg,#efdce2,#e5cbd3);
-  border-color:#ffffff;
-}
-.message-card.grade-miss #messageMain{color:#853d50}
 
-@media(max-width:700px){
-  .message-card.judgement-feedback{
-    min-width:210px;
-    padding:14px 18px;
+
+/* ===== V5.6 HUD 不遮畫面的即時判定 ===== */
+.live-feedback{
+  width:154px;
+  min-width:154px;
+  height:56px;
+  display:grid;
+  grid-template-columns:1fr;
+  align-content:center;
+  gap:3px;
+  padding:5px 8px;
+  color:#365873;
+  background:#e8eef1;
+  border:3px solid #fff;
+  border-radius:17px;
+  box-shadow:0 5px 0 rgba(108,155,181,.11);
+  overflow:hidden;
+  transition:background .14s ease,transform .14s ease;
+}
+.live-feedback-main{
+  min-width:0;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  grid-template-areas:
+    "label grade"
+    "note note";
+  column-gap:6px;
+  align-items:center;
+}
+.live-feedback-label{
+  grid-area:label;
+  color:#6a8294;
+  font-size:9px;
+  font-weight:1000;
+  letter-spacing:.06em;
+}
+.live-feedback strong{
+  grid-area:grade;
+  min-width:0;
+  color:#375873;
+  font-size:18px;
+  font-weight:1000;
+  line-height:1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.live-feedback #liveFeedbackNote{
+  grid-area:note;
+  min-width:0;
+  color:#5c7487;
+  font-size:10px;
+  font-weight:950;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.live-feedback-history{
+  min-height:9px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.live-history-chip{
+  height:9px;
+  flex:1 1 0;
+  min-width:0;
+  border-radius:999px;
+  background:#c9d5dc;
+  opacity:.95;
+}
+.live-history-chip.perfect{background:#77b995}
+.live-history-chip.good{background:#78abc4}
+.live-history-chip.ok{background:#c4aa59}
+.live-history-chip.miss{background:#bd7889}
+
+.live-feedback.grade-ready{background:#e8eef1}
+.live-feedback.grade-perfect{background:#d7ebe1}
+.live-feedback.grade-perfect strong{color:#276348}
+.live-feedback.grade-good{background:#d8e8f0}
+.live-feedback.grade-good strong{color:#2b6381}
+.live-feedback.grade-ok{background:#ebe4c7}
+.live-feedback.grade-ok strong{color:#755f23}
+.live-feedback.grade-miss{background:#ead5dc}
+.live-feedback.grade-miss strong{color:#823f51}
+
+.live-feedback.pulse{
+  animation:liveFeedbackPulse .28s ease-out;
+}
+@keyframes liveFeedbackPulse{
+  0%{transform:scale(.94)}
+  60%{transform:scale(1.05)}
+  100%{transform:scale(1)}
+}
+
+@media(max-width:900px){
+  .live-feedback{
+    width:116px;
+    min-width:116px;
+    height:48px;
+    padding:4px 6px;
+    border-radius:14px;
   }
-  .message-card.judgement-feedback #messageMain{
-    font-size:29px;
+  .live-feedback strong{font-size:15px}
+  .live-feedback #liveFeedbackNote{font-size:9px}
+  .live-feedback-label{display:none}
+  .live-feedback-main{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "grade"
+      "note";
+  }
+}
+@media(max-width:760px){
+  .hud-title{
+    max-width:110px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .live-feedback{
+    width:104px;
+    min-width:104px;
   }
 }
 
@@ -1770,10 +1845,10 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V5.5</h1>
+        <h1>🎵 直笛音高挑戰 V5.6</h1>
         <div class="subtitle">曲目由 Google 試算表與 Drive 管理，也能自由選音進行指法隨機練習。</div>
       </div>
-      <div class="badge">✨ 即時分級回饋</div>
+      <div class="badge">📊 HUD即時回饋</div>
     </div>
 
     <div class="practice-mode-switch" role="tablist" aria-label="練習模式">
@@ -1971,6 +2046,16 @@ html.setup-mode body .setup-card{
     <div class="stat"><span class="stat-label">BPM</span><span id="hudBpm" class="stat-value">80</span></div>
     <div class="stat"><span class="stat-label">進度</span><span id="progressText" class="stat-value">0%</span></div>
     <div class="stat"><span class="stat-label">分數</span><span id="scoreText" class="stat-value">0</span></div>
+
+    <div id="liveFeedback" class="live-feedback grade-ready" aria-live="polite" aria-label="即時判定">
+      <div class="live-feedback-main">
+        <span class="live-feedback-label">判定</span>
+        <strong id="liveGrade">READY</strong>
+        <span id="liveFeedbackNote">等待第一個音</span>
+      </div>
+      <div id="liveFeedbackHistory" class="live-feedback-history" aria-label="最近四次判定"></div>
+    </div>
+
     <button id="pauseBtn" title="暫停">⏸</button>
     <button id="backBtn" title="回設定">⚙</button>
   </div>
@@ -2161,6 +2246,8 @@ const bpmRange=$("bpmRange"), bpmInput=$("bpmInput"), previewRange=$("previewRan
 const toleranceRange=$("toleranceRange"), toleranceValue=$("toleranceValue"), metronomeToggle=$("metronomeToggle");
 const startBtn=$("startBtn"), demoBtn=$("demoBtn"), pauseBtn=$("pauseBtn"), backBtn=$("backBtn");
 const hudTitle=$("hudTitle"), hudSub=$("hudSub"), hudBpm=$("hudBpm"), progressText=$("progressText"), scoreText=$("scoreText");
+const liveFeedback=$("liveFeedback"), liveGrade=$("liveGrade");
+const liveFeedbackNote=$("liveFeedbackNote"), liveFeedbackHistory=$("liveFeedbackHistory");
 const meterFill=$("meterFill"), detectedNote=$("detectedNote"), statusText=$("statusText");
 const messageCard=$("messageCard"), messageMain=$("messageMain"), messageSub=$("messageSub");
 
@@ -3149,6 +3236,7 @@ async function startGame(useMic){
 
   resultOverlay.hidden=true;
   messageCard.classList.remove("show");
+  resetLiveFeedback();
   state.score=0; state.judgedCount=0; state.eventStates=new Map(); state.particles=[]; state.receiverFlashes={};
   state.running=true; state.paused=false; state.finished=false; state.pausedDuration=0; state.pauseStarted=0;
   state.nextMetronomeBeat=0;
@@ -3233,6 +3321,7 @@ resultBackBtn.addEventListener("click",()=>{
 
 function stopAndReturn(){
   resultOverlay.hidden=true;
+  resetLiveFeedback();
   state.running=false; state.paused=false; state.finished=false;
   gameScreen.classList.remove("active");
   setupScreen.classList.add("active");
@@ -3285,30 +3374,53 @@ function showMessage(main,sub="",duration=700){
   }
 }
 
-function showJudgementFeedback(grade,noteId,earnedPoints,maxPoints){
-  clearTimeout(state.messageTimer);
+function resetLiveFeedback(){
+  liveFeedback.classList.remove(
+    "grade-perfect",
+    "grade-good",
+    "grade-ok",
+    "grade-miss",
+    "pulse"
+  );
+  liveFeedback.classList.add("grade-ready");
+  liveGrade.textContent="READY";
+  liveFeedbackNote.textContent="等待第一個音";
+  liveFeedbackHistory.innerHTML="";
+}
 
+function showJudgementFeedback(grade,noteId,earnedPoints,maxPoints){
   const note=NOTE_BY_ID[noteId];
   const label=note?.label||noteId;
   const title=gradeDisplayName(grade);
-  const pointsText=grade==="miss"
-    ? `${label}｜再試一次`
-    : `${label}｜+${earnedPoints} 分`;
 
-  clearJudgementMessageStyle();
-  messageCard.classList.add(
-    "judgement-feedback",
-    `grade-${grade}`
+  liveFeedback.classList.remove(
+    "grade-ready",
+    "grade-perfect",
+    "grade-good",
+    "grade-ok",
+    "grade-miss",
+    "pulse"
   );
-  messageMain.textContent=title;
-  messageSub.textContent=pointsText;
-  messageCard.classList.add("show");
+  liveFeedback.classList.add(`grade-${grade}`);
 
-  const duration=grade==="miss" ? 720 : 600;
-  state.messageTimer=setTimeout(()=>{
-    messageCard.classList.remove("show");
-    clearJudgementMessageStyle();
-  },duration);
+  liveGrade.textContent=title;
+  liveFeedbackNote.textContent=grade==="miss"
+    ? `${label}｜再試一次`
+    : `${label}｜+${earnedPoints}分`;
+
+  // 只在 HUD 輕微跳動，不遮住音符軌道。
+  void liveFeedback.offsetWidth;
+  liveFeedback.classList.add("pulse");
+
+  const chip=document.createElement("span");
+  chip.className=`live-history-chip ${grade}`;
+  chip.title=`${title}｜${label}`;
+  chip.setAttribute("aria-label",`${title} ${label}`);
+  liveFeedbackHistory.prepend(chip);
+
+  while(liveFeedbackHistory.children.length>4){
+    liveFeedbackHistory.lastElementChild.remove();
+  }
 }
 
 function centsBetween(freq,target){return 1200*Math.log2(freq/target)}
@@ -4341,6 +4453,7 @@ addEventListener("keyup",e=>{
 
 resizeCanvas();
 buildRandomNotePicker();
+resetLiveFeedback();
 setPracticeMode("library");
 loadSongLibrary();
 })();
