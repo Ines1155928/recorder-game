@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V5.6｜HUD即時回饋版</title>
+<title>直笛音高挑戰 V5.7｜拍點起音判定版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1845,10 +1845,10 @@ html.setup-mode body .setup-card{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V5.6</h1>
+        <h1>🎵 直笛音高挑戰 V5.7</h1>
         <div class="subtitle">曲目由 Google 試算表與 Drive 管理，也能自由選音進行指法隨機練習。</div>
       </div>
-      <div class="badge">📊 HUD即時回饋</div>
+      <div class="badge">🎯 拍點起音判定</div>
     </div>
 
     <div class="practice-mode-switch" role="tablist" aria-label="練習模式">
@@ -2019,7 +2019,7 @@ html.setup-mode body .setup-card{
             </div>
             <label class="check-row"><input id="metronomeToggle" type="checkbox" checked> 開啟節拍器提示音</label>
             <div class="judgement-hint">
-              目前使用寬鬆判定；長音可提早半拍換氣仍得滿分，再提早停止則依實際維持時間扣分。
+              必須在拍點附近重新起音；提前一直吹住不算正確。同音連續出現時也要重新吐音，長音最後半拍仍可換氣。
             </div>
           </div>
 
@@ -2196,6 +2196,16 @@ const state = {
   audioBuffer:null,
   detected:null,
   detectedVolume:0,
+
+  // 起音追蹤：防止玩家提前持續吹住指定音，到了拍點仍被判定正確。
+  detectedOnsetNoteId:null,
+  detectedOnsetPerf:-Infinity,
+  trackedPitchNoteId:null,
+  trackedPitchLastSeenAt:0,
+  trackedPitchPeakVolume:0,
+  trackedPitchDipReady:true,
+  trackedPitchLastAttackAt:0,
+
   startPerf:0,
   pauseStarted:0,
   pausedDuration:0,
@@ -3237,6 +3247,7 @@ async function startGame(useMic){
   resultOverlay.hidden=true;
   messageCard.classList.remove("show");
   resetLiveFeedback();
+  resetPitchOnsetTracking();
   state.score=0; state.judgedCount=0; state.eventStates=new Map(); state.particles=[]; state.receiverFlashes={};
   state.running=true; state.paused=false; state.finished=false; state.pausedDuration=0; state.pauseStarted=0;
   state.nextMetronomeBeat=0;
@@ -3251,7 +3262,9 @@ async function startGame(useMic){
       maxPoints:0,
       scoreRatio:0,
       qualityRatio:0,
-      resultGrade:"miss"
+      resultGrade:"miss",
+      attackOffsetTick:null,
+      missReason:""
     });
   }
 
@@ -3322,6 +3335,7 @@ resultBackBtn.addEventListener("click",()=>{
 function stopAndReturn(){
   resultOverlay.hidden=true;
   resetLiveFeedback();
+  resetPitchOnsetTracking();
   state.running=false; state.paused=false; state.finished=false;
   gameScreen.classList.remove("active");
   setupScreen.classList.add("active");
@@ -3388,7 +3402,7 @@ function resetLiveFeedback(){
   liveFeedbackHistory.innerHTML="";
 }
 
-function showJudgementFeedback(grade,noteId,earnedPoints,maxPoints){
+function showJudgementFeedback(grade,noteId,earnedPoints,maxPoints,missReason=""){
   const note=NOTE_BY_ID[noteId];
   const label=note?.label||noteId;
   const title=gradeDisplayName(grade);
@@ -3405,7 +3419,7 @@ function showJudgementFeedback(grade,noteId,earnedPoints,maxPoints){
 
   liveGrade.textContent=title;
   liveFeedbackNote.textContent=grade==="miss"
-    ? `${label}｜再試一次`
+    ? `${label}｜${missReason||"再試一次"}`
     : `${label}｜+${earnedPoints}分`;
 
   // 只在 HUD 輕微跳動，不遮住音符軌道。
@@ -3511,6 +3525,99 @@ function autoCorrelate(buffer,sampleRate){
   return sampleRate/refinedLag;
 }
 
+
+function resetPitchOnsetTracking(){
+  state.detectedOnsetNoteId=null;
+  state.detectedOnsetPerf=-Infinity;
+  state.trackedPitchNoteId=null;
+  state.trackedPitchLastSeenAt=0;
+  state.trackedPitchPeakVolume=0;
+  state.trackedPitchDipReady=true;
+  state.trackedPitchLastAttackAt=0;
+}
+
+function registerPitchOnset(noteId,now){
+  state.detectedOnsetNoteId=noteId;
+  state.detectedOnsetPerf=now;
+  state.trackedPitchLastAttackAt=now;
+}
+
+function trackPitchOnset(nearest,now){
+  const noteId=nearest?.note?.id||null;
+  const volume=Math.max(0,state.detectedVolume||0);
+  const gapMs=now-state.trackedPitchLastSeenAt;
+
+  if(!noteId){
+    // 舌奏或換氣造成短暫音量下降時，先標記為可以產生下一次起音。
+    if(gapMs>35){
+      state.trackedPitchDipReady=true;
+    }
+
+    // 真正停止一小段時間後，視為完全放開上一個音。
+    if(gapMs>120){
+      state.trackedPitchNoteId=null;
+      state.trackedPitchPeakVolume=0;
+    }
+    return;
+  }
+
+  const changedPitch=
+    state.trackedPitchNoteId &&
+    state.trackedPitchNoteId!==noteId;
+
+  const startedAfterSilence=
+    !state.trackedPitchNoteId ||
+    gapMs>70;
+
+  if(changedPitch||startedAfterSilence){
+    registerPitchOnset(noteId,now);
+    state.trackedPitchPeakVolume=volume;
+    state.trackedPitchDipReady=false;
+  }else{
+    // 同音重複時，利用舌奏造成的「音量下降後再上升」辨識新的起音。
+    state.trackedPitchPeakVolume=Math.max(
+      volume,
+      state.trackedPitchPeakVolume*.995
+    );
+
+    const dipThreshold=Math.max(
+      state.micGate*1.15,
+      state.trackedPitchPeakVolume*.58
+    );
+
+    if(volume<dipThreshold){
+      state.trackedPitchDipReady=true;
+    }
+
+    const reboundThreshold=Math.max(
+      state.micGate*1.8,
+      state.trackedPitchPeakVolume*.76
+    );
+
+    if(
+      state.trackedPitchDipReady &&
+      volume>=reboundThreshold &&
+      now-state.trackedPitchLastAttackAt>=90
+    ){
+      registerPitchOnset(noteId,now);
+      state.trackedPitchPeakVolume=volume;
+      state.trackedPitchDipReady=false;
+    }
+  }
+
+  state.trackedPitchNoteId=noteId;
+  state.trackedPitchLastSeenAt=now;
+}
+
+function performanceTimeToTick(perfTime){
+  const elapsedMs=
+    perfTime-state.startPerf-state.pausedDuration;
+
+  return (elapsedMs/1000)*
+    (state.practiceBpm/60)*
+    TPQN;
+}
+
 function updatePitch(){
   if(state.demoMode||!state.analyser||!state.audioBuffer) return;
   state.analyser.getFloatTimeDomainData(state.audioBuffer);
@@ -3518,7 +3625,9 @@ function updatePitch(){
   const meterScale=state.micIsIPad?4200:1800;
   meterFill.style.width=`${Math.max(0,Math.min(100,state.detectedVolume*meterScale))}%`;
   if(freq>0){
-    const nearest=closestSelectedNote(freq); state.detected=nearest;
+    const nearest=closestSelectedNote(freq);
+    state.detected=nearest;
+    trackPitchOnset(nearest,performance.now());
     detectedNote.textContent=nearest?nearest.note.label:"—";
     if(nearest){
       detectedNote.style.color=nearest.note.color;
@@ -3526,7 +3635,9 @@ function updatePitch(){
       statusText.textContent=`${Math.round(freq)} Hz｜${dir} ${Math.round(Math.abs(nearest.cents))}¢`;
     }
   }else{
-    state.detected=null; detectedNote.textContent="—"; detectedNote.style.color="white";
+    state.detected=null;
+    trackPitchOnset(null,performance.now());
+    detectedNote.textContent="—"; detectedNote.style.color="white";
     statusText.textContent=state.micIsIPad
       ? "等待直笛聲；請讓 iPad 麥克風朝向直笛，距離約 20～40 公分"
       : "等待清楚、穩定的直笛聲";
@@ -3557,14 +3668,14 @@ function gradeDisplayName(grade){
 }
 
 function judgeSong(dt,currentTick){
-  // V5.3 寬鬆判定＋長音比例計分：
-  // 1. 起音允許稍微提早或延後。
-  // 2. 麥克風短暫漏訊保留 180ms 緩衝。
-  // 3. 長音可以少吹最後半拍作為換氣，仍視為完整維持。
-  // 4. 若比半拍更早停止，依實際吹奏比例給部分分數。
-  const attackEarly=TPQN*.45;
-  const attackLate=TPQN*.70;
-  const releaseGrace=TPQN*.35;
+  // V5.7 拍點起音判定：
+  // 1. 正確音必須在拍點附近重新起音，不能提前一直吹住等音符經過。
+  // 2. 起音仍保留兒童練習所需的寬鬆範圍：提早0.30拍、延後0.45拍。
+  // 3. 同音連續出現時，必須重新吐音；連結線已在MusicXML解析時合併，不需重吹。
+  // 4. 長音最後半拍仍可作為換氣，不扣維持分。
+  const attackEarly=TPQN*.30;
+  const attackLate=TPQN*.45;
+  const releaseGrace=TPQN*.30;
   const dropoutGraceMs=180;
   const now=performance.now();
 
@@ -3588,12 +3699,28 @@ function judgeSong(dt,currentTick){
       now-st.lastCorrectAt<=dropoutGraceMs
     );
 
+    const onsetTick=
+      state.detectedOnsetNoteId===ev.noteId
+        ? performanceTimeToTick(state.detectedOnsetPerf)
+        : -Infinity;
+
+    const onsetInWindow=
+      onsetTick>=ev.startTick-attackEarly &&
+      onsetTick<=ev.startTick+attackLate;
+
     const insideAttackWindow=
       currentTick>=ev.startTick-attackEarly &&
       currentTick<=ev.startTick+attackLate;
 
-    if(insideAttackWindow && correct && !st.attackHit){
+    if(
+      insideAttackWindow &&
+      onsetInWindow &&
+      correct &&
+      !st.attackHit
+    ){
       st.attackHit=true;
+      st.attackOffsetTick=onsetTick-ev.startTick;
+
       flashReceiver(ev.noteId);
       burst(
         receiverX(),
@@ -3602,7 +3729,14 @@ function judgeSong(dt,currentTick){
       );
     }
 
-    if(currentTick>=ev.startTick && currentTick<=endTick && correct){
+    // 只有成功抓到拍點起音之後，才開始累積音值。
+    // 因此提前一直吹住指定音，不會累積成正確長音。
+    if(
+      st.attackHit &&
+      currentTick>=ev.startTick &&
+      currentTick<=endTick &&
+      correct
+    ){
       st.correctTime+=dt;
 
       const isLong=ev.durationTick>=TPQN*1.5;
@@ -3631,13 +3765,15 @@ function judgeSong(dt,currentTick){
       const durationSec=beats*secondsPerBeat;
       const rawRatio=
         durationSec>0 ? st.correctTime/durationSec : 0;
-      const maxPoints=Math.round(100*Math.max(1,beats));
-      const isLong=beats>=1.5;
 
+      const maxPoints=Math.round(
+        100*Math.max(1,beats)
+      );
+
+      const isLong=beats>=1.5;
       let earnedPoints=0;
 
       if(isLong){
-        // 最後半拍可作為換氣，不扣分。
         const breathingGraceSec=.5*secondsPerBeat;
         const fullHoldTargetSec=Math.max(
           durationSec-breathingGraceSec,
@@ -3646,67 +3782,98 @@ function judgeSong(dt,currentTick){
 
         const holdRatio=Math.max(
           0,
-          Math.min(1,st.correctTime/fullHoldTargetSec)
+          Math.min(
+            1,
+            st.correctTime/fullHoldTargetSec
+          )
         );
 
-        // 起音占30%，長音維持占70%。
-        // 若起音瞬間漏抓，但後段吹得很完整，仍保留部分起音分。
-        const sustainedRescue=rawRatio>=.55;
-        const attackScore=st.attackHit ? .30 : sustainedRescue ? .15 : 0;
-        const holdScore=.70*holdRatio;
-        const totalRatio=Math.max(
-          0,
-          Math.min(1,attackScore+holdScore)
-        );
+        if(st.attackHit){
+          const attackScore=.30;
+          const holdScore=.70*holdRatio;
+          const totalRatio=Math.max(
+            0,
+            Math.min(1,attackScore+holdScore)
+          );
 
-        earnedPoints=Math.round(maxPoints*totalRatio);
+          earnedPoints=Math.round(
+            maxPoints*totalRatio
+          );
 
-        // 長音直接以起音＋維持比例作為表現分級。
-        st.qualityRatio=totalRatio;
+          st.qualityRatio=totalRatio;
+          st.hit=totalRatio>=.55;
+        }else{
+          earnedPoints=0;
+          st.qualityRatio=0;
+          st.hit=false;
+        }
 
-        // 正確率採較寬鬆門檻；分數仍會反映長音是否吹足。
-        st.hit=totalRatio>=.55;
         st.holdRatio=holdRatio;
       }else{
         const required=
-          ev.durationTick<=TPQN*.5 ? .10 : .25;
-        const sustainedRescue=rawRatio>=.55;
+          ev.durationTick<=TPQN*.5
+            ? .10
+            : .25;
 
         st.hit=
-          (st.attackHit||sustainedRescue) &&
+          st.attackHit &&
           rawRatio>=required;
 
-        earnedPoints=st.hit ? maxPoints : 0;
-        st.holdRatio=Math.max(0,Math.min(1,rawRatio));
+        earnedPoints=st.hit
+          ? maxPoints
+          : 0;
 
-        // 短音總分維持通過／不通過，但成績分級會再細分吹奏品質。
+        st.holdRatio=Math.max(
+          0,
+          Math.min(1,rawRatio)
+        );
+
         if(!st.hit){
           st.qualityRatio=0;
         }else if(ev.durationTick<=TPQN*.5){
-          st.qualityRatio=st.attackHit ? .95 : .62;
-        }else if(st.attackHit && rawRatio>=.65){
           st.qualityRatio=.95;
-        }else if(st.attackHit && rawRatio>=.40){
+        }else if(rawRatio>=.65){
+          st.qualityRatio=.95;
+        }else if(rawRatio>=.40){
           st.qualityRatio=.82;
         }else{
           st.qualityRatio=.64;
         }
       }
 
+      if(!st.attackHit){
+        st.missReason=
+          rawRatio>.05
+            ? "拍點未重新起音"
+            : "沒有在拍點起音";
+      }else if(!st.hit){
+        st.missReason="音值太短";
+      }else{
+        st.missReason="";
+      }
+
       st.earnedPoints=earnedPoints;
       st.maxPoints=maxPoints;
-      st.scoreRatio=maxPoints>0 ? earnedPoints/maxPoints : 0;
-      st.resultGrade=performanceGrade(st.qualityRatio);
+      st.scoreRatio=maxPoints>0
+        ? earnedPoints/maxPoints
+        : 0;
+
+      st.resultGrade=performanceGrade(
+        st.qualityRatio
+      );
+
       st.rawRatio=rawRatio;
       state.score+=earnedPoints;
-      scoreText.textContent=String(state.score);
+      scoreText.textContent=String(
+        state.score
+      );
 
-      // 每個音完成判定時，立即顯示 Perfect／Good／OK／Miss。
       showJudgementFeedback(
         st.resultGrade,
         ev.noteId,
         earnedPoints,
-        maxPoints
+        maxPoints,
+        st.missReason
       );
     }
   }
@@ -4434,6 +4601,12 @@ addEventListener("keydown",e=>{
   if(n){
     keysHeld.add(e.key.toLowerCase());
     state.detected={note:n,cents:0};
+    state.detectedVolume=Math.max(state.micGate*2.5,.02);
+    registerPitchOnset(n.id,performance.now());
+    state.trackedPitchNoteId=n.id;
+    state.trackedPitchLastSeenAt=performance.now();
+    state.trackedPitchPeakVolume=state.detectedVolume;
+    state.trackedPitchDipReady=false;
     detectedNote.textContent=n.label;
     detectedNote.style.color=n.color;
     meterFill.style.width="75%";
@@ -4445,6 +4618,8 @@ addEventListener("keyup",e=>{
   keysHeld.delete(e.key.toLowerCase());
   if(keysHeld.size===0){
     state.detected=null;
+    state.detectedVolume=0;
+    trackPitchOnset(null,performance.now());
     detectedNote.textContent="—";
     meterFill.style.width="0%";
     statusText.textContent=demoHelpText();
