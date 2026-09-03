@@ -1837,6 +1837,78 @@ html.setup-mode body .setup-card{
 /* ===== V5.8 設定頁固定開始列 =====
    無論曲目清單多長，都能直接開始遊戲，不必捲到頁面最底部。
 */
+.speed-range-control{
+  display:grid;
+  grid-template-columns:42px minmax(80px,1fr) 42px;
+  gap:8px;
+  align-items:center;
+}
+
+.speed-range-control input[type="range"]{
+  width:100%;
+  min-width:0;
+}
+
+.speed-step-button{
+  width:42px;
+  height:42px;
+  min-width:42px;
+  padding:0;
+  border:2px solid #8eb8cc;
+  border-radius:13px;
+  color:#214c68;
+  background:linear-gradient(180deg,#f8fcff,#dcecf3);
+  box-shadow:0 4px 0 rgba(78,126,153,.14);
+  font-size:24px;
+  line-height:1;
+}
+
+.speed-value{
+  min-width:80px;
+  text-align:center;
+  font-weight:1000;
+  color:#315b75;
+}
+
+.option-help{
+  margin:-5px 0 2px 147px;
+  padding:8px 11px;
+  border-radius:11px;
+  color:#607d92;
+  background:rgba(219,234,242,.7);
+  font-size:12px;
+  line-height:1.45;
+}
+
+.game-speed-stat{
+  min-width:146px;
+}
+
+.game-speed-control{
+  display:grid;
+  grid-template-columns:32px minmax(42px,1fr) 32px;
+  gap:5px;
+  align-items:center;
+  margin-top:2px;
+}
+
+.hud .game-speed-button{
+  width:32px;
+  height:32px;
+  min-width:32px;
+  padding:0;
+  border:2px solid rgba(99,151,180,.36);
+  border-radius:10px;
+  color:#315b75;
+  background:#edf7fb;
+  font-size:21px;
+  line-height:1;
+}
+
+.hud .game-speed-button:disabled{
+  opacity:.38;
+}
+
 html.setup-mode body #setupScreen.active{
   padding-bottom:max(104px,calc(86px + env(safe-area-inset-bottom))) !important;
 }
@@ -1868,7 +1940,38 @@ body:not(.setup-mode) > .setup-actions{
   display:none !important;
 }
 
+@media(max-width:900px){
+  .game-speed-stat{
+    min-width:126px;
+    padding:4px 6px;
+  }
+
+  .game-speed-control{
+    grid-template-columns:28px minmax(38px,1fr) 28px;
+    gap:3px;
+  }
+
+  .hud .game-speed-button{
+    width:28px;
+    height:28px;
+    min-width:28px;
+    font-size:18px;
+  }
+}
+
 @media(max-width:580px){
+  .speed-option-row{
+    grid-template-columns:1fr;
+  }
+
+  .speed-value{
+    text-align:left;
+  }
+
+  .option-help{
+    margin:-4px 0 2px;
+  }
+
   html.setup-mode body #setupScreen.active{
     padding-bottom:max(94px,calc(78px + env(safe-area-inset-bottom))) !important;
   }
@@ -2051,7 +2154,7 @@ body:not(.setup-mode) > .setup-actions{
           <div id="songInfo" class="song-info" style="display:none">
             <div class="info-item"><div class="info-label">曲名</div><div id="songTitle" class="info-value">—</div></div>
             <div class="info-item"><div class="info-label">拍號</div><div id="songTime" class="info-value">—</div></div>
-            <div class="info-item"><div id="songBpmLabel" class="info-label">原譜 BPM</div><div id="songOriginalBpm" class="info-value">—</div></div>
+            <div class="info-item"><div id="songBpmLabel" class="info-label">原譜速度</div><div id="songOriginalBpm" class="info-value">—</div></div>
             <div class="info-item"><div class="info-label">小節 / 音符</div><div id="songStats" class="info-value">—</div></div>
           </div>
 
@@ -2060,16 +2163,21 @@ body:not(.setup-mode) > .setup-actions{
           <div id="parseWarning" class="warn-box"></div>
 
           <div class="option-group" style="margin-top:16px">
-            <div class="option-row">
-              <label for="bpmRange">練習 BPM</label>
-              <input id="bpmRange" type="range" min="40" max="200" step="1" value="80">
-              <input id="bpmInput" class="number-input" type="number" min="40" max="240" step="1" value="80">
+            <div class="option-row speed-option-row">
+              <label for="speedRange">速度調整</label>
+              <div class="speed-range-control">
+                <button id="setupSpeedDown" class="speed-step-button" type="button" aria-label="速度減慢 2">－</button>
+                <input id="speedRange" type="range" min="40" max="200" step="1" value="80" aria-label="速度調整">
+                <button id="setupSpeedUp" class="speed-step-button" type="button" aria-label="速度加快 2">＋</button>
+              </div>
+              <span id="speedValue" class="speed-value">速度 80</span>
             </div>
             <div class="option-row">
-              <label for="previewRange">提前顯示</label>
+              <label for="previewRange">預先看到</label>
               <input id="previewRange" type="range" min="2" max="8" step="1" value="4">
-              <span id="previewValue">4 拍</span>
+              <span id="previewValue">未來 4 拍</span>
             </div>
+            <div class="option-help">控制畫面一次能看見後面幾拍；數字越大，音符越早出現在右側，但不會改變遊戲速度。</div>
             <div class="option-row">
               <label for="toleranceRange">音準寬容度（預設寬鬆）</label>
               <input id="toleranceRange" type="range" min="25" max="90" step="5" value="70">
@@ -2097,7 +2205,14 @@ body:not(.setup-mode) > .setup-actions{
       <div id="hudTitle" class="hud-title">直笛音高挑戰</div>
       <div id="hudSub" class="hud-sub">—</div>
     </div>
-    <div class="stat"><span class="stat-label">BPM</span><span id="hudBpm" class="stat-value">80</span></div>
+    <div class="stat game-speed-stat">
+      <span class="stat-label">速度</span>
+      <div class="game-speed-control">
+        <button id="gameSpeedDown" class="game-speed-button" type="button" aria-label="遊戲速度減慢 2">－</button>
+        <span id="hudBpm" class="stat-value">80</span>
+        <button id="gameSpeedUp" class="game-speed-button" type="button" aria-label="遊戲速度加快 2">＋</button>
+      </div>
+    </div>
     <div class="stat"><span class="stat-label">進度</span><span id="progressText" class="stat-value">0%</span></div>
     <div class="stat"><span class="stat-label">分數</span><span id="scoreText" class="stat-value">0</span></div>
 
@@ -2266,6 +2381,8 @@ const state = {
   trackedPitchLastAttackAt:0,
 
   startPerf:0,
+  timelineAnchorPerf:0,
+  timelineAnchorTick:0,
   pauseStarted:0,
   pausedDuration:0,
   lastFrame:0,
@@ -2287,7 +2404,8 @@ const state = {
   randomQuestionCount:20,
   randomNoteBeats:2,
   avoidImmediateRepeat:true,
-  shuffleEachStart:true
+  shuffleEachStart:true,
+  speedControlsReady:false
 };
 
 const $ = id => document.getElementById(id);
@@ -2311,7 +2429,10 @@ const songInfo=$("songInfo"), songTitle=$("songTitle"), songTime=$("songTime");
 const songBpmLabel=$("songBpmLabel"), songOriginalBpm=$("songOriginalBpm"), songStats=$("songStats");
 const noteTags=$("noteTags"), parseWarning=$("parseWarning"), preview=$("preview");
 
-const bpmRange=$("bpmRange"), bpmInput=$("bpmInput"), previewRange=$("previewRange"), previewValue=$("previewValue");
+const speedRange=$("speedRange"), speedValue=$("speedValue");
+const setupSpeedDown=$("setupSpeedDown"), setupSpeedUp=$("setupSpeedUp");
+const gameSpeedDown=$("gameSpeedDown"), gameSpeedUp=$("gameSpeedUp");
+const previewRange=$("previewRange"), previewValue=$("previewValue");
 const toleranceRange=$("toleranceRange"), toleranceValue=$("toleranceValue"), metronomeToggle=$("metronomeToggle");
 const startBtn=$("startBtn"), demoBtn=$("demoBtn"), pauseBtn=$("pauseBtn"), backBtn=$("backBtn");
 const hudTitle=$("hudTitle"), hudSub=$("hudSub"), hudBpm=$("hudBpm"), progressText=$("progressText"), scoreText=$("scoreText");
@@ -2766,7 +2887,7 @@ function renderSongLibrary(){
       song.grade,
       song.semester,
       song.category,
-      song.defaultBpm ? `建議 ${song.defaultBpm} BPM` : "",
+      song.defaultBpm ? `建議速度 ${song.defaultBpm}` : "",
       difficultyText(song.difficulty)
     ].filter(Boolean);
     meta.textContent=metaParts.join("｜") || "直笛練習曲";
@@ -3189,7 +3310,7 @@ function renderSongInfo(){
   songInfo.style.display="grid";
   songTitle.textContent=s.title;
   songTime.textContent=s.timeSignature;
-  songBpmLabel.textContent=meta.randomPractice?"練習 BPM":"原譜 BPM";
+  songBpmLabel.textContent=meta.randomPractice?"練習速度":"原譜速度";
   songOriginalBpm.textContent=Math.round(meta.randomPractice?state.practiceBpm:s.originalBpm);
   songStats.textContent=meta.randomPractice
     ? `${s.events.length} 題 / ${s.usedNotes.length} 個音`
@@ -3269,13 +3390,64 @@ function renderPreview(){
   });
 }
 
-function syncBpm(value){
-  const v=Math.max(40,Math.min(240,Number(value)||80));
-  state.practiceBpm=v; bpmRange.value=String(Math.min(200,v)); bpmInput.value=String(v);
+const MIN_SPEED=40;
+const MAX_SPEED=200;
+const SPEED_STEP=2;
+
+function updateSpeedButtonStates(){
+  setupSpeedDown.disabled=state.practiceBpm<=MIN_SPEED;
+  setupSpeedUp.disabled=state.practiceBpm>=MAX_SPEED;
+  gameSpeedDown.disabled=!state.speedControlsReady || state.practiceBpm<=MIN_SPEED;
+  gameSpeedUp.disabled=!state.speedControlsReady || state.practiceBpm>=MAX_SPEED;
 }
-bpmRange.addEventListener("input",()=>syncBpm(bpmRange.value));
-bpmInput.addEventListener("change",()=>syncBpm(bpmInput.value));
-previewRange.addEventListener("input",()=>{state.previewBeats=Number(previewRange.value);previewValue.textContent=`${state.previewBeats} 拍`});
+
+function syncBpm(value,preservePosition=false){
+  const v=Math.max(MIN_SPEED,Math.min(MAX_SPEED,Number(value)||80));
+
+  if(preservePosition && state.running){
+    const now=performance.now();
+    state.timelineAnchorTick=getCurrentTick(now);
+    state.timelineAnchorPerf=now;
+    state.lastFrame=now;
+    resetPitchOnsetTracking();
+  }
+
+  state.practiceBpm=v;
+  speedRange.value=String(v);
+  speedValue.textContent=`速度 ${Math.round(v)}`;
+  hudBpm.textContent=String(Math.round(v));
+  updateSpeedButtonStates();
+
+  if(state.song?.libraryMeta?.randomPractice){
+    songOriginalBpm.textContent=String(Math.round(v));
+  }
+
+  return v;
+}
+
+function adjustPracticeSpeed(delta,fromGame=false){
+  const before=state.practiceBpm;
+  const value=syncBpm(before+delta,state.running);
+
+  if(fromGame && state.running && value!==before){
+    const direction=delta>0?"加快":"放慢";
+    if(state.paused){
+      messageSub.textContent=`目前速度 ${Math.round(value)}`;
+    }else{
+      showMessage(`速度 ${Math.round(value)}`,direction,520);
+    }
+  }
+}
+
+speedRange.addEventListener("input",()=>syncBpm(speedRange.value));
+setupSpeedDown.addEventListener("click",()=>adjustPracticeSpeed(-SPEED_STEP));
+setupSpeedUp.addEventListener("click",()=>adjustPracticeSpeed(SPEED_STEP));
+gameSpeedDown.addEventListener("click",()=>adjustPracticeSpeed(-SPEED_STEP,true));
+gameSpeedUp.addEventListener("click",()=>adjustPracticeSpeed(SPEED_STEP,true));
+previewRange.addEventListener("input",()=>{
+  state.previewBeats=Number(previewRange.value);
+  previewValue.textContent=`未來 ${state.previewBeats} 拍`;
+});
 toleranceRange.addEventListener("input",()=>{state.toleranceCents=Number(toleranceRange.value);toleranceValue.textContent=`±${state.toleranceCents}¢`});
 
 function resizeCanvas(){
@@ -3360,10 +3532,12 @@ async function startGame(useMic){
   state.score=0; state.judgedCount=0; state.eventStates=new Map(); state.particles=[]; state.receiverFlashes={};
   state.running=true; state.paused=false; state.finished=false; state.pausedDuration=0; state.pauseStarted=0;
   state.nextMetronomeBeat=0;
+  state.speedControlsReady=false;
+  updateSpeedButtonStates();
   for(const ev of state.song.events){
     state.eventStates.set(ev.id,{
       attackHit:false,
-      correctTime:0,
+      correctTicks:0,
       judged:false,
       hit:false,
       holdParticleTimer:0,
@@ -3400,6 +3574,8 @@ async function startGame(useMic){
     const now = performance.now();
 
     state.startPerf = now + countInDuration;
+    state.timelineAnchorPerf = state.startPerf;
+    state.timelineAnchorTick = 0;
     state.lastFrame = now;
     state.nextMetronomeBeat = 0;
 
@@ -3416,6 +3592,8 @@ async function startGame(useMic){
 
     setTimeout(() => {
       if(!state.running) return;
+      state.speedControlsReady=true;
+      updateSpeedButtonStates();
       showMessage("開始！", "", Math.min(500, beatMs * .7));
     }, countInDuration);
 
@@ -3428,10 +3606,15 @@ demoBtn.addEventListener("click",()=>startGame(false));
 pauseBtn.addEventListener("click",()=>{
   if(!state.running||state.finished) return;
   if(!state.paused){
-    state.paused=true; state.pauseStarted=performance.now(); pauseBtn.textContent="▶"; showMessage("暫停","",999999);
+    const now=performance.now();
+    state.timelineAnchorTick=getCurrentTick(now);
+    state.timelineAnchorPerf=now;
+    state.paused=true; state.pauseStarted=now; pauseBtn.textContent="▶"; showMessage("暫停","",999999);
   }else{
-    state.paused=false; state.pausedDuration+=performance.now()-state.pauseStarted; pauseBtn.textContent="⏸"; messageCard.classList.remove("show");
-    state.lastFrame=performance.now(); requestAnimationFrame(loop);
+    const now=performance.now();
+    state.paused=false; state.pausedDuration+=now-state.pauseStarted; pauseBtn.textContent="⏸"; messageCard.classList.remove("show");
+    state.timelineAnchorPerf=now;
+    state.lastFrame=now; requestAnimationFrame(loop);
   }
 });
 backBtn.addEventListener("click",stopAndReturn);
@@ -3446,6 +3629,8 @@ function stopAndReturn(){
   resetLiveFeedback();
   resetPitchOnsetTracking();
   state.running=false; state.paused=false; state.finished=false;
+  state.speedControlsReady=false;
+  updateSpeedButtonStates();
   gameScreen.classList.remove("active");
   setupScreen.classList.add("active");
   document.documentElement.classList.add("setup-mode");
@@ -3719,12 +3904,9 @@ function trackPitchOnset(nearest,now){
 }
 
 function performanceTimeToTick(perfTime){
-  const elapsedMs=
-    perfTime-state.startPerf-state.pausedDuration;
-
-  return (elapsedMs/1000)*
-    (state.practiceBpm/60)*
-    TPQN;
+  const elapsedMs=perfTime-state.timelineAnchorPerf;
+  return state.timelineAnchorTick+
+    (elapsedMs/1000)*(state.practiceBpm/60)*TPQN;
 }
 
 function updatePitch(){
@@ -3754,9 +3936,10 @@ function updatePitch(){
 }
 
 function getCurrentTick(now){
-  const elapsedMs=now-state.startPerf-state.pausedDuration;
+  if(state.paused) return state.timelineAnchorTick;
+  const elapsedMs=now-state.timelineAnchorPerf;
   const quarterNotes=(elapsedMs/1000)*(state.practiceBpm/60);
-  return quarterNotes*TPQN;
+  return state.timelineAnchorTick+quarterNotes*TPQN;
 }
 
 
@@ -3846,7 +4029,7 @@ function judgeSong(dt,currentTick){
       currentTick<=endTick &&
       correct
     ){
-      st.correctTime+=dt;
+      st.correctTicks+=dt*(state.practiceBpm/60)*TPQN;
 
       const isLong=ev.durationTick>=TPQN*1.5;
       if(isLong){
@@ -3870,10 +4053,8 @@ function judgeSong(dt,currentTick){
       state.judgedCount++;
 
       const beats=ev.durationTick/TPQN;
-      const secondsPerBeat=60/state.practiceBpm;
-      const durationSec=beats*secondsPerBeat;
       const rawRatio=
-        durationSec>0 ? st.correctTime/durationSec : 0;
+        ev.durationTick>0 ? st.correctTicks/ev.durationTick : 0;
 
       const maxPoints=Math.round(
         100*Math.max(1,beats)
@@ -3883,17 +4064,17 @@ function judgeSong(dt,currentTick){
       let earnedPoints=0;
 
       if(isLong){
-        const breathingGraceSec=.5*secondsPerBeat;
-        const fullHoldTargetSec=Math.max(
-          durationSec-breathingGraceSec,
-          durationSec*.5
+        const breathingGraceTicks=.5*TPQN;
+        const fullHoldTargetTicks=Math.max(
+          ev.durationTick-breathingGraceTicks,
+          ev.durationTick*.5
         );
 
         const holdRatio=Math.max(
           0,
           Math.min(
             1,
-            st.correctTime/fullHoldTargetSec
+            st.correctTicks/fullHoldTargetTicks
           )
         );
 
@@ -4193,7 +4374,7 @@ function renderResultReport(report){
 
   if(!weakNotes.length){
     resultAdvice.textContent=
-      "表現很穩定！這次沒有特別需要加強的音，可以提高BPM或增加練習音域。";
+      "表現很穩定！這次沒有特別需要加強的音，可以提高速度或增加練習音域。";
   }else{
     const labels=weakNotes.map(item=>{
       const detail=[];
