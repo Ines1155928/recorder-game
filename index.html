@@ -1964,7 +1964,7 @@ html.setup-mode body .setup-card{
 
           <label class="check-row random-check-row">
             <input id="avoidImmediateRepeat" type="checkbox" checked>
-            儘量避免連續出現相同音
+            避免規律重複（不連續 3 題、不固定交替）
           </label>
 
           <label class="check-row random-check-row">
@@ -2411,41 +2411,91 @@ function shuffleArray(values){
   return array;
 }
 
-function makeBalancedRandomSequence(ids,count,avoidRepeat=true){
+function weightedRandomChoice(ids,remaining){
+  const total=ids.reduce((sum,id)=>sum+(remaining.get(id)||0),0);
+  let target=Math.random()*total;
+
+  for(const id of ids){
+    target-=remaining.get(id)||0;
+    if(target<0) return id;
+  }
+
+  return ids[ids.length-1];
+}
+
+function makeBalancedRandomSequence(ids,count,avoidPatterns=true){
   if(!ids.length) return [];
   if(ids.length===1) return Array(count).fill(ids[0]);
 
+  // 先分配每個音應出現的次數，讓題數維持平均；多出的題目隨機分配。
+  const baseCount=Math.floor(count/ids.length);
+  const remaining=new Map(ids.map(id=>[id,baseCount]));
+  shuffleArray(ids)
+    .slice(0,count%ids.length)
+    .forEach(id=>remaining.set(id,remaining.get(id)+1));
+
   const result=[];
-  let last=null;
 
-  while(result.length<count){
-    let bag=shuffleArray(ids);
-
-    if(avoidRepeat && last && bag[0]===last){
-      const swapIndex=bag.findIndex(id=>id!==last);
-      if(swapIndex>0){
-        [bag[0],bag[swapIndex]]=[bag[swapIndex],bag[0]];
-      }
+  if(!avoidPatterns){
+    while(result.length<count){
+      const available=ids.filter(id=>(remaining.get(id)||0)>0);
+      const next=weightedRandomChoice(available,remaining);
+      result.push(next);
+      remaining.set(next,remaining.get(next)-1);
     }
-
-    for(const id of bag){
-      if(result.length>=count) break;
-
-      if(avoidRepeat && id===last){
-        const alternative=bag.find(candidate=>candidate!==last && !result.includes(candidate));
-        if(alternative){
-          result.push(alternative);
-          last=alternative;
-          continue;
-        }
-      }
-
-      result.push(id);
-      last=id;
-    }
+    return result;
   }
 
-  return result.slice(0,count);
+  const createsRepetitivePattern=id=>{
+    const last=result.at(-1);
+    const secondLast=result.at(-2);
+    const thirdLast=result.at(-3);
+
+    // 允許 AA 來打破兩音固定交替，但不允許 AAA。
+    if(id===last && id===secondLast) return true;
+
+    // 已經出現 ABA 時，不再接 B，避免形成 ABABAB…。
+    return id===secondLast && last===thirdLast && id!==last;
+  };
+
+  // 隨機化的回溯排列：先使用剩餘題數較多的音，並在同數量時隨機決定。
+  // 回溯可避免最後只剩某個音、被迫破壞規則的情況。
+  const deadEnds=new Set();
+  const arrange=()=>{
+    if(result.length===count) return true;
+
+    const stateKey=`${ids.map(id=>remaining.get(id)||0).join(",")}|${result.slice(-3).join(",")}`;
+    if(deadEnds.has(stateKey)) return false;
+
+    const candidates=shuffleArray(
+      ids.filter(id=>(remaining.get(id)||0)>0 && !createsRepetitivePattern(id))
+    ).sort((a,b)=>(remaining.get(b)||0)-(remaining.get(a)||0));
+
+    for(const next of candidates){
+      result.push(next);
+      remaining.set(next,remaining.get(next)-1);
+
+      if(arrange()) return true;
+
+      remaining.set(next,remaining.get(next)+1);
+      result.pop();
+    }
+
+    deadEnds.add(stateKey);
+    return false;
+  };
+
+  if(arrange()) return result;
+
+  // 單一音以外幾乎都能符合規則；若未來題型改變導致無解，仍產生平衡題目。
+  while(result.length<count){
+    const available=ids.filter(id=>(remaining.get(id)||0)>0);
+    const next=weightedRandomChoice(available,remaining);
+    result.push(next);
+    remaining.set(next,remaining.get(next)-1);
+  }
+
+  return result;
 }
 
 function generateRandomPractice(showConfirmation=true){
