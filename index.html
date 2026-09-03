@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V5.7｜拍點起音判定版</title>
+<title>直笛音高挑戰 V5.9｜旋律提示版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -1880,6 +1880,38 @@ html.setup-mode body .setup-card{
   line-height:1.45;
 }
 
+.guide-option-row select{
+  grid-column:2 / 4;
+}
+
+.guide-mode-select{
+  width:100%;
+  min-width:0;
+  padding:10px 12px;
+  border:2px solid #b7d3e0;
+  border-radius:12px;
+  color:#315b75;
+  background:#f8fcfe;
+  font-weight:900;
+}
+
+.game-guide-stat{
+  min-width:132px;
+}
+
+.hud .game-guide-select{
+  width:100%;
+  min-width:0;
+  margin-top:2px;
+  padding:5px 7px;
+  border:2px solid rgba(99,151,180,.32);
+  border-radius:9px;
+  color:#315b75;
+  background:#edf7fb;
+  font-size:12px;
+  font-weight:900;
+}
+
 .game-speed-stat{
   min-width:146px;
 }
@@ -1957,6 +1989,16 @@ body:not(.setup-mode) > .setup-actions{
     min-width:28px;
     font-size:18px;
   }
+
+  .game-guide-stat{
+    min-width:108px;
+    padding:4px 6px;
+  }
+
+  .hud .game-guide-select{
+    padding:4px 5px;
+    font-size:11px;
+  }
 }
 
 @media(max-width:580px){
@@ -1970,6 +2012,14 @@ body:not(.setup-mode) > .setup-actions{
 
   .option-help{
     margin:-4px 0 2px;
+  }
+
+  .guide-option-row{
+    grid-template-columns:1fr;
+  }
+
+  .guide-option-row select{
+    grid-column:auto;
   }
 
   html.setup-mode body #setupScreen.active{
@@ -2006,7 +2056,7 @@ body:not(.setup-mode) > .setup-actions{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V5.7</h1>
+        <h1>🎵 直笛音高挑戰 V5.9</h1>
         <div class="subtitle">曲目由 Google 試算表與 Drive 管理，也能自由選音進行指法隨機練習。</div>
       </div>
       <div class="badge">🎯 拍點起音判定</div>
@@ -2183,6 +2233,15 @@ body:not(.setup-mode) > .setup-actions{
               <input id="toleranceRange" type="range" min="25" max="90" step="5" value="70">
               <span id="toleranceValue">±70¢</span>
             </div>
+            <div class="option-row guide-option-row">
+              <label for="guideModeSelect">旋律提示（導唱）</label>
+              <select id="guideModeSelect" class="guide-mode-select">
+                <option value="off" selected>關閉</option>
+                <option value="onset">音頭提示</option>
+                <option value="full">全程導唱</option>
+              </select>
+            </div>
+            <div class="option-help">音頭提示會在每個音開始時播放短音；全程導唱會完整播放旋律。使用麥克風計分時，建議戴耳機避免喇叭聲被誤判。</div>
             <label class="check-row"><input id="metronomeToggle" type="checkbox" checked> 開啟節拍器提示音</label>
             <div class="judgement-hint">
               必須在拍點附近重新起音；提前一直吹住不算正確。同音連續出現時也要重新吐音，長音最後半拍仍可換氣。
@@ -2212,6 +2271,14 @@ body:not(.setup-mode) > .setup-actions{
         <span id="hudBpm" class="stat-value">80</span>
         <button id="gameSpeedUp" class="game-speed-button" type="button" aria-label="遊戲速度加快 2">＋</button>
       </div>
+    </div>
+    <div class="stat game-guide-stat">
+      <label class="stat-label" for="gameGuideModeSelect">旋律提示</label>
+      <select id="gameGuideModeSelect" class="game-guide-select" aria-label="遊戲中的旋律提示模式">
+        <option value="off" selected>關閉</option>
+        <option value="onset">音頭提示</option>
+        <option value="full">全程導唱</option>
+      </select>
     </div>
     <div class="stat"><span class="stat-label">進度</span><span id="progressText" class="stat-value">0%</span></div>
     <div class="stat"><span class="stat-label">分數</span><span id="scoreText" class="stat-value">0</span></div>
@@ -2405,7 +2472,10 @@ const state = {
   randomNoteBeats:2,
   avoidImmediateRepeat:true,
   shuffleEachStart:true,
-  speedControlsReady:false
+  speedControlsReady:false,
+  guideMode:"off",
+  guideEventId:null,
+  guideVoice:null
 };
 
 const $ = id => document.getElementById(id);
@@ -2432,6 +2502,7 @@ const noteTags=$("noteTags"), parseWarning=$("parseWarning"), preview=$("preview
 const speedRange=$("speedRange"), speedValue=$("speedValue");
 const setupSpeedDown=$("setupSpeedDown"), setupSpeedUp=$("setupSpeedUp");
 const gameSpeedDown=$("gameSpeedDown"), gameSpeedUp=$("gameSpeedUp");
+const guideModeSelect=$("guideModeSelect"), gameGuideModeSelect=$("gameGuideModeSelect");
 const previewRange=$("previewRange"), previewValue=$("previewValue");
 const toleranceRange=$("toleranceRange"), toleranceValue=$("toleranceValue"), metronomeToggle=$("metronomeToggle");
 const startBtn=$("startBtn"), demoBtn=$("demoBtn"), pauseBtn=$("pauseBtn"), backBtn=$("backBtn");
@@ -3393,6 +3464,11 @@ function renderPreview(){
 const MIN_SPEED=40;
 const MAX_SPEED=200;
 const SPEED_STEP=2;
+const GUIDE_MODES={
+  off:"關閉",
+  onset:"音頭提示",
+  full:"全程導唱"
+};
 
 function updateSpeedButtonStates(){
   setupSpeedDown.disabled=state.practiceBpm<=MIN_SPEED;
@@ -3439,11 +3515,33 @@ function adjustPracticeSpeed(delta,fromGame=false){
   }
 }
 
+function syncGuideMode(value,fromGame=false){
+  const mode=Object.prototype.hasOwnProperty.call(GUIDE_MODES,value)?value:"off";
+  const changed=state.guideMode!==mode;
+  state.guideMode=mode;
+  guideModeSelect.value=mode;
+  gameGuideModeSelect.value=mode;
+  resetGuidePlayback();
+
+  if(fromGame && state.running && changed){
+    const label=GUIDE_MODES[mode];
+    if(state.paused){
+      messageSub.textContent=`旋律提示：${label}`;
+    }else{
+      showMessage("旋律提示",label,650);
+    }
+  }
+
+  return mode;
+}
+
 speedRange.addEventListener("input",()=>syncBpm(speedRange.value));
 setupSpeedDown.addEventListener("click",()=>adjustPracticeSpeed(-SPEED_STEP));
 setupSpeedUp.addEventListener("click",()=>adjustPracticeSpeed(SPEED_STEP));
 gameSpeedDown.addEventListener("click",()=>adjustPracticeSpeed(-SPEED_STEP,true));
 gameSpeedUp.addEventListener("click",()=>adjustPracticeSpeed(SPEED_STEP,true));
+guideModeSelect.addEventListener("change",()=>syncGuideMode(guideModeSelect.value));
+gameGuideModeSelect.addEventListener("change",()=>syncGuideMode(gameGuideModeSelect.value,true));
 previewRange.addEventListener("input",()=>{
   state.previewBeats=Number(previewRange.value);
   previewValue.textContent=`未來 ${state.previewBeats} 拍`;
@@ -3532,6 +3630,7 @@ async function startGame(useMic){
   state.score=0; state.judgedCount=0; state.eventStates=new Map(); state.particles=[]; state.receiverFlashes={};
   state.running=true; state.paused=false; state.finished=false; state.pausedDuration=0; state.pauseStarted=0;
   state.nextMetronomeBeat=0;
+  resetGuidePlayback();
   state.speedControlsReady=false;
   updateSpeedButtonStates();
   for(const ev of state.song.events){
@@ -3609,6 +3708,7 @@ pauseBtn.addEventListener("click",()=>{
     const now=performance.now();
     state.timelineAnchorTick=getCurrentTick(now);
     state.timelineAnchorPerf=now;
+    resetGuidePlayback();
     state.paused=true; state.pauseStarted=now; pauseBtn.textContent="▶"; showMessage("暫停","",999999);
   }else{
     const now=performance.now();
@@ -3628,6 +3728,7 @@ function stopAndReturn(){
   resultOverlay.hidden=true;
   resetLiveFeedback();
   resetPitchOnsetTracking();
+  resetGuidePlayback();
   state.running=false; state.paused=false; state.finished=false;
   state.speedControlsReady=false;
   updateSpeedButtonStates();
@@ -4203,9 +4304,102 @@ function playClick(accent=false){
   osc.stop(now + 0.12);
 }
 
+function guideAudioContext(){
+  if(state.audioContext && state.audioContext.state!=="closed"){
+    return state.audioContext;
+  }
+
+  if(!window.__guideAudioContext || window.__guideAudioContext.state==="closed"){
+    const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+    window.__guideAudioContext=new AudioContextClass({latencyHint:"interactive"});
+  }
+
+  return window.__guideAudioContext;
+}
+
+function stopGuideVoice(){
+  const voice=state.guideVoice;
+  if(!voice) return;
+  state.guideVoice=null;
+
+  try{
+    const now=voice.ac.currentTime;
+    voice.gain.gain.cancelScheduledValues(now);
+    voice.gain.gain.setValueAtTime(Math.max(.0001,voice.gain.gain.value),now);
+    voice.gain.gain.exponentialRampToValueAtTime(.0001,now+.035);
+    voice.osc.stop(now+.04);
+  }catch(_error){}
+}
+
+function resetGuidePlayback(){
+  stopGuideVoice();
+  state.guideEventId=null;
+}
+
+function playGuideTone(noteId,sustain=false){
+  const note=NOTE_BY_ID[noteId];
+  if(!note) return;
+
+  stopGuideVoice();
+  const ac=guideAudioContext();
+  if(ac.state==="suspended") ac.resume().catch(()=>{});
+
+  const osc=ac.createOscillator();
+  const gain=ac.createGain();
+  const now=ac.currentTime;
+  const peak=sustain?.055:.072;
+
+  osc.type="triangle";
+  osc.frequency.setValueAtTime(note.freq,now);
+  gain.gain.setValueAtTime(.0001,now);
+  gain.gain.exponentialRampToValueAtTime(peak,now+.018);
+
+  const voice={ac,osc,gain};
+  state.guideVoice=voice;
+  osc.onended=()=>{
+    if(state.guideVoice===voice) state.guideVoice=null;
+  };
+
+  osc.connect(gain).connect(ac.destination);
+  osc.start(now);
+
+  if(!sustain){
+    gain.gain.setValueAtTime(peak,now+.20);
+    gain.gain.exponentialRampToValueAtTime(.0001,now+.31);
+    osc.stop(now+.32);
+  }
+}
+
+function updateGuide(currentTick){
+  if(state.guideMode==="off" || currentTick<0 || !state.song){
+    if(state.guideEventId!==null || state.guideVoice) resetGuidePlayback();
+    return;
+  }
+
+  const activeEvent=state.song.events.find(ev=>
+    currentTick>=ev.startTick && currentTick<ev.startTick+ev.durationTick
+  )||null;
+
+  if(!activeEvent){
+    if(state.guideEventId!==null || state.guideVoice) resetGuidePlayback();
+    return;
+  }
+
+  if(state.guideEventId===activeEvent.id) return;
+
+  stopGuideVoice();
+  state.guideEventId=activeEvent.id;
+
+  if(state.guideMode==="full"){
+    playGuideTone(activeEvent.noteId,true);
+  }else if(currentTick-activeEvent.startTick<=TPQN*.20){
+    playGuideTone(activeEvent.noteId,false);
+  }
+}
+
 function updateGame(dt,now){
   const currentTick=getCurrentTick(now);
-  updatePitch(); judgeSong(dt,currentTick); updateMetronome(currentTick);
+  updatePitch(); judgeSong(dt,currentTick); updateMetronome(currentTick); updateGuide(currentTick);
   for(const p of state.particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;p.alpha=Math.max(0,p.life/p.maxLife)}
   state.particles=state.particles.filter(p=>p.life>0);
   const pct=Math.min(100,Math.max(0,currentTick/state.song.totalTicks*100));
@@ -4396,6 +4590,7 @@ function showResultReport(){
 }
 
 function finishSong(){
+  resetGuidePlayback();
   state.finished=true;
   state.running=false;
 
