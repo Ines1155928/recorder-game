@@ -1834,6 +1834,64 @@ html.setup-mode body .setup-card{
   }
 }
 
+/* ===== V5.8 設定頁固定開始列 =====
+   無論曲目清單多長，都能直接開始遊戲，不必捲到頁面最底部。
+*/
+html.setup-mode body #setupScreen.active{
+  padding-bottom:max(104px,calc(86px + env(safe-area-inset-bottom))) !important;
+}
+
+html.setup-mode body .setup-actions{
+  position:fixed !important;
+  left:50%;
+  right:auto;
+  bottom:max(10px,env(safe-area-inset-bottom)) !important;
+  z-index:100;
+  width:min(1240px,calc(100vw - 28px));
+  margin:0 !important;
+  padding:12px !important;
+  transform:translateX(-50%);
+  justify-content:flex-end;
+  background:rgba(244,249,252,.94) !important;
+  border:3px solid rgba(255,255,255,.96);
+  border-radius:22px !important;
+  box-shadow:0 12px 32px rgba(70,113,143,.22),0 4px 0 rgba(132,190,221,.15);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+
+html.setup-mode body .setup-actions button{
+  min-height:50px;
+}
+
+body:not(.setup-mode) > .setup-actions{
+  display:none !important;
+}
+
+@media(max-width:580px){
+  html.setup-mode body #setupScreen.active{
+    padding-bottom:max(94px,calc(78px + env(safe-area-inset-bottom))) !important;
+  }
+
+  html.setup-mode body .setup-actions{
+    bottom:max(6px,env(safe-area-inset-bottom)) !important;
+    width:calc(100vw - 16px);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    padding:8px !important;
+    border-radius:18px !important;
+  }
+
+  html.setup-mode body .setup-actions button{
+    width:100%;
+    min-width:0;
+    min-height:54px;
+    padding:8px 10px;
+    line-height:1.25;
+  }
+}
+
 </style>
 </head>
 <body class="setup-mode">
@@ -2031,10 +2089,6 @@ html.setup-mode body .setup-card{
       </div>
     </div>
 
-    <div class="setup-actions">
-      <button id="demoBtn" class="secondary" disabled>不開麥克風試玩</button>
-      <button id="startBtn" class="primary" disabled>啟用麥克風並開始</button>
-    </div>
   </div>
 </section>
 <section id="gameScreen" class="screen">
@@ -2076,6 +2130,11 @@ html.setup-mode body .setup-card{
     <div id="statusText" class="tip-box">請先匯入曲目</div>
   </div>
 </section>
+</div>
+
+<div class="setup-actions">
+  <button id="demoBtn" class="secondary" disabled>不開麥克風試玩</button>
+  <button id="startBtn" class="primary" disabled>啟用麥克風並開始</button>
 </div>
 
 <div id="resultOverlay" class="result-overlay" hidden>
