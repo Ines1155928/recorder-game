@@ -2729,7 +2729,6 @@ function weightedRandomChoice(ids,remaining){
 
   return ids[ids.length-1];
 }
-
 function makeBalancedRandomSequence(ids,count,avoidPatterns=true){
   if(!ids.length) return [];
   if(ids.length===1) return Array(count).fill(ids[0]);
@@ -2801,7 +2800,6 @@ function makeBalancedRandomSequence(ids,count,avoidPatterns=true){
     result.push(next);
     remaining.set(next,remaining.get(next)-1);
   }
-
   return result;
 }
 
