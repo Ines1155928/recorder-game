@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#09162f">
-<title>直笛音高挑戰 V5.9｜旋律提示版</title>
+<title>直笛音高挑戰 V5.10｜旋律提示版</title>
 <style>
 :root{
   --bg1:#071226; --bg2:#0d2146; --panel:rgba(10,25,53,.88);
@@ -2056,7 +2056,7 @@ body:not(.setup-mode) > .setup-actions{
       </div>
     <div class="title-row">
       <div>
-        <h1>🎵 直笛音高挑戰 V5.9</h1>
+        <h1>🎵 直笛音高挑戰 V5.10</h1>
         <div class="subtitle">曲目由 Google 試算表與 Drive 管理，也能自由選音進行指法隨機練習。</div>
       </div>
       <div class="badge">🎯 拍點起音判定</div>
@@ -2156,10 +2156,9 @@ body:not(.setup-mode) > .setup-actions{
               <span>題目數量</span>
               <select id="randomQuestionCount" class="library-control">
                 <option value="8">8 題</option>
-                <option value="12">12 題</option>
-                <option value="20" selected>20 題</option>
-                <option value="30">30 題</option>
-                <option value="40">40 題</option>
+                <option value="12" selected>12 題</option>
+                <option value="16">16 題</option>
+                <option value="20">20 題</option>
               </select>
             </label>
 
@@ -2468,7 +2467,7 @@ const state = {
   librarySong:null,
   randomSong:null,
   randomSelected:new Set(),
-  randomQuestionCount:20,
+  randomQuestionCount:12,
   randomNoteBeats:2,
   avoidImmediateRepeat:true,
   shuffleEachStart:true,
@@ -2613,6 +2612,7 @@ function createRandomNoteButton(note,container){
       state.randomSelected.add(note.id);
     }
     updateRandomNotePicker();
+    applyRandomQuestionCountDefault();
     generateRandomPractice(false);
   });
 
@@ -2647,9 +2647,17 @@ function updateRandomNotePicker(){
   generateRandomBtn.disabled=state.randomSelected.size===0;
 }
 
+function applyRandomQuestionCountDefault(){
+  const selectedCount=state.randomSelected.size;
+  const defaultCount=selectedCount>0 && selectedCount<3 ? 8 : 12;
+  randomQuestionCount.value=String(defaultCount);
+  state.randomQuestionCount=defaultCount;
+}
+
 function setRandomSelection(ids){
   state.randomSelected=new Set(ids.filter(id=>NOTE_BY_ID[id]));
   updateRandomNotePicker();
+  applyRandomQuestionCountDefault();
   generateRandomPractice(false);
 }
 
@@ -2764,7 +2772,7 @@ function generateRandomPractice(showConfirmation=true){
     return null;
   }
 
-  const count=Math.max(1,Number(randomQuestionCount.value)||20);
+  const count=Math.max(1,Number(randomQuestionCount.value)||12);
   const noteBeats=Math.max(1,Number(randomNoteBeats.value)||2);
   const avoid=avoidImmediateRepeat.checked;
 
@@ -4327,7 +4335,7 @@ function stopGuideVoice(){
     voice.gain.gain.cancelScheduledValues(now);
     voice.gain.gain.setValueAtTime(Math.max(.0001,voice.gain.gain.value),now);
     voice.gain.gain.exponentialRampToValueAtTime(.0001,now+.035);
-    voice.osc.stop(now+.04);
+    voice.oscillators.forEach(osc=>osc.stop(now+.04));
   }catch(_error){}
 }
 
@@ -4344,29 +4352,40 @@ function playGuideTone(noteId,sustain=false){
   const ac=guideAudioContext();
   if(ac.state==="suspended") ac.resume().catch(()=>{});
 
-  const osc=ac.createOscillator();
+  const mainOsc=ac.createOscillator();
+  const brightOsc=ac.createOscillator();
+  const mainGain=ac.createGain();
+  const brightGain=ac.createGain();
   const gain=ac.createGain();
   const now=ac.currentTime;
-  const peak=sustain?.055:.072;
+  const peak=sustain?.13:.17;
 
-  osc.type="triangle";
-  osc.frequency.setValueAtTime(note.freq,now);
+  // 基音使用圓潤三角波，高八度加入少量方波泛音；比原本單一音色更容易從直笛聲中辨識。
+  mainOsc.type="triangle";
+  mainOsc.frequency.setValueAtTime(note.freq,now);
+  brightOsc.type="square";
+  brightOsc.frequency.setValueAtTime(note.freq*2,now);
+  mainGain.gain.setValueAtTime(.82,now);
+  brightGain.gain.setValueAtTime(sustain?.18:.24,now);
   gain.gain.setValueAtTime(.0001,now);
-  gain.gain.exponentialRampToValueAtTime(peak,now+.018);
+  gain.gain.exponentialRampToValueAtTime(peak,now+.014);
 
-  const voice={ac,osc,gain};
+  const oscillators=[mainOsc,brightOsc];
+  const voice={ac,oscillators,gain};
   state.guideVoice=voice;
-  osc.onended=()=>{
+  mainOsc.onended=()=>{
     if(state.guideVoice===voice) state.guideVoice=null;
   };
 
-  osc.connect(gain).connect(ac.destination);
-  osc.start(now);
+  mainOsc.connect(mainGain).connect(gain);
+  brightOsc.connect(brightGain).connect(gain);
+  gain.connect(ac.destination);
+  oscillators.forEach(osc=>osc.start(now));
 
   if(!sustain){
     gain.gain.setValueAtTime(peak,now+.20);
     gain.gain.exponentialRampToValueAtTime(.0001,now+.31);
-    osc.stop(now+.32);
+    oscillators.forEach(osc=>osc.stop(now+.32));
   }
 }
 
