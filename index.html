@@ -2217,7 +2217,7 @@ body:not(.setup-mode) > .setup-actions{
               <label for="speedRange">速度調整</label>
               <div class="speed-range-control">
                 <button id="setupSpeedDown" class="speed-step-button" type="button" aria-label="速度減慢 2">－</button>
-                <input id="speedRange" type="range" min="40" max="200" step="1" value="80" aria-label="速度調整">
+                <input id="speedRange" type="range" min="20" max="120" step="1" value="80" aria-label="速度調整">
                 <button id="setupSpeedUp" class="speed-step-button" type="button" aria-label="速度加快 2">＋</button>
               </div>
               <span id="speedValue" class="speed-value">速度 80</span>
@@ -3470,8 +3470,8 @@ function renderPreview(){
   });
 }
 
-const MIN_SPEED=40;
-const MAX_SPEED=200;
+const MIN_SPEED=20;
+const MAX_SPEED=120;
 const SPEED_STEP=2;
 const GUIDE_MODES={
   off:"關閉",
