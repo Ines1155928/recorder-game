@@ -3640,7 +3640,7 @@ async function startGame(useMic){
   state.running=true; state.paused=false; state.finished=false; state.pausedDuration=0; state.pauseStarted=0;
   state.nextMetronomeBeat=0;
   resetGuidePlayback();
-  state.speedControlsReady=false;
+  state.speedControlsReady=true;
   updateSpeedButtonStates();
   for(const ev of state.song.events){
     state.eventStates.set(ev.id,{
