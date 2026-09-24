@@ -2002,6 +2002,53 @@ body:not(.setup-mode) > .setup-actions{
   }
 }
 
+@media(min-width:901px) and (max-width:1280px){
+  .setup-grid > .panel{
+    min-width:0;
+  }
+
+  .option-row{
+    grid-template-columns:112px minmax(0,1fr) minmax(64px,auto);
+    gap:8px;
+  }
+
+  .option-row input[type="range"]{
+    min-width:0;
+  }
+
+  .speed-option-row{
+    grid-template-columns:minmax(0,1fr) auto;
+  }
+
+  .speed-option-row > label{
+    grid-column:1;
+    grid-row:1;
+  }
+
+  .speed-option-row .speed-value{
+    grid-column:2;
+    grid-row:1;
+    text-align:right;
+  }
+
+  .speed-option-row .speed-range-control{
+    grid-column:1 / -1;
+    grid-row:2;
+  }
+
+  .option-help{
+    margin-left:120px;
+  }
+
+  .guide-option-row{
+    grid-template-columns:112px minmax(0,1fr);
+  }
+
+  .guide-option-row select{
+    grid-column:2;
+  }
+}
+
 @media(max-width:580px){
   .speed-option-row{
     grid-template-columns:1fr;
@@ -3187,6 +3234,7 @@ async function selectLibrarySong(entry,card){
 
     const song=parseMusicXML(xmlText,loadedTitle);
     song.title=loadedTitle||song.title;
+    song.originalBpm=loadedBpm;
     song.libraryMeta={
       ...entry,
       source:entry.source||"Google 試算表／Drive"
@@ -4630,6 +4678,7 @@ function getReceiverFeedback(noteId,currentTick,now){
   const flashProgress = flash
     ? Math.max(0, Math.min(1, (flashUntil - now) / 360))
     : 0;
+  let repeatFlashProgress = 0;
 
   const correctSound =
     state.detected &&
@@ -4641,12 +4690,25 @@ function getReceiverFeedback(noteId,currentTick,now){
 
   // 音符頭到達接收器後，從起音到音值結束都視為「正在接收」。
   // 這個狀態不依賴學生是否吹對，因此唱名會完整跟隨樂譜音值恆亮。
-  for(const ev of state.song.events){
+  for(let eventIndex=0;eventIndex<state.song.events.length;eventIndex++){
+    const ev=state.song.events[eventIndex];
     if(ev.noteId !== noteId) continue;
 
     const endTick = ev.startTick + ev.durationTick;
-    if(currentTick >= ev.startTick && currentTick <= endTick){
+    if(currentTick >= ev.startTick && currentTick < endTick){
       activeEvent = ev;
+
+      const previousEvent=state.song.events[eventIndex-1];
+      if(previousEvent?.noteId===noteId){
+        const repeatFlashTicks=Math.min(
+          ev.durationTick,
+          TPQN*(state.practiceBpm/60)*.36
+        );
+        repeatFlashProgress=Math.max(
+          0,
+          Math.min(1,1-(currentTick-ev.startTick)/repeatFlashTicks)
+        );
+      }
 
       const isLong = ev.durationTick >= TPQN * 1.5;
       hold = Boolean(isLong && correctSound);
@@ -4657,11 +4719,12 @@ function getReceiverFeedback(noteId,currentTick,now){
   return {
     flash,
     flashProgress,
+    repeatFlashProgress,
     hold,
     noteActive:Boolean(activeEvent),
     activeEvent,
     correctSound,
-    active:flash || hold
+    active:flash || repeatFlashProgress>0 || hold
   };
 }
 
@@ -4779,12 +4842,17 @@ function drawGame(currentTick){
       ctx.fill();
     }
 
-    // 一拍或短音：只有成功收到正確起音後才閃一次
-    if(feedback.flash){
-      const p = 1 - feedback.flashProgress;
+    // 成功收到正確起音時閃一次；連續同音的下一個音到達時也重新閃爍，
+    // 讓學生能看出這是新的音符，而不是上一個音持續不變。
+    const receiverFlashProgress=Math.max(
+      feedback.flashProgress,
+      feedback.repeatFlashProgress
+    );
+    if(receiverFlashProgress>0){
+      const p = 1 - receiverFlashProgress;
 
       ctx.save();
-      ctx.globalAlpha = feedback.flashProgress * .95;
+      ctx.globalAlpha = receiverFlashProgress * .95;
       ctx.strokeStyle="#ffffff";
       ctx.lineWidth=6;
       ctx.shadowColor=note.color;
@@ -4795,7 +4863,7 @@ function drawGame(currentTick){
       ctx.restore();
 
       ctx.save();
-      ctx.globalAlpha = feedback.flashProgress * .65;
+      ctx.globalAlpha = receiverFlashProgress * .65;
       ctx.fillStyle=note.color;
       ctx.shadowColor=note.color;
       ctx.shadowBlur=42;
