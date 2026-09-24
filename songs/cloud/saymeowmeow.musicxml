@@ -1,0 +1,2579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="4.0">
+  <work>
+    <work-title>柯南</work-title>
+    </work>
+  <identification>
+    <encoding>
+      <software>MuseScore Studio 4.7.3</software>
+      <encoding-date>2026-07-20</encoding-date>
+      <supports element="accidental" type="yes"/>
+      <supports element="beam" type="yes"/>
+      <supports element="print" attribute="new-page" type="yes" value="yes"/>
+      <supports element="print" attribute="new-system" type="yes" value="yes"/>
+      <supports element="stem" type="yes"/>
+      </encoding>
+    <source>http://musescore.com/user/10039351/scores/4117731</source>
+    <miscellaneous>
+      <miscellaneous-field name="creationDate">2017-06-19</miscellaneous-field>
+      <miscellaneous-field name="mscVersion">4.70</miscellaneous-field>
+      <miscellaneous-field name="platform">Microsoft Windows</miscellaneous-field>
+      </miscellaneous>
+    </identification>
+  <defaults>
+    <scaling>
+      <millimeters>7.05556</millimeters>
+      <tenths>40</tenths>
+      </scaling>
+    <page-layout>
+      <page-height>1683.36</page-height>
+      <page-width>1190.88</page-width>
+      <page-margins type="even">
+        <left-margin>56.6929</left-margin>
+        <right-margin>56.6929</right-margin>
+        <top-margin>56.6929</top-margin>
+        <bottom-margin>113.386</bottom-margin>
+        </page-margins>
+      <page-margins type="odd">
+        <left-margin>56.6929</left-margin>
+        <right-margin>56.6929</right-margin>
+        <top-margin>56.6929</top-margin>
+        <bottom-margin>113.386</bottom-margin>
+        </page-margins>
+      </page-layout>
+    <appearance>
+      <line-width type="light barline">1.8</line-width>
+      <line-width type="heavy barline">5.5</line-width>
+      <line-width type="beam">5</line-width>
+      <line-width type="bracket">4.4</line-width>
+      <line-width type="dashes">1.5</line-width>
+      <line-width type="enclosure">2</line-width>
+      <line-width type="ending">1.1</line-width>
+      <line-width type="extend">1</line-width>
+      <line-width type="leger">1.6</line-width>
+      <line-width type="pedal">1.1</line-width>
+      <line-width type="octave shift">1.1</line-width>
+      <line-width type="slur middle">2.1</line-width>
+      <line-width type="slur tip">0.7</line-width>
+      <line-width type="staff">1.1</line-width>
+      <line-width type="stem">1</line-width>
+      <line-width type="tie middle">2.1</line-width>
+      <line-width type="tie tip">0.7</line-width>
+      <line-width type="tuplet bracket">1</line-width>
+      <line-width type="wedge">1.2</line-width>
+      <note-size type="cue">70</note-size>
+      <note-size type="grace">70</note-size>
+      <note-size type="grace-cue">49</note-size>
+      </appearance>
+    <music-font font-family="Leland"/>
+    <word-font font-family="FreeSerif" font-size="10"/>
+    <lyric-font font-family="Leelawadee UI" font-size="11"/>
+    </defaults>
+  <credit page="1">
+    <credit-type>title</credit-type>
+    <credit-words default-x="595.44" default-y="1626.67" justify="center" valign="top" font-family="華康少女文字W7(P)" font-size="39">學貓叫
+</credit-words>
+    <credit-words font-size="24">(改編) 
+</credit-words>
+    <credit-words font-size="12">by黃少司老師
+</credit-words>
+    <credit-words>
+</credit-words>
+    <credit-words font-family="華康方圓體W7" font-size="22">＊此首歌曲調性為 ______大調，______這個音要升。
+</credit-words>
+    <credit-words></credit-words>
+    </credit>
+  <credit page="1">
+    <credit-type>composer</credit-type>
+    <credit-words default-x="1134.19" default-y="1390.38" justify="right" valign="bottom" font-family="微軟正黑體" font-size="14">班級座號姓名：________________</credit-words>
+    </credit>
+  <part-list>
+    <score-part id="P1">
+      <part-name print-object="no">高音直笛</part-name>
+      <part-abbreviation print-object="no">S. Rec.</part-abbreviation>
+      <score-instrument id="P1-I1">
+        <instrument-name>高音直笛</instrument-name>
+        <instrument-sound>wind.flutes.recorder.soprano</instrument-sound>
+        </score-instrument>
+      <midi-device id="P1-I1" port="1"></midi-device>
+      <midi-instrument id="P1-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>75</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      </score-part>
+    </part-list>
+  <part id="P1">
+    <measure number="1" width="1077.49">
+      <print>
+        <system-layout>
+          <system-margins>
+            <left-margin>0</left-margin>
+            <right-margin>0</right-margin>
+            </system-margins>
+          <top-system-distance>306.28</top-system-distance>
+          </system-layout>
+        </print>
+      <attributes>
+        <divisions>2</divisions>
+        <key>
+          <fifths>1</fifths>
+          </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+          </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          <clef-octave-change>1</clef-octave-change>
+          </clef>
+        </attributes>
+      <note default-x="98.89" default-y="-20">
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        </note>
+      <note default-x="481.12" default-y="-20">
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="735.93" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-x="0.53" default-y="-40" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>我 </text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="905.81" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-40" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>們</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="2" width="571.13">
+      <print new-system="yes">
+        <system-layout>
+          <system-margins>
+            <left-margin>0</left-margin>
+            <right-margin>0</right-margin>
+            </system-margins>
+          <system-distance>140.4</system-distance>
+          </system-layout>
+        </print>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="76.76" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>一</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="142.44" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>起</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="208.11" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>學</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="273.79" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>貓</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="339.47" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>叫</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="437.98" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>一</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="503.65" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>起</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="3" width="506.36">
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="12" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="77.68" default-y="-10">
+        <pitch>
+          <step>D</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="143.35" default-y="-10">
+        <pitch>
+          <step>D</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="209.03" default-y="-10">
+        <pitch>
+          <step>D</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="274.7" default-y="-10">
+        <pitch>
+          <step>D</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="373.21" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>在</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>我</text>
+          </lyric>
+        </note>
+      <note default-x="438.89" default-y="-35">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>要</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="4" width="571.13">
+      <print new-system="yes">
+        <system-layout>
+          <system-margins>
+            <left-margin>0</left-margin>
+            <right-margin>0</right-margin>
+            </system-margins>
+          <system-distance>140.4</system-distance>
+          </system-layout>
+        </print>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="76.76" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>面</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>穿</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="142.44" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>前</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="208.11" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>撒</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="273.79" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>個</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>外</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="339.47" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="1" default-x="0.41" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>嬌 </text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>套</text>
+          </lyric>
+        </note>
+      <note default-x="437.98" default-y="-35">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-x="0.89" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>哎 </text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>聞</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="503.65" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-x="0.88" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喲 </text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="5" width="506.36">
+      <note default-x="12" default-y="-35">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>身</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="77.68" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>上</text>
+          </lyric>
+        </note>
+      <note default-x="143.35" default-y="-35">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="209.03" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>味</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="274.7" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-x="0.48" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>道 </text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="373.21" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>我</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>想</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="438.89" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-48.5" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        <lyric number="2" default-y="-72.25" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>要</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="6" width="591.6">
+      <print new-system="yes">
+        <system-layout>
+          <system-margins>
+            <left-margin>0</left-margin>
+            <right-margin>0</right-margin>
+            </system-margins>
+          <system-distance>140.4</system-distance>
+          </system-layout>
+        </print>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="76.76" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>心</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>變</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="145.17" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>臟</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>成</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="213.57" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>砰</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="281.98" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>砰</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="350.38" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>跳</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>貓</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="452.99" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>迷</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>賴</text>
+          </lyric>
+        </note>
+      <note default-x="521.39" default-y="-50">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>戀</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>在</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="7" width="485.89">
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="12" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>上</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="80.4" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>懷</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="148.81" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>裡</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="217.21" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>壞</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>睡</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="285.62" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot default-x="302.12" default-y="-25"/>
+        <stem>up</stem>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>笑</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>著</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="415.69" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>每</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="8" width="691.77">
+      <print new-system="yes">
+        <system-layout>
+          <system-margins>
+            <left-margin>0</left-margin>
+            <right-margin>0</right-margin>
+            </system-margins>
+          <system-distance>140.4</system-distance>
+          </system-layout>
+        </print>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="76.76" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>不</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="153.41" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>說</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="230.06" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>愛</text>
+          </lyric>
+        </note>
+      <note default-x="306.72" default-y="-15">
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>我</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="383.37" default-y="-10">
+        <pitch>
+          <step>D</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>我</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="460.02" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>就</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="536.67" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="613.32" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="9" width="385.73">
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="12" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <dot default-x="28.5" default-y="-25"/>
+        <stem>up</stem>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="230.63" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>我</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="307.28" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-55.66" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>們</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="10" width="317.95">
+      <print new-system="yes">
+        <system-layout>
+          <system-margins>
+            <left-margin>0</left-margin>
+            <right-margin>0</right-margin>
+            </system-margins>
+          <system-distance>140.4</system-distance>
+          </system-layout>
+        </print>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="76.76" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>一</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="108.68" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>起</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="140.6" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>學</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="172.52" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>貓</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="204.43" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>叫</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="252.31" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>一</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="284.23" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>起</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="11" width="253.18">
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="12" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="43.92" default-y="-10">
+        <pitch>
+          <step>D</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="75.84" default-y="-10">
+        <pitch>
+          <step>D</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="107.75" default-y="-10">
+        <pitch>
+          <step>D</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="139.67" default-y="-10">
+        <pitch>
+          <step>D</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="187.55" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>在</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>我</text>
+          </lyric>
+        </note>
+      <note default-x="219.46" default-y="-35">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>要</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="12" width="253.18">
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="12" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>面</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>穿</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="43.92" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>前</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="75.84" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>撒</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="107.75" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>個</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>外</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="139.67" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="1" default-x="0.41" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>嬌 </text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>套</text>
+          </lyric>
+        </note>
+      <note default-x="187.55" default-y="-35">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-x="0.89" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>哎 </text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>聞</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="219.46" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-x="0.88" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喲 </text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="13" width="253.18">
+      <note default-x="12" default-y="-35">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>身</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="43.92" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>上</text>
+          </lyric>
+        </note>
+      <note default-x="75.84" default-y="-35">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="107.75" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>味</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="139.67" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>喵</text>
+          </lyric>
+        <lyric number="2" default-x="0.48" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>道 </text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="187.55" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>我</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>想</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="219.46" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.07" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        <lyric number="2" default-y="-76.82" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>要</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="14" width="341.47">
+      <print new-system="yes">
+        <system-layout>
+          <system-margins>
+            <left-margin>0</left-margin>
+            <right-margin>0</right-margin>
+            </system-margins>
+          <system-distance>140.4</system-distance>
+          </system-layout>
+        </print>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="76.76" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>心</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>變</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="111.82" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>臟</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>成</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="146.87" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>砰</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="181.93" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>砰</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="mi">none</kind>
+        </harmony>
+      <note default-x="216.98" default-y="-40">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>跳</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>貓</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="269.56" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>迷</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>賴</text>
+          </lyric>
+        </note>
+      <note default-x="304.62" default-y="-50">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>戀</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>在</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="15" width="255.73">
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="12" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>上</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="47.05" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>懷</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="82.11" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>裡</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="117.16" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>壞</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>睡</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="152.22" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot default-x="168.72" default-y="-25"/>
+        <stem>up</stem>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>笑</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>著</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="re">none</kind>
+        </harmony>
+      <note default-x="218.87" default-y="-45">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        <lyric number="2" default-y="-77.23" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>每</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="16" width="276.71">
+      <note default-x="12" default-y="-15">
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>天</text>
+          </lyric>
+        </note>
+      <note default-x="64.58" default-y="-15">
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>都</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="99.64" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <beam number="1">end</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>貪</text>
+          </lyric>
+        </note>
+      <note default-x="134.69" default-y="-15">
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">begin</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>戀</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="ti">none</kind>
+        </harmony>
+      <note default-x="169.75" default-y="-20">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>著</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="204.8" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>你</text>
+          </lyric>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="la">none</kind>
+        </harmony>
+      <note default-x="239.85" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <beam number="1">end</beam>
+        <notations>
+          <tied type="start"/>
+          </notations>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>的</text>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="17" width="203.58">
+      <note default-x="12" default-y="-25">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <notations>
+          <tied type="stop"/>
+          </notations>
+        </note>
+      <harmony print-frame="no">
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="sol">none</kind>
+        </harmony>
+      <note default-x="47.05" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>3</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot default-x="63.56" default-y="-25"/>
+        <stem>up</stem>
+        <notations>
+          <tied type="start"/>
+          </notations>
+        <lyric number="1" default-y="-53.48" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>好</text>
+          </lyric>
+        </note>
+      <note default-x="113.71" default-y="-30">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>4</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <notations>
+          <tied type="stop"/>
+          </notations>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+    </part>
+  </score-partwise>
