@@ -1,8 +1,336 @@
 [
   {
-    "id": "hot-bread",
+    "id": "heidenrolsenall",
+    "title": "野玫瑰完整版",
+    "file": "songs/cloud/heidenrolsenall.musicxml",
+    "grade": "五年級",
+    "semester": "上學期",
+    "category": "課本歌曲",
+    "difficulty": 4,
+    "defaultBpm": 40,
+    "tags": [
+      "2/4",
+      "升fa",
+      "升re"
+    ],
+    "description": "翰林p.98,99",
+    "enabled": true
+  },
+  {
+    "id": "heidenrolsenfirst",
+    "title": "野玫瑰第一行",
+    "file": "songs/cloud/heidenrolsenfirst.musicxml",
+    "grade": "五年級",
+    "semester": "上學期",
+    "category": "課本歌曲",
+    "difficulty": 1,
+    "defaultBpm": 70,
+    "tags": [
+      "4/4",
+      "re-sol"
+    ],
+    "description": "翰林p.98",
+    "enabled": true
+  },
+  {
+    "id": "heidenrolsenend",
+    "title": "野玫瑰第四行第一部",
+    "file": "songs/cloud/heidenrolsenend.musicxml",
+    "grade": "五年級",
+    "semester": "上學期",
+    "category": "課本歌曲",
+    "difficulty": 2,
+    "defaultBpm": 70,
+    "tags": [
+      "4/4",
+      "do-高音do"
+    ],
+    "description": "翰林p.99",
+    "enabled": true
+  },
+  {
+    "id": "peachblossomtakestheferry",
+    "title": "桃花過渡",
+    "file": "songs/cloud/peachblossomtakestheferry.musicxml",
+    "grade": "五年級",
+    "semester": "上學期",
+    "category": "補充歌曲",
+    "difficulty": 3,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "台灣民謠"
+    ],
+    "description": "",
+    "enabled": true
+  },
+  {
+    "id": "saymeowmeow",
+    "title": "學貓叫",
+    "file": "songs/cloud/saymeowmeow.musicxml",
+    "grade": "五年級",
+    "semester": "上學期",
+    "category": "補充歌曲",
+    "difficulty": 3,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "綜合練習"
+    ],
+    "description": "",
+    "enabled": true
+  },
+  {
+    "id": "longingforthespringbreeze",
+    "title": "望春風",
+    "file": "songs/cloud/longingforthespringbreeze.musicxml",
+    "grade": "五年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 3,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "re-高mi"
+    ],
+    "description": "翰林p.165",
+    "enabled": true
+  },
+  {
+    "id": "amazingrace",
+    "title": "奇異恩典",
+    "file": "songs/cloud/amazingrace.musicxml",
+    "grade": "五年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 2,
+    "defaultBpm": 80,
+    "tags": [
+      "3/4",
+      "三連音"
+    ],
+    "description": "翰林p.164",
+    "enabled": true
+  },
+  {
+    "id": "jesujoy-of-mass-desiring",
+    "title": "耶穌，是我們仰望的喜悅",
+    "file": "songs/cloud/jesujoy-of-mass-desiring.musicxml",
+    "grade": "四年級",
+    "semester": "上學期",
+    "category": "課本歌曲",
+    "difficulty": 1,
+    "defaultBpm": 90,
+    "tags": [
+      "4/4",
+      "sol",
+      "la",
+      "si",
+      "do'",
+      "re'"
+    ],
+    "description": "翰林p.121",
+    "enabled": true
+  },
+  {
+    "id": "musette",
+    "title": "彌賽特舞曲",
+    "file": "songs/cloud/musette.musicxml",
+    "grade": "四年級",
+    "semester": "上學期",
+    "category": "課本歌曲",
+    "difficulty": 3,
+    "defaultBpm": 70,
+    "tags": [
+      "4/4",
+      "sol",
+      "la",
+      "si",
+      "do'",
+      "re'"
+    ],
+    "description": "翰林p.121",
+    "enabled": true
+  },
+  {
+    "id": "squidgame",
+    "title": "魷魚遊戲",
+    "file": "songs/cloud/squidgame.musicxml",
+    "grade": "四年級",
+    "semester": "上學期",
+    "category": "補充歌曲",
+    "difficulty": 2,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "升re",
+      "低音mi"
+    ],
+    "description": "",
+    "enabled": true
+  },
+  {
+    "id": "westminsterquartersing",
+    "title": "西敏寺鐘聲G大調",
+    "file": "songs/cloud/westminsterquartersing.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 1,
+    "defaultBpm": 80,
+    "tags": [
+      "3/4",
+      "低音re"
+    ],
+    "description": "翰林p.94",
+    "enabled": true
+  },
+  {
+    "id": "makemehappy",
+    "title": "讓我們歡樂",
+    "file": "songs/cloud/makemehappy.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 2,
+    "defaultBpm": 80,
+    "tags": [
+      "3/4",
+      "升fa"
+    ],
+    "description": "翰林p.103",
+    "enabled": true
+  },
+  {
+    "id": "westminsterquartersinc",
+    "title": "西敏寺鐘聲Ｃ大調",
+    "file": "songs/cloud/westminsterquartersinc.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 1,
+    "defaultBpm": 80,
+    "tags": [
+      "3/4",
+      "高音mi"
+    ],
+    "description": "翰林p.116",
+    "enabled": true
+  },
+  {
+    "id": "newworld",
+    "title": "新世界",
+    "file": "songs/cloud/newworld.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 2,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "高音mi"
+    ],
+    "description": "翰林p.117",
+    "enabled": true
+  },
+  {
+    "id": "pianoconcerto",
+    "title": "鋼琴協奏曲",
+    "file": "songs/cloud/pianoconcerto.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 1,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "re-高re"
+    ],
+    "description": "翰林p.152",
+    "enabled": true
+  },
+  {
+    "id": "symphonyno1",
+    "title": "交響曲第一號主題",
+    "file": "songs/cloud/symphonyno1.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 1,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "高音mi"
+    ],
+    "description": "翰林p.152",
+    "enabled": true
+  },
+  {
+    "id": "grandfathersclock",
+    "title": "古老的鐘",
+    "file": "songs/cloud/grandfathersclock.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 3,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "re-高re"
+    ],
+    "description": "翰林p.153",
+    "enabled": true
+  },
+  {
+    "id": "when-we-play-together",
+    "title": "當我們同在一起",
+    "file": "songs/cloud/when-we-play-together.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "補充歌曲",
+    "difficulty": 3,
+    "defaultBpm": 80,
+    "tags": [
+      "3/4",
+      "附點四分音符",
+      "高音mi"
+    ],
+    "description": "",
+    "enabled": true
+  },
+  {
+    "id": "donadona",
+    "title": "多娜多娜",
+    "file": "songs/cloud/donadona.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "補充歌曲",
+    "difficulty": 2,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "升fa"
+    ],
+    "description": "練習升fa",
+    "enabled": true
+  },
+  {
+    "id": "littlebeeinc",
+    "title": "小蜜蜂C大調",
+    "file": "songs/cloud/littlebeeinc.musicxml",
+    "grade": "四年級",
+    "semester": "下學期",
+    "category": "補充歌曲",
+    "difficulty": 2,
+    "defaultBpm": 80,
+    "tags": [],
+    "description": "",
+    "enabled": true
+  },
+  {
+    "id": "hotbread",
     "title": "熱麵包",
-    "file": "songs/hot-bread.musicxml",
+    "file": "songs/cloud/hotbread.musicxml",
     "grade": "三年級",
     "semester": "上學期",
     "category": "課本歌曲",
@@ -10,40 +338,162 @@
     "defaultBpm": 80,
     "tags": [
       "4/4",
-      "sol-la-si",
-      "基礎節奏"
+      "sol",
+      "la",
+      "si"
     ],
-    "description": "適合練習 sol、la、si 與四分、八分音符。",
+    "description": "練習sol,la,si",
     "enabled": true
   },
   {
-    "id": "when-we-play-together",
-    "title": "當我們同在一起",
-    "file": "songs/when-we-play-together.musicxml",
-    "grade": "四年級",
+    "id": "odetojoy",
+    "title": "歡樂頌",
+    "file": "songs/cloud/odetojoy.musicxml",
+    "grade": "三年級",
     "semester": "下學期",
-    "category": "補充歌曲",
-    "difficulty": 3,
+    "category": "課本歌曲",
+    "difficulty": 1,
     "defaultBpm": 80,
     "tags": [
-      "3/4"
+      "4/4",
+      "sol",
+      "la",
+      "si",
+      "do'",
+      "re'"
     ],
-    "description": "適合練習附點四分音符、高音mi。",
+    "description": "翰林p.114",
     "enabled": true
   },
   {
-    "id": "donadona",
-    "title": "多娜多娜",
-    "file": "songs/donadona.musicxml",
-    "grade": "四年級",
-    "semester": "上學期",
-    "category": "補充歌曲",
+    "id": "march",
+    "title": "進行曲",
+    "file": "songs/cloud/march.musicxml",
+    "grade": "三年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
     "difficulty": 2,
     "defaultBpm": 80,
     "tags": [
-      "4/4"
+      "4/4",
+      "sol",
+      "la",
+      "si",
+      "do'",
+      "re'"
     ],
-    "description": "練習升fa。",
+    "description": "翰林p.114",
+    "enabled": true
+  },
+  {
+    "id": "songofthecanyon",
+    "title": "峽谷之歌",
+    "file": "songs/cloud/songofthecanyon.musicxml",
+    "grade": "三年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 2,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "sol",
+      "la",
+      "si",
+      "do'"
+    ],
+    "description": "翰林p.134",
+    "enabled": true
+  },
+  {
+    "id": "countrylane",
+    "title": "鄉村小路",
+    "file": "songs/cloud/countrylane.musicxml",
+    "grade": "三年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 1,
+    "defaultBpm": 80,
+    "tags": [
+      "4/4",
+      "sol",
+      "la",
+      "si",
+      "do'"
+    ],
+    "description": "翰林p.135",
+    "enabled": true
+  },
+  {
+    "id": "buku",
+    "title": "布穀",
+    "file": "songs/cloud/buku.musicxml",
+    "grade": "三年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 1,
+    "defaultBpm": 80,
+    "tags": [
+      "3/4",
+      "sol",
+      "la",
+      "si",
+      "do'",
+      "re'"
+    ],
+    "description": "翰林p.136",
+    "enabled": true
+  },
+  {
+    "id": "littlebeeinG",
+    "title": "小蜜蜂G大調",
+    "file": "songs/cloud/littlebeeinG.musicxml",
+    "grade": "三年級",
+    "semester": "下學期",
+    "category": "課本歌曲",
+    "difficulty": 2,
+    "defaultBpm": 90,
+    "tags": [
+      "3/4",
+      "sol",
+      "la",
+      "si",
+      "do'",
+      "re'"
+    ],
+    "description": "翰林p.137",
+    "enabled": true
+  },
+  {
+    "id": "bukubird",
+    "title": "布穀鳥",
+    "file": "songs/cloud/bukubird.musicxml",
+    "grade": "三年級",
+    "semester": "下學期",
+    "category": "補充歌曲",
+    "difficulty": 1,
+    "defaultBpm": 80,
+    "tags": [
+      "3/4",
+      "sol",
+      "la",
+      "si",
+      "do'",
+      "re'"
+    ],
+    "description": "",
+    "enabled": true
+  },
+  {
+    "id": "heidenrolsenendlow",
+    "title": "heidenrolsenendlow",
+    "file": "songs/cloud/heidenrolsenendlow.musicxml",
+    "grade": "",
+    "semester": "",
+    "category": "",
+    "difficulty": 1,
+    "defaultBpm": 80,
+    "tags": [],
+    "description": "",
     "enabled": true
   }
 ]
