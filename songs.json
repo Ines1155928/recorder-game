@@ -485,15 +485,16 @@
   },
   {
     "id": "heidenrolsenendlow",
-    "title": "heidenrolsenendlow",
+    "title": "野玫瑰第四行第二部",
     "file": "songs/cloud/heidenrolsenendlow.musicxml",
-    "grade": "",
-    "semester": "",
-    "category": "",
-    "difficulty": 1,
-    "defaultBpm": 80,
+    "grade": "五年級",
+    "semester": "上學期",
+    "category": "課本歌曲",
+    "difficulty": 2,
+    "defaultBpm": 70,
     "tags": [],
     "description": "",
     "enabled": true
   }
 ]
+
