@@ -2321,10 +2321,10 @@ body:not(.setup-mode) > .setup-actions{
               <label for="visualModeSelect">遊戲呈現</label>
               <select id="visualModeSelect" class="guide-mode-select">
                 <option value="horizontal" selected>橫向軌道</option>
-                <option value="falling">由上往下落下</option>
+                <option value="falling">發散式軌道</option>
               </select>
             </div>
-            <div class="option-help">落下模式會把音符從畫面上方送到底部判定線，適合用來練習看譜與抓拍點。</div>
+            <div class="option-help">發散式軌道會從下方判定點向上方展開，音符沿斜向軌道落下，方便辨認不同音高。</div>
             <label class="check-row"><input id="metronomeToggle" type="checkbox" checked> 開啟節拍器提示音</label>
             <div class="judgement-hint">
               必須在拍點附近重新起音；提前一直吹住不算正確。同音連續出現時也要重新吐音，長音最後半拍仍可換氣。
@@ -2359,7 +2359,7 @@ body:not(.setup-mode) > .setup-actions{
       <label class="stat-label" for="gameVisualModeSelect">遊戲呈現</label>
       <select id="gameVisualModeSelect" class="game-visual-select" aria-label="遊戲呈現模式">
         <option value="horizontal" selected>橫向</option>
-        <option value="falling">由上往下</option>
+        <option value="falling">發散式</option>
       </select>
     </div>
     <div class="stat game-guide-stat">
@@ -3540,6 +3540,16 @@ function trackXFor(noteId){
 function fallingReceiverY(height){
   return Math.min(height-70,Math.max(145,height*.78));
 }
+function getFallingTrackPoint(index,count,width,receiverY,y){
+  const bottomX=getTrackX(index,count,width);
+  const centerX=width/2;
+  const topX=centerX+(bottomX-centerX)*1.26;
+  const progress=y/Math.max(1,receiverY);
+  return {
+    x:topX+(bottomX-topX)*progress,
+    angle:Math.atan2(bottomX-topX,receiverY)
+  };
+}
 function visualReceiverPosition(noteId){
   return state.visualMode==="falling"
     ? {x:trackXFor(noteId),y:fallingReceiverY(canvas.clientHeight)}
@@ -3651,7 +3661,7 @@ function syncGuideMode(value,fromGame=false){
 
 const VISUAL_MODES={
   horizontal:"橫向軌道",
-  falling:"由上往下落下"
+  falling:"發散式軌道"
 };
 
 function syncVisualMode(value,fromGame=false){
@@ -4790,28 +4800,36 @@ function drawFallingGame(currentTick){
   ctx.restore();
 
   selected.forEach((note,index)=>{
-    const x=getTrackX(index,selected.length,w);
+    const topPoint=getFallingTrackPoint(index,selected.length,w,receiverY,0);
+    const bottomPoint=getFallingTrackPoint(index,selected.length,w,receiverY,receiverY);
+    const x=bottomPoint.x;
     const feedback=getReceiverFeedback(note.id,currentTick,now);
 
-    const lane=ctx.createLinearGradient(0,0,0,receiverY);
-    lane.addColorStop(0,note.color+"10");
-    lane.addColorStop(.72,note.color+"32");
-    lane.addColorStop(1,note.color+"88");
-    ctx.fillStyle=lane;
-    ctx.fillRect(Math.max(0,x-30),0,60,receiverY);
-
-    ctx.strokeStyle=note.color+"66";
-    ctx.lineWidth=2;
+    ctx.save();
+    ctx.globalAlpha=.14;
+    ctx.strokeStyle=note.color;
+    ctx.lineWidth=22;
+    ctx.shadowColor=note.color;
+    ctx.shadowBlur=18;
     ctx.beginPath();
-    ctx.moveTo(x,18);
-    ctx.lineTo(x,receiverY);
+    ctx.moveTo(topPoint.x,0);
+    ctx.lineTo(bottomPoint.x,receiverY);
     ctx.stroke();
+    ctx.globalAlpha=.82;
+    ctx.strokeStyle=note.color+"66";
+    ctx.lineWidth=4;
+    ctx.shadowBlur=8;
+    ctx.beginPath();
+    ctx.moveTo(topPoint.x,0);
+    ctx.lineTo(bottomPoint.x,receiverY);
+    ctx.stroke();
+    ctx.restore();
 
     ctx.fillStyle=note.color;
     ctx.font='1000 14px "Arial Rounded MT Bold","Noto Sans TC",sans-serif';
     ctx.textAlign="center";
     ctx.textBaseline="top";
-    ctx.fillText(note.label,x,12);
+    ctx.fillText(note.label,topPoint.x,12);
 
     ctx.save();
     ctx.translate(x,receiverY);
@@ -4911,28 +4929,36 @@ function drawFallingGame(currentTick){
     if(endY>receiverY+140 || y<-140) continue;
 
     const note=NOTE_BY_ID[ev.noteId];
-    const x=trackXFor(ev.noteId);
+    const trackIndex=getSelectedNotes().findIndex(item=>item.id===ev.noteId);
+    const track=getFallingTrackPoint(trackIndex,getSelectedNotes().length,w,receiverY,y);
+    const tailTrack=getFallingTrackPoint(trackIndex,getSelectedNotes().length,w,receiverY,endY);
+    const x=track.x;
+    const tailX=tailTrack.x;
     const r=Math.max(26,Math.min(44,h*.072));
     const st=state.eventStates.get(ev.id);
 
     ctx.save();
     if(st?.judged) ctx.globalAlpha=st.hit?.28:.16;
 
-    const bodyTop=Math.min(endY,y);
-    const bodyHeight=Math.max(12,Math.abs(y-endY));
-    if(bodyHeight>r*.7){
-      const body=ctx.createLinearGradient(x,bodyTop,x,y);
+    const segmentLength=Math.hypot(x-tailX,y-endY);
+    if(segmentLength>r*.7){
+      const angle=Math.atan2(x-tailX,y-endY);
+      ctx.save();
+      ctx.translate(x,y);
+      ctx.rotate(angle);
+      const body=ctx.createLinearGradient(0,-segmentLength,0,0);
       body.addColorStop(0,note.color+"66");
       body.addColorStop(1,note.color);
       ctx.fillStyle=body;
       ctx.shadowColor=note.color;
       ctx.shadowBlur=10;
-      drawRoundedRect(x-r*.68,bodyTop,r*1.36,bodyHeight,r*.68);
+      drawRoundedRect(-r*.68,-segmentLength,r*1.36,segmentLength,r*.68);
       ctx.fill();
       ctx.shadowBlur=0;
       ctx.strokeStyle="rgba(255,255,255,.45)";
       ctx.lineWidth=2;
       ctx.stroke();
+      ctx.restore();
     }
 
     const orbGrad=ctx.createRadialGradient(x-r*.28,y-r*.3,r*.08,x,y,r);
