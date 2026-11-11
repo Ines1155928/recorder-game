@@ -2093,6 +2093,34 @@ body:not(.setup-mode) > .setup-actions{
   }
 }
 
+.visual-mode-stat{
+  min-width:118px;
+}
+
+.hud .game-visual-select{
+  width:100%;
+  min-width:0;
+  margin-top:2px;
+  padding:5px 7px;
+  border:2px solid rgba(99,151,180,.32);
+  border-radius:9px;
+  color:#315b75;
+  background:#edf7fb;
+  font-size:12px;
+  font-weight:900;
+}
+
+@media(max-width:900px){
+  .visual-mode-stat{
+    min-width:96px;
+    padding:4px 6px;
+  }
+
+  .hud .game-visual-select{
+    padding:4px 5px;
+    font-size:11px;
+  }
+}
 </style>
 </head>
 <body class="setup-mode">
@@ -2289,6 +2317,14 @@ body:not(.setup-mode) > .setup-actions{
               </select>
             </div>
             <div class="option-help">音頭提示會在每個音開始時播放短音；全程導唱會完整播放旋律。使用麥克風計分時，建議戴耳機避免喇叭聲被誤判。</div>
+            <div class="option-row guide-option-row">
+              <label for="visualModeSelect">遊戲呈現</label>
+              <select id="visualModeSelect" class="guide-mode-select">
+                <option value="horizontal" selected>橫向軌道</option>
+                <option value="falling">由上往下落下</option>
+              </select>
+            </div>
+            <div class="option-help">落下模式會把音符從畫面上方送到底部判定線，適合用來練習看譜與抓拍點。</div>
             <label class="check-row"><input id="metronomeToggle" type="checkbox" checked> 開啟節拍器提示音</label>
             <div class="judgement-hint">
               必須在拍點附近重新起音；提前一直吹住不算正確。同音連續出現時也要重新吐音，長音最後半拍仍可換氣。
@@ -2318,6 +2354,13 @@ body:not(.setup-mode) > .setup-actions{
         <span id="hudBpm" class="stat-value">80</span>
         <button id="gameSpeedUp" class="game-speed-button" type="button" aria-label="遊戲速度加快 2">＋</button>
       </div>
+    </div>
+    <div class="stat visual-mode-stat">
+      <label class="stat-label" for="gameVisualModeSelect">遊戲呈現</label>
+      <select id="gameVisualModeSelect" class="game-visual-select" aria-label="遊戲呈現模式">
+        <option value="horizontal" selected>橫向</option>
+        <option value="falling">由上往下</option>
+      </select>
     </div>
     <div class="stat game-guide-stat">
       <label class="stat-label" for="gameGuideModeSelect">旋律提示</label>
@@ -2521,6 +2564,7 @@ const state = {
   shuffleEachStart:true,
   speedControlsReady:false,
   guideMode:"off",
+  visualMode:"horizontal",
   guideEventId:null,
   guideVoice:null
 };
@@ -2550,6 +2594,7 @@ const speedRange=$("speedRange"), speedValue=$("speedValue");
 const setupSpeedDown=$("setupSpeedDown"), setupSpeedUp=$("setupSpeedUp");
 const gameSpeedDown=$("gameSpeedDown"), gameSpeedUp=$("gameSpeedUp");
 const guideModeSelect=$("guideModeSelect"), gameGuideModeSelect=$("gameGuideModeSelect");
+const visualModeSelect=$("visualModeSelect"), gameVisualModeSelect=$("gameVisualModeSelect");
 const previewRange=$("previewRange"), previewValue=$("previewValue");
 const toleranceRange=$("toleranceRange"), toleranceValue=$("toleranceValue"), metronomeToggle=$("metronomeToggle");
 const startBtn=$("startBtn"), demoBtn=$("demoBtn"), pauseBtn=$("pauseBtn"), backBtn=$("backBtn");
@@ -3477,10 +3522,28 @@ function getTrackY(index,count,height){
   if(count===1) return height/2;
   return height-bottomPad-index*((height-topPad-bottomPad)/(count-1));
 }
+function getTrackX(index,count,width){
+  const sidePad=Math.min(70,Math.max(24,width*.06));
+  if(count<=1) return width/2;
+  return sidePad+index*((width-sidePad*2)/(count-1));
+}
 function trackYFor(noteId){
   const selected=getSelectedNotes();
   const idx=selected.findIndex(n=>n.id===noteId);
   return getTrackY(idx,selected.length,canvas.clientHeight);
+}
+function trackXFor(noteId){
+  const selected=getSelectedNotes();
+  const idx=selected.findIndex(n=>n.id===noteId);
+  return getTrackX(idx,selected.length,canvas.clientWidth);
+}
+function fallingReceiverY(height){
+  return Math.min(height-70,Math.max(145,height*.78));
+}
+function visualReceiverPosition(noteId){
+  return state.visualMode==="falling"
+    ? {x:trackXFor(noteId),y:fallingReceiverY(canvas.clientHeight)}
+    : {x:receiverX(),y:trackYFor(noteId)};
 }
 function renderPreview(){
   preview.innerHTML="";
@@ -3586,6 +3649,32 @@ function syncGuideMode(value,fromGame=false){
   return mode;
 }
 
+const VISUAL_MODES={
+  horizontal:"橫向軌道",
+  falling:"由上往下落下"
+};
+
+function syncVisualMode(value,fromGame=false){
+  const mode=Object.prototype.hasOwnProperty.call(VISUAL_MODES,value)
+    ? value
+    : "horizontal";
+  const changed=state.visualMode!==mode;
+  state.visualMode=mode;
+  visualModeSelect.value=mode;
+  gameVisualModeSelect.value=mode;
+
+  if(fromGame && state.running && changed){
+    const label=VISUAL_MODES[mode];
+    if(state.paused){
+      messageSub.textContent=`遊戲呈現：${label}`;
+    }else{
+      showMessage("遊戲呈現",label,650);
+    }
+  }
+
+  return mode;
+}
+
 speedRange.addEventListener("input",()=>syncBpm(speedRange.value));
 setupSpeedDown.addEventListener("click",()=>adjustPracticeSpeed(-SPEED_STEP));
 setupSpeedUp.addEventListener("click",()=>adjustPracticeSpeed(SPEED_STEP));
@@ -3593,6 +3682,8 @@ gameSpeedDown.addEventListener("click",()=>adjustPracticeSpeed(-SPEED_STEP,true)
 gameSpeedUp.addEventListener("click",()=>adjustPracticeSpeed(SPEED_STEP,true));
 guideModeSelect.addEventListener("change",()=>syncGuideMode(guideModeSelect.value));
 gameGuideModeSelect.addEventListener("change",()=>syncGuideMode(gameGuideModeSelect.value,true));
+visualModeSelect.addEventListener("change",()=>syncVisualMode(visualModeSelect.value));
+gameVisualModeSelect.addEventListener("change",()=>syncVisualMode(gameVisualModeSelect.value,true));
 previewRange.addEventListener("input",()=>{
   state.previewBeats=Number(previewRange.value);
   previewValue.textContent=`未來 ${state.previewBeats} 拍`;
@@ -4166,9 +4257,10 @@ function judgeSong(dt,currentTick){
       st.attackOffsetTick=onsetTick-ev.startTick;
 
       flashReceiver(ev.noteId);
+      const receiver=visualReceiverPosition(ev.noteId);
       burst(
-        receiverX(),
-        trackYFor(ev.noteId),
+        receiver.x,
+        receiver.y,
         NOTE_BY_ID[ev.noteId].color
       );
     }
@@ -4189,9 +4281,10 @@ function judgeSong(dt,currentTick){
 
         while(st.holdParticleTimer>=0.045){
           st.holdParticleTimer-=0.045;
+          const receiver=visualReceiverPosition(ev.noteId);
           emitHoldParticles(
-            receiverX(),
-            trackYFor(ev.noteId),
+            receiver.x,
+            receiver.y,
             NOTE_BY_ID[ev.noteId].color
           );
         }
@@ -4666,6 +4759,233 @@ function drawRoundedRect(x,y,w,h,r){
   const rr=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+rr,y);ctx.arcTo(x+w,y,x+w,y+h,rr);ctx.arcTo(x+w,y+h,x,y+h,rr);ctx.arcTo(x,y+h,x,y,rr);ctx.arcTo(x,y,x+w,y,rr);ctx.closePath()
 }
 
+function drawFallingGame(currentTick){
+  const w=canvas.clientWidth;
+  const h=canvas.clientHeight;
+  const receiverY=fallingReceiverY(h);
+  const selected=getSelectedNotes();
+  const now=performance.now();
+  const previewTicks=state.previewBeats*TPQN;
+  const distance=receiverY+86;
+  const targetR=Math.max(16,Math.min(34,w/Math.max(8,selected.length*1.8)));
+
+  ctx.clearRect(0,0,w,h);
+
+  const background=ctx.createLinearGradient(0,0,0,h);
+  background.addColorStop(0,"#10284b");
+  background.addColorStop(1,"#07152d");
+  ctx.fillStyle=background;
+  ctx.fillRect(0,0,w,h);
+
+  ctx.save();
+  ctx.globalAlpha=.22;
+  for(let i=0;i<58;i++){
+    const x=(i*149)%w;
+    const y=(i*83)%Math.max(1,receiverY);
+    ctx.fillStyle="#fff";
+    ctx.beginPath();
+    ctx.arc(x,y,(i%3)*.45+.6,0,Math.PI*2);
+    ctx.fill();
+  }
+  ctx.restore();
+
+  selected.forEach((note,index)=>{
+    const x=getTrackX(index,selected.length,w);
+    const feedback=getReceiverFeedback(note.id,currentTick,now);
+
+    const lane=ctx.createLinearGradient(0,0,0,receiverY);
+    lane.addColorStop(0,note.color+"10");
+    lane.addColorStop(.72,note.color+"32");
+    lane.addColorStop(1,note.color+"88");
+    ctx.fillStyle=lane;
+    ctx.fillRect(Math.max(0,x-30),0,60,receiverY);
+
+    ctx.strokeStyle=note.color+"66";
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(x,18);
+    ctx.lineTo(x,receiverY);
+    ctx.stroke();
+
+    ctx.fillStyle=note.color;
+    ctx.font='1000 14px "Arial Rounded MT Bold","Noto Sans TC",sans-serif';
+    ctx.textAlign="center";
+    ctx.textBaseline="top";
+    ctx.fillText(note.label,x,12);
+
+    ctx.save();
+    ctx.translate(x,receiverY);
+    const receiverGrad=ctx.createRadialGradient(-targetR*.25,-targetR*.3,2,0,0,targetR);
+    receiverGrad.addColorStop(0,"rgba(255,255,255,.72)");
+    receiverGrad.addColorStop(.2,note.color+"cc");
+    receiverGrad.addColorStop(.68,note.color+"88");
+    receiverGrad.addColorStop(1,"#12213e");
+    ctx.fillStyle=receiverGrad;
+    ctx.shadowColor=note.color;
+    ctx.shadowBlur=7;
+    ctx.beginPath();
+    ctx.arc(0,0,targetR,0,Math.PI*2);
+    ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.strokeStyle="rgba(255,255,255,.82)";
+    ctx.lineWidth=2.5;
+    ctx.stroke();
+
+    const hole=ctx.createRadialGradient(0,0,2,0,0,targetR*.68);
+    hole.addColorStop(0,"rgba(0,0,0,.96)");
+    hole.addColorStop(.72,"rgba(2,7,18,.96)");
+    hole.addColorStop(1,"rgba(7,18,38,.78)");
+    ctx.fillStyle=hole;
+    ctx.beginPath();
+    ctx.arc(0,0,targetR*.67,0,Math.PI*2);
+    ctx.fill();
+
+    if(feedback.noteActive){
+      ctx.fillStyle=note.color;
+      ctx.shadowColor=note.color;
+      ctx.shadowBlur=feedback.correctSound?22:11;
+      ctx.beginPath();
+      ctx.arc(0,0,targetR*.68,0,Math.PI*2);
+      ctx.fill();
+      ctx.shadowBlur=0;
+    }
+
+    const flashProgress=Math.max(feedback.flashProgress,feedback.repeatFlashProgress);
+    if(flashProgress>0){
+      const p=1-flashProgress;
+      ctx.globalAlpha=flashProgress*.9;
+      ctx.strokeStyle="#fff";
+      ctx.lineWidth=5;
+      ctx.shadowColor=note.color;
+      ctx.shadowBlur=28;
+      ctx.beginPath();
+      ctx.arc(0,0,targetR+10+p*20,0,Math.PI*2);
+      ctx.stroke();
+      ctx.shadowBlur=0;
+      ctx.globalAlpha=1;
+    }
+
+    if(feedback.hold){
+      ctx.strokeStyle="#fff";
+      ctx.lineWidth=5;
+      ctx.shadowColor=note.color;
+      ctx.shadowBlur=28;
+      ctx.beginPath();
+      ctx.arc(0,0,targetR+8,0,Math.PI*2);
+      ctx.stroke();
+      ctx.shadowBlur=0;
+    }
+
+    ctx.fillStyle="#fff";
+    ctx.font=`1000 ${Math.max(9,Math.min(16,targetR*.62))}px "Arial Rounded MT Bold","Noto Sans TC",sans-serif`;
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillText(note.label,0,1);
+    ctx.restore();
+  });
+
+  ctx.strokeStyle="rgba(255,255,255,.92)";
+  ctx.lineWidth=3;
+  ctx.shadowColor="#fff";
+  ctx.shadowBlur=12;
+  ctx.beginPath();
+  ctx.moveTo(0,receiverY);
+  ctx.lineTo(w,receiverY);
+  ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.fillStyle="rgba(255,255,255,.82)";
+  ctx.font='900 12px "Arial Rounded MT Bold","Noto Sans TC",sans-serif';
+  ctx.textAlign="left";
+  ctx.textBaseline="bottom";
+  ctx.fillText("判定線",12,receiverY-8);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0,0,w,receiverY+targetR*.72);
+  ctx.clip();
+
+  for(const ev of state.song.events){
+    const beatsUntil=ev.startTick-currentTick;
+    const y=receiverY-(beatsUntil/previewTicks)*distance;
+    const endY=y-(ev.durationTick/previewTicks)*distance;
+    if(endY>receiverY+140 || y<-140) continue;
+
+    const note=NOTE_BY_ID[ev.noteId];
+    const x=trackXFor(ev.noteId);
+    const r=Math.max(26,Math.min(44,h*.072));
+    const st=state.eventStates.get(ev.id);
+
+    ctx.save();
+    if(st?.judged) ctx.globalAlpha=st.hit?.28:.16;
+
+    const bodyTop=Math.min(endY,y);
+    const bodyHeight=Math.max(12,Math.abs(y-endY));
+    if(bodyHeight>r*.7){
+      const body=ctx.createLinearGradient(x,bodyTop,x,y);
+      body.addColorStop(0,note.color+"66");
+      body.addColorStop(1,note.color);
+      ctx.fillStyle=body;
+      ctx.shadowColor=note.color;
+      ctx.shadowBlur=10;
+      drawRoundedRect(x-r*.68,bodyTop,r*1.36,bodyHeight,r*.68);
+      ctx.fill();
+      ctx.shadowBlur=0;
+      ctx.strokeStyle="rgba(255,255,255,.45)";
+      ctx.lineWidth=2;
+      ctx.stroke();
+    }
+
+    const orbGrad=ctx.createRadialGradient(x-r*.28,y-r*.3,r*.08,x,y,r);
+    orbGrad.addColorStop(0,"#fff");
+    orbGrad.addColorStop(.12,note.color);
+    orbGrad.addColorStop(.68,note.color);
+    orbGrad.addColorStop(1,"#172544");
+    ctx.fillStyle=orbGrad;
+    ctx.shadowColor=note.color;
+    ctx.shadowBlur=18;
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.strokeStyle="rgba(255,255,255,.82)";
+    ctx.lineWidth=3;
+    ctx.stroke();
+
+    const labelFontSize=Math.max(15,Math.min(25,r*.58));
+    ctx.font=`1000 ${labelFontSize}px "Arial Rounded MT Bold","Noto Sans TC",sans-serif`;
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    const textWidth=ctx.measureText(note.label).width;
+    const pillW=Math.max(r*1.35,textWidth+18);
+    const pillH=Math.max(28,labelFontSize+9);
+    ctx.fillStyle="rgba(3,10,24,.88)";
+    drawRoundedRect(x-pillW/2,y-pillH/2,pillW,pillH,pillH/2);
+    ctx.fill();
+    ctx.lineWidth=3;
+    ctx.strokeStyle="rgba(255,255,255,.92)";
+    ctx.stroke();
+    ctx.lineWidth=5;
+    ctx.strokeStyle="rgba(0,0,0,.85)";
+    ctx.strokeText(note.label,x,y+1);
+    ctx.fillStyle="#fff";
+    ctx.fillText(note.label,x,y+1);
+    ctx.restore();
+  }
+  ctx.restore();
+
+  for(const p of state.particles){
+    ctx.save();
+    ctx.globalAlpha=p.alpha;
+    ctx.fillStyle=p.color;
+    ctx.shadowColor=p.color;
+    ctx.shadowBlur=12;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
 function getReceiverFeedback(noteId,currentTick,now){
   const flashUntil = state.receiverFlashes[noteId] || 0;
   const flash = flashUntil > now;
@@ -4723,6 +5043,11 @@ function getReceiverFeedback(noteId,currentTick,now){
 }
 
 function drawGame(currentTick){
+  if(state.visualMode==="falling"){
+    drawFallingGame(currentTick);
+    return;
+  }
+
   const w = canvas.clientWidth;
   const h = canvas.clientHeight;
   const rx = receiverX();
