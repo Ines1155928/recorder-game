@@ -3543,11 +3543,11 @@ function fallingReceiverY(height){
 function getFallingTrackPoint(index,count,width,receiverY,y){
   const bottomX=getTrackX(index,count,width);
   const centerX=width/2;
-  const topX=centerX+(bottomX-centerX)*1.26;
-  const progress=y/Math.max(1,receiverY);
+  const vanishingY=-90;
+  const progress=(y-vanishingY)/Math.max(1,receiverY-vanishingY);
   return {
-    x:topX+(bottomX-topX)*progress,
-    angle:Math.atan2(bottomX-topX,receiverY)
+    x:centerX+(bottomX-centerX)*progress,
+    angle:Math.atan2(bottomX-centerX,receiverY-vanishingY)
   };
 }
 function visualReceiverPosition(noteId){
@@ -4800,7 +4800,7 @@ function drawFallingGame(currentTick){
   ctx.restore();
 
   selected.forEach((note,index)=>{
-    const topPoint=getFallingTrackPoint(index,selected.length,w,receiverY,0);
+    const topPoint=getFallingTrackPoint(index,selected.length,w,receiverY,-90);
     const bottomPoint=getFallingTrackPoint(index,selected.length,w,receiverY,receiverY);
     const x=bottomPoint.x;
     const feedback=getReceiverFeedback(note.id,currentTick,now);
@@ -4812,7 +4812,7 @@ function drawFallingGame(currentTick){
     ctx.shadowColor=note.color;
     ctx.shadowBlur=18;
     ctx.beginPath();
-    ctx.moveTo(topPoint.x,0);
+    ctx.moveTo(topPoint.x,-90);
     ctx.lineTo(bottomPoint.x,receiverY);
     ctx.stroke();
     ctx.globalAlpha=.82;
@@ -4820,7 +4820,7 @@ function drawFallingGame(currentTick){
     ctx.lineWidth=4;
     ctx.shadowBlur=8;
     ctx.beginPath();
-    ctx.moveTo(topPoint.x,0);
+    ctx.moveTo(topPoint.x,-90);
     ctx.lineTo(bottomPoint.x,receiverY);
     ctx.stroke();
     ctx.restore();
@@ -4942,7 +4942,7 @@ function drawFallingGame(currentTick){
 
     const segmentLength=Math.hypot(x-tailX,y-endY);
     if(segmentLength>r*.7){
-      const angle=Math.atan2(x-tailX,y-endY);
+      const angle=Math.atan2(tailX-x,y-endY);
       ctx.save();
       ctx.translate(x,y);
       ctx.rotate(angle);
